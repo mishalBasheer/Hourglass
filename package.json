@@ -1,0 +1,17 @@
+{
+  "name": "zain_decor",
+  "version": "1.0.0",
+  "description": "ecommerce application for furnitures and interior decors",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "format": "npx prettier --write ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "morgan": "^1.10.0",
+    "prettier": "^2.7.1"
+  }
+}
