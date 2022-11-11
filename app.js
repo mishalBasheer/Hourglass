@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
-  res.render('user/forgotpass');
+  res.render('user/cart');
 });
 
 export default app;
