@@ -12,8 +12,23 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', (req, res) => {
-  res.render('admin/product_management');
-});
+const getUserHome = (req,res) =>{
+  res.render('user/home');
+}
+const getAdminLogin = (req,res) =>{
+  res.render('admin/login');
+}
+
+
+const userRouter = express.Router();
+const adminRouter = express.Router();
+
+userRouter.route('/').get(getUserHome);
+adminRouter.route('/').get(getAdminLogin);
+
+
+
+app.use('/', userRouter);
+app.use('/admin', adminRouter);
 
 export default app;
