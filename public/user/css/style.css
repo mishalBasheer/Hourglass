@@ -2219,8 +2219,9 @@ ul {
 }
 
 /* line 107, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_menu.scss */
-.main_menu a i {
+.main_menu a {
   color: #000;
+  font-family: "Poppins", sans-serif;
   position: relative;
   z-index: 1;
   font-size: 15px;
