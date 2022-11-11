@@ -1,0 +1,69 @@
+<%- include('partials/header.ejs') %>
+
+    <!-- breadcrumb start-->
+    <section class="breadcrumb breadcrumb_bg">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="breadcrumb_iner">
+                        <div class="breadcrumb_iner_item">
+                            <h2>Log In</h2>
+                            <p>Home <span>-</span> Log In</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- breadcrumb start-->
+
+    <!--================login_part Area =================-->
+    <section class="login_part padding_top">
+        <div class="container h-100">
+            <div class="row align-items-center justify-content-center h-100">
+
+                <div class="col-12">
+                    <div class="login_part_form m-auto">
+                        <div class="login_part_form_iner ml-5">
+                            <h3>Join Zain Family ! <br>
+                                Please Sign Up now</h3>
+                            <form class="row contact_form" action="#" method="post" novalidate="novalidate">
+                                <div class="col-md-6 form-group p_star">
+                                    <input type="text" class="form-control" id="fname" name="fname" value=""
+                                        placeholder="First Name" required>
+                                </div>
+                                <div class="col-md-6 form-group p_star">
+                                    <input type="text" class="form-control" id="lname" name="lname" value=""
+                                        placeholder="Last Name" required>
+                                </div>
+                                <div class="col-md-12 form-group p_star">
+                                    <input type="text" class="form-control" id="mob" name="mob" value="" pattern="\d*" maxlength="10"
+                                        placeholder="Phone number" required>
+                                </div>
+                                <div class="col-md-12 form-group p_star">
+                                    <input type="text" class="form-control" id="pincode" name="pincode" value="" pattern="\d*" maxlength="6"
+                                        placeholder="Pincode" required>
+                                </div>
+                                <div class="col-md-12 form-group p_star">
+                                    <input type="email" class="form-control" id="email" name="email" value=""
+                                        placeholder="Email Address" required>
+                                </div>
+                                <div class="col-md-12 form-group p_star">
+                                    <input type="password" class="form-control" id="password" name="password" value=""
+                                        placeholder="Password" required>
+                                </div>
+                                <div class="col-md-12 form-group">
+                                    <button type="submit" value="submit" class="btn_3">
+                                        Create Profile
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--================login_part end =================-->
+
+    <%- include('partials/footer.ejs') %>
