@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
-  res.render('admin/dashboard');
+  res.render('admin/product_management');
 });
 
 export default app;
