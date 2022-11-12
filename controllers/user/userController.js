@@ -11,6 +11,7 @@ const getSignIn = (req, res) => {
 const getSignUp = (req, res) => {
   res.render('user/signup');
 };
+
 const newUser = async (req, res) => {
   try {
     console.log(req.body);
@@ -31,4 +32,25 @@ const newUser = async (req, res) => {
   }
 };
 
-export { getUserHome, getSignIn, getSignUp, newUser };
+const userCheck = async (req, res) => {
+
+    const user = await User.findOne({ mob: req.body.mob });
+
+    if(user){
+      res.status(200).json({
+        status:'success',
+        data:{
+          user
+        }
+      });
+    }else{
+      // console.log(err.message);
+      res.status(400).json({
+        status:'error',
+        // message:err,
+      })
+    }
+  
+};
+
+export { getUserHome, getSignIn, getSignUp, newUser, userCheck };

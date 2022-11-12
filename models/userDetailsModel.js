@@ -12,6 +12,7 @@ const userDetailsSchema = new mongoose.Schema({
   mob: {
     type: Number,
     required: [true, 'mobile number required'],
+    unique: [true,'number existing'],
   },
   pincode: {
     type: Number,
