@@ -1,4 +1,4 @@
-import User from "../../models/userDetailsModel.js";
+import User from '../../models/userDetailsModel.js';
 
 const getUserHome = (req, res) => {
   res.render('user/home');
@@ -9,10 +9,26 @@ const getSignIn = (req, res) => {
 };
 
 const getSignUp = (req, res) => {
-    res.render('user/signup');
+  res.render('user/signup');
 };
-const newUser = (req, res) => {
+const newUser = async (req, res) => {
+  try {
+    console.log(req.body);
+    const newUser = await User.create(req.body);
 
+    res.status(200).json({
+      status: 'success',
+      data: {
+        user: newUser,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      status: 'error',
+      message: err,
+    });
+  }
 };
 
-export { getUserHome, getSignIn, getSignUp,newUser };
+export { getUserHome, getSignIn, getSignUp, newUser };
