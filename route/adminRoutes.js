@@ -4,7 +4,7 @@ import {
     getAdminDashboard,
     getAdminOrders,
     getAdminProducts,
-    getAdminUsers} from "../controllers/adminController.js";
+    getAdminUsers} from "../controllers/admin/adminController.js";
 
 const router = express.Router();
 

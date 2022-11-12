@@ -1,3 +1,5 @@
+import User from "../../models/userDetailsModel.js";
+
 const getUserHome = (req, res) => {
   res.render('user/home');
 };
