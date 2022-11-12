@@ -3,8 +3,8 @@ import logger from 'morgan';
 import path from 'path';
 import session from 'express-session';
 
-import userRouter from './routes/userRoutes.js';
-import adminRouter from './routes/adminRoutes.js';
+import userRouter from './route/userRoutes.js';
+import adminRouter from './route/adminRoutes.js';
 
 const app = express();
 const __dirname = path.resolve();
