@@ -10,6 +10,7 @@ const mongoos = mongoose
   .connect(DBL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useCreateIndex: true,
   });
 
 export default mongoos;
