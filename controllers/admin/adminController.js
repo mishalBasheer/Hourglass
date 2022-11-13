@@ -1,5 +1,5 @@
 import Admin from '../../models/adminModel.js';
-import {adminLoginCheck} from './adminHelpers.js'
+import Product from '../../models/productModel.js'
 
 const getAdminLogin = (req, res) => {
   res.render('admin/login');
@@ -12,9 +12,6 @@ const getAdminOrders = (req, res) => {
 };
 const getAdminProducts = (req, res) => {
   res.render('admin/product_management');
-};
-const addProduct = (req, res) => {
-  res.render('admin/add_product');
 };
 const getAdminUsers = (req, res) => {
   res.render('admin/client');
@@ -49,6 +46,29 @@ const adminCheck = async (req, res) => {
   }
   };
 
+  const getAddProductPage = (req,res)=>{
+    res.render('admin/add_product');
+  }
+
+
+  const uploadProduct=async (req,res)=>{
+    try{
+      // console.log("form body: ", req.body);
+      const product = await Product.create(req.body);
+      // console.log("product details: ",product);
+      // res.status(200).json({
+      //   data:req.body,
+      // })
+      res.redirect('/admin/products/add-product');
+    }catch(err){
+      console.log(err);
+      res.status(400).json({
+        status:"failed to upload"
+      })
+    }
+
+}
+
 
 export { 
   getAdminLogin,
@@ -56,4 +76,6 @@ export {
   getAdminOrders,
   getAdminProducts,
   getAdminUsers,
+  getAddProductPage,
+  uploadProduct,
   adminCheck};
