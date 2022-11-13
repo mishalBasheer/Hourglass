@@ -6,6 +6,9 @@ const productSchema = new mongoose.Schema({
       required: [true, 'A product must have a title'],
       unique: [true, 'A product must have a unique title'],
     },
+    date:{
+      type:String,
+    },
     brand: {
       type: String,
       required:[true,'please specify product brand']

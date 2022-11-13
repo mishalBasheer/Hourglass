@@ -4,18 +4,36 @@ import Product from '../../models/productModel.js'
 const getAdminLogin = (req, res) => {
   res.render('admin/login');
 };
+
 const getAdminDashboard = (req, res) => {
   res.render('admin/dashboard');
 };
+
 const getAdminOrders = (req, res) => {
   res.render('admin/orders');
 };
-const getAdminProducts = (req, res) => {
-  res.render('admin/product_management');
+
+const getAdminProducts = async (req, res) => {
+  try{
+    // console.log(await getAllProduct());
+    let products = await getAllProduct();
+    res.render('admin/product_management',{products});
+  }catch(err){
+    res.status(400).json({
+      status:"no data in database",
+      message:err,
+    })
+  }
+
 };
+
 const getAdminUsers = (req, res) => {
   res.render('admin/client');
 };
+
+const getAddProductPage = (req,res)=>{
+  res.render('admin/add_product');
+}
 
 const adminCheck = async (req, res) => {
   try{
@@ -46,11 +64,6 @@ const adminCheck = async (req, res) => {
   }
   };
 
-  const getAddProductPage = (req,res)=>{
-    res.render('admin/add_product');
-  }
-
-
   const uploadProduct=async (req,res)=>{
     try{
       // console.log("form body: ", req.body);
@@ -69,6 +82,16 @@ const adminCheck = async (req, res) => {
 
 }
 
+const getAllProduct= ()=>{
+  return new Promise (async(resolve,reject)=>{
+    let products = await Product.find();
+    if(products!=null){
+      resolve(products)
+    }else{
+      reject({status:"failed",message:"no products found"})
+    }
+  })
+}
 
 export { 
   getAdminLogin,
