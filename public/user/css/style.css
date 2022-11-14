@@ -2139,7 +2139,7 @@ ul {
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
   /* line 20, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_menu.scss */
   .main_menu .main-menu-item ul li .nav-link {
-    padding: 35px 20px;
+    padding: 35px 10px;
   }
 }
 
@@ -2366,7 +2366,7 @@ ul {
     color: #000;
   }
   /* line 267, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_menu.scss */
-  .main_menu a i {
+  .main_menu a  {
     margin-left: 0px;
   }
 }
@@ -2376,6 +2376,20 @@ ul {
   .main_menu {
     padding: 20px 0px;
   }
+  .main_menu a {
+
+    margin-left: 20px;
+  }
+}
+
+.di-none{display: inline;}
+
+@media (max-width: 380px) {
+  
+.di-none{
+  display: none;
+}
+
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
@@ -2468,6 +2482,10 @@ ul {
     margin-bottom: 15px;
     line-height: 1.3;
   }
+  .banner_part .single_banner_slider .banner_text .banner_text_iner {
+    vertical-align: bottom;
+  }
+  
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
@@ -2477,6 +2495,9 @@ ul {
     margin-bottom: 15px;
     line-height: 1.3;
   }
+  .banner_part .single_banner_slider .banner_text .banner_text_iner {
+    vertical-align: bottom;
+  }
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
@@ -2485,6 +2506,9 @@ ul {
     font-size: 40px;
     margin-bottom: 15px;
     line-height: 1.3;
+  }
+  .banner_part .single_banner_slider .banner_text .banner_text_iner {
+    vertical-align: bottom;
   }
 }
 
@@ -2529,7 +2553,7 @@ ul {
 /* line 66, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_banner.scss */
 .banner_part .single_banner_slider .banner_img {
   position: absolute;
-  right: 0;
+  right: 1%;
   top: 30%;
 }
 
@@ -2586,6 +2610,7 @@ ul {
 /* line 107, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_banner.scss */
 .banner_part .btn_2 {
   box-shadow: none;
+  margin-left: 1px;
 }
 
 @media (max-width: 991px) {
@@ -2617,12 +2642,17 @@ ul {
   .banner_part .slider-counter {
     font-size: 40px;
   }
+  .banner_part {
+    padding: 0;
+    height: 650px;
+  }
 }
 
 @media (max-width: 991px) {
   /* line 2, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_banner.scss */
   .banner_part {
     padding: 0;
+    height: 577px;
   }
 }
 
@@ -2650,6 +2680,7 @@ ul {
   .feature_part .single_feature_post_text {
     padding: 35px 20px;
   }
+
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
