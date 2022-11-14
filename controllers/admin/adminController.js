@@ -17,7 +17,7 @@ const getAdminOrders = (req, res) => {
 const getEditProductPage =async(req,res)=>{
   
  let product = await Product.find({_id:mongoose.Types.ObjectId(req.params.id)})
- let userId = req.param.id;
+ let userId = req.params.id;
   res.render('admin/edit_product',{product:product[0],userId});
 }
 
@@ -102,7 +102,9 @@ const getAllProduct= ()=>{
   return new Promise (async(resolve,reject)=>{
     let products = await Product.find();
     if(products!=null){
+      console.log(products)
       resolve(products)
+
     }else{
       reject({status:"failed",message:"no products found"})
     }
