@@ -3,26 +3,26 @@
   <div class="container px-6 mt-8 mx-auto grid">
     <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
       <!-- General elements -->
-      <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Add Product</h4>
-      <form action="/admin/products/add-product" method="post">
+      <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Edit Product</h4>
+      <form action="/admin/products/edit-product/<%= userId %>" method="post">
         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
           <label class="block text-sm">
             <span class="text-gray-700 dark:text-gray-400">Title</span>
             <input
-              name="title"
+              name="title" value="<%= product.title %>"
               type="text"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              placeholder="Chesterfield Sofa"
+              
             />
           </label>
 
           <label class="block mt-4 text-sm">
             <span class="text-gray-700 dark:text-gray-400">Brand</span>
             <input
-              name="brand"
+              name="brand" value="<%= product.brand %>"
               type="text"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              placeholder="Teak Wood"
+              
             />
           </label>
 
@@ -32,24 +32,24 @@
               name="category"
               class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
             >
-            <option value="none" selected disabled hidden>Select an Option</option>
-              <option value="Furniture">Furniture</option>
-              <option value="Wall Accent">Wall Accent</option>
-              <option value="Lighting">Lighting</option>
-              <option value="Garden & Outdoor">Garden & Outdoor</option>
-              <option value="Sofa & Recliners">Sofa & Recliners</option>
-              <option value="Storage">Storage</option>
-              <option value="Beds & Mattress">Beds & Mattress</option>
+            <option value="<%= product.category %>" selected ><%= product.category %></option>
+            <option value="Furniture">Furniture</option>
+            <option value="Wall Accent">Wall Accent</option>
+            <option value="Lighting">Lighting</option>
+            <option value="Garden & Outdoor">Garden & Outdoor</option>
+            <option value="Sofa & Recliners">Sofa & Recliners</option>
+            <option value="Storage">Storage</option>
+            <option value="Beds & Mattress">Beds & Mattress</option>
             </select>
           </label>
 
           <label class="block mt-4 text-sm">
             <span class="text-gray-700 dark:text-gray-400">Price</span>
             <input
-              name="price"
+              name="price" value="<%= product.price %>"
               type="number"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              placeholder="$899"
+              
             />
           </label>
 
@@ -78,8 +78,7 @@
               name="description"
               class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
               rows="3"
-              placeholder="Enter description of the product here....."
-            ></textarea>
+            ><%= product.description %></textarea>
           </label>
 
           <button type="submit"

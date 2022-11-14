@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import Admin from '../../models/adminModel.js';
 import Product from '../../models/productModel.js'
 
@@ -12,6 +13,13 @@ const getAdminDashboard = (req, res) => {
 const getAdminOrders = (req, res) => {
   res.render('admin/orders');
 };
+
+const getEditProductPage =async(req,res)=>{
+  
+ let product = await Product.find({_id:mongoose.Types.ObjectId(req.params.id)})
+ let userId = req.param.id;
+  res.render('admin/edit_product',{product:product[0],userId});
+}
 
 const getAdminProducts = async (req, res) => {
   try{
@@ -33,6 +41,14 @@ const getAdminUsers = (req, res) => {
 
 const getAddProductPage = (req,res)=>{
   res.render('admin/add_product');
+}
+
+const editProduct = async (req, res)=>{
+  await Product.findOneAndUpdate(req.params.id,req.body,{
+    new:true,
+    runValidators:true,
+  })
+  res.redirect('/admin/products');
 }
 
 const adminCheck = async (req, res) => {
@@ -101,4 +117,6 @@ export {
   getAdminUsers,
   getAddProductPage,
   uploadProduct,
+  getEditProductPage,
+  editProduct,
   adminCheck};
