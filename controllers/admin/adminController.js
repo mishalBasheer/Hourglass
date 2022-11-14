@@ -109,6 +109,11 @@ const getAllProduct= ()=>{
   })
 }
 
+const deleteProduct= async(req,res)=>{
+  await Product.deleteOne({_id:req.params.id});
+  res.redirect('/admin/products')
+}
+
 export { 
   getAdminLogin,
   getAdminDashboard,
@@ -119,4 +124,5 @@ export {
   uploadProduct,
   getEditProductPage,
   editProduct,
+  deleteProduct,
   adminCheck};
