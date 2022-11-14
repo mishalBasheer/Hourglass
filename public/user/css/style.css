@@ -2367,9 +2367,11 @@ ul {
   }
   /* line 267, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_menu.scss */
   .main_menu a  {
-    margin-left: 0px;
+    margin-left: 25px;
   }
 }
+
+.di-none{display: inline;}
 
 @media (max-width: 576px) {
   /* line 273, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_menu.scss */
@@ -2380,17 +2382,14 @@ ul {
 
     margin-left: 20px;
   }
+  .di-none{
+    display: none;
+  }
 }
 
-.di-none{display: inline;}
 
-@media (max-width: 380px) {
-  
-.di-none{
-  display: none;
-}
 
-}
+
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
   /* line 279, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_menu.scss */
