@@ -4,7 +4,7 @@
     <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
       <!-- General elements -->
       <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Add Product</h4>
-      <form action="/admin/products/add-product" method="post">
+      <form action="/admin/products/add-product" method="post" enctype="multipart/form-data">
         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
           <label class="block text-sm">
             <span class="text-gray-700 dark:text-gray-400">Title</span>
@@ -41,6 +41,15 @@
               <option value="Storage">Storage</option>
               <option value="Beds & Mattress">Beds & Mattress</option>
             </select>
+          </label>
+          
+          <label class="block mt-4 text-sm">
+            <span class="text-gray-700 dark:text-gray-400">Images</span>
+            <input
+              name="images"
+              type="file"
+              class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+            multiple/>
           </label>
 
           <label class="block mt-4 text-sm">

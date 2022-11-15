@@ -15,7 +15,7 @@ const getAdminOrders = (req, res) => {
 };
 
 const getEditProductPage =async(req,res)=>{
-  
+
  let product = await Product.find({_id:mongoose.Types.ObjectId(req.params.id)})
  let userId = req.params.id;
   res.render('admin/edit_product',{product:product[0],userId});
@@ -82,7 +82,13 @@ const adminCheck = async (req, res) => {
 
   const uploadProduct=async (req,res)=>{
     try{
-      // console.log("form body: ", req.body);
+      console.log("form body: ", req.body);
+      console.log(req.files);
+      const img=[];
+      req.files.forEach(el => {
+        img.push(el.filename);
+      });
+      Object.assign(req.body,{images:img});
       const product = await Product.create(req.body);
       // console.log("product details: ",product);
       // res.status(200).json({
