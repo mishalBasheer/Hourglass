@@ -21,7 +21,7 @@ router.route('/dashboard').get(getAdminDashboard);
 router.route('/orders').get(getAdminOrders);
 router.route('/products').get(getAdminProducts);
 router.route('/products/add-product').get(getAddProductPage).post(imageUpload.array('images',4), uploadProduct);
-router.route('/products/edit-product/:id').get(getEditProductPage).post(editProduct);
+router.route('/products/edit-product/:id').get(getEditProductPage).post(imageUpload.array('images',4),editProduct);
 router.route('/products/delete-product/:id').get(deleteProduct);
 router.route('/clients').get(getAdminUsers);
 

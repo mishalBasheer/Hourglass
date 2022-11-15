@@ -11,6 +11,7 @@ const mongoos = mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
+    useFindAndModify:false
   });
 
 export default mongoos;
