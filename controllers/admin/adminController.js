@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import Admin from '../../models/adminModel.js';
 import Product from '../../models/productModel.js'
+import moment from "moment";
 
 const getAdminLogin = (req, res) => {
   res.render('admin/login');
@@ -25,7 +26,7 @@ const getAdminProducts = async (req, res) => {
   try{
     // console.log(await getAllProduct());
     let products = await getAllProduct();
-    res.render('admin/product_management',{products});
+   res.render('admin/product_management',{products});
   }catch(err){
     res.status(400).json({
       status:"no data in database",
@@ -46,7 +47,8 @@ const getAddProductPage = (req,res)=>{
 const editProduct = async (req, res)=>{
   // console.log(req.files)
   if(req.files.length===0){
-    await Product.findOneAndUpdate(req.params.id,req.body,{
+    console.log(req.body)
+    await Product.findByIdAndUpdate(req.params.id,req.body,{
       upsert:true,
       new:true,
       runValidators:true,
@@ -57,8 +59,10 @@ const editProduct = async (req, res)=>{
   req.files.forEach(el => {
     img.push(el.filename);
   });
-  Object.assign(req.body,{images:img});
-  await Product.findOneAndUpdate(req.params.id,req.body,{
+  Object.assign(req.body,{images:img,date:moment().format("MMMM Do YYYY, h:mm a")});
+  const {title,brand,category,price,images,description}=req.body;
+  console.log(req.body)
+  await Product.findByIdAndUpdate(req.params.id,req.body,{
     upsert:true,
     new:true,
     runValidators:true,
@@ -66,6 +70,7 @@ const editProduct = async (req, res)=>{
   res.redirect('/admin/products');
 }
 }
+
 
 const adminCheck = async (req, res) => {
   try{
@@ -124,7 +129,6 @@ const getAllProduct= ()=>{
   return new Promise (async(resolve,reject)=>{
     let products = await Product.find();
     if(products!=null){
-      // console.log(products)
       resolve(products)
 
     }else{

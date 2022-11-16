@@ -5,7 +5,7 @@ const productSchema = new mongoose.Schema({
     title: {
       type: String,
       required: [true, 'A product must have a title'],
-      unique: [true, 'A product must have a unique title'],
+      // unique: [true, 'A product must have a unique title'],
     },
     date:{
       type:String,

@@ -26,6 +26,7 @@
                 <th class="px-4 py-3">Category</th>
                 <th class="px-4 py-3">Date</th>
                 <th class="px-4 py-3">Actions</th>
+                <th class="px-4 py-3"> </th>
               </tr>
             </thead>
             <tbody
@@ -58,7 +59,9 @@
                         <%= products[i].brand %>
                       </p>
                     </div>
-                  </div>
+
+
+                </div>
                 </td>
                 <td class="px-4 py-3 text-sm">$ <%= products[i].price %></td>
                 <td class="px-4 py-3 text-xs">
@@ -109,7 +112,17 @@
                   </a>
                   </div>
                 </td>
+                <td class="px-4 py-3 text-sm">                    
+                  <button
+                  onclick="modalSaveDetails(['<%=products[i].title %>','<%=products[i].description%>'])" 
+                  @click="openModal"
+                  class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                  View Details
+                </button>
+              </td>
               </tr>
+
+
 
           <% } %>
 
@@ -377,6 +390,7 @@
   </main>
 
   <script>
+    
 function deleteWarning(id){    
   const swalWithBootstrapButtons = Swal.mixin({
   customClass: {
