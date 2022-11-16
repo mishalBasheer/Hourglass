@@ -4,29 +4,58 @@ import Product from '../../models/productModel.js'
 import moment from "moment";
 
 const getAdminLogin = (req, res) => {
-  res.render('admin/login');
+  if(req.session.adminLogIn){
+    res.redirect('/admin/dashboard')
+  }else{
+    res.render('admin/login');
+  }
 };
 
 const getAdminDashboard = (req, res) => {
-  res.render('admin/dashboard');
+  req.session.pageIn="dashboard";
+  res.render('admin/dashboard',
+  {pageIn:req.session.pageIn,
+    dashboardPage:" text-gray-800 dark:text-gray-100",
+    ordersPage:"",
+    productsPage:"",
+    usersPage:""});
 };
 
 const getAdminOrders = (req, res) => {
-  res.render('admin/orders');
+  req.session.pageIn="orders";
+  res.render('admin/orders',
+  {pageIn:req.session.pageIn,
+    ordersPage:"dark:text-gray-100",
+    dashboardPage:"",
+    productsPage:"",
+    usersPage:""});
 };
 
 const getEditProductPage =async(req,res)=>{
 
  let product = await Product.find({_id:mongoose.Types.ObjectId(req.params.id)})
  let userId = req.params.id;
-  res.render('admin/edit_product',{product:product[0],userId});
+ req.session.pageIn="products";
+  res.render('admin/edit_product',
+  {product:product[0],
+    userId,pageIn:req.session.pageIn,
+    productsPage:"dark:text-gray-100",
+    dashboardPage:"",
+    ordersPage:"",
+    usersPage:""});
 }
 
 const getAdminProducts = async (req, res) => {
   try{
     // console.log(await getAllProduct());
     let products = await getAllProduct();
-   res.render('admin/product_management',{products});
+    req.session.pageIn="products";
+   res.render('admin/product_management',
+   {products,pageIn:req.session.pageIn,
+    productsPage:"dark:text-gray-100",
+    dashboardPage:"",
+    ordersPage:"",
+    usersPage:""});
   }catch(err){
     res.status(400).json({
       status:"no data in database",
@@ -37,11 +66,23 @@ const getAdminProducts = async (req, res) => {
 };
 
 const getAdminUsers = (req, res) => {
-  res.render('admin/client');
+  req.session.pageIn="users";
+  res.render('admin/client',
+  {pageIn:req.session.pageIn,
+    usersPage:"dark:text-gray-100",
+    dashboardPage:"",
+    ordersPage:"",
+    productsPage:""});
 };
 
 const getAddProductPage = (req,res)=>{
-  res.render('admin/add_product');
+  req.session.pageIn="products";
+  res.render('admin/add_product',
+  {pageIn:req.session.pageIn,
+    productsPage:"dark:text-gray-100",
+    dashboardPage:"",
+    ordersPage:"",
+    usersPage:""});
 }
 
 const editProduct = async (req, res)=>{
@@ -81,11 +122,14 @@ const adminCheck = async (req, res) => {
         user.comparePassword(req.body.password, function (err, isMatch) {
           if (err) throw err;
           if (isMatch) {
-            res.render('admin/dashboard');
+            console.log('admin')
+            req.session.adminLogIn=true;
+            console.log('SESSION CHECK',req.session)
+            res.redirect('/admin/dashboard');
           } else {
             res.status(400).json({
               status: 'admin Password not match',
-              // message:err,
+              message:err,
             });
           }
         });
