@@ -53,7 +53,7 @@
         cursor: default;
         z-index: 1;
     }
-        .irs-slider.single {
+        /* .irs-slider.single {
 
         }
         .irs-slider.from {
@@ -61,7 +61,7 @@
         }
         .irs-slider.to {
 
-        }
+        } */
         .irs-slider.type_last {
             z-index: 2;
         }
@@ -262,5 +262,5 @@
     color: #99a4ac;
 }
 
-.irs-disabled {
-}
+/* .irs-disabled {
+} */

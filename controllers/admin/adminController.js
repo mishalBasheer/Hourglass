@@ -101,7 +101,7 @@ const editProduct = async (req, res)=>{
     img.push(el.filename);
   });
   Object.assign(req.body,{images:img,date:moment().format("MMMM Do YYYY, h:mm a")});
-  const {title,brand,category,price,images,description}=req.body;
+  // const {title,brand,category,price,images,description}=req.body;
   console.log(req.body)
   await Product.findByIdAndUpdate(req.params.id,req.body,{
     upsert:true,

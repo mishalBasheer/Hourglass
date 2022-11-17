@@ -26,6 +26,28 @@ const getOtpPage = (req, res) => {
   res.render('user/otp_page');
 };
 
+const getAllShop =(req,res)=>{
+  res.render('user/shop');
+}
+const getProductDetails =(req,res)=>{
+  res.render('user/p_details');
+}
+const getContactUs =(req,res)=>{
+  res.render('user/contact');
+}
+const getForgetPassword =(req,res)=>{
+  res.render('user/forgotpass');
+}
+const getCart =(req,res)=>{
+  res.render('user/cart');
+}
+const getOrderConfirmation =(req,res)=>{
+  res.render('user/order');
+}
+const getTracking =(req,res)=>{
+  res.render('user/tracking');
+}
+
 const emailCheck = (userData) => {
   return new Promise(async (resolve, reject) => {
     let emailMatchFound;
@@ -116,4 +138,16 @@ const verifyOtp = (req, res) => {
     });
 };
 
-export { getUserHome, getSignIn, getSignUp, newUser, userCheck, getOtpPage, sendOtp, getOtpPhonePage, verifyOtp };
+const getCheckout = (req, res)=>{
+  res.render('user/checkout')
+}
+
+
+export { getUserHome, getSignIn, getSignUp, newUser, userCheck, getOtpPage, sendOtp, getOtpPhonePage, verifyOtp,getAllShop ,
+  getProductDetails,
+  getContactUs,
+  getForgetPassword,
+  getTracking,
+  getCart,
+  getCheckout,
+  getOrderConfirmation };
