@@ -29,6 +29,14 @@ const userDetailsSchema = new mongoose.Schema({
     required: [true, 'password field required'],
     minlength: [6, 'password should be at least 6 characters'],
   },
+  block:{
+    type:Boolean,
+    default:false
+  },
+  image:{
+    type:String,
+    default:"user_icon.jpg"
+  }
 });
 
 userDetailsSchema.pre('save', async function (next) {

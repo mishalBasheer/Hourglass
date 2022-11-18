@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import Admin from '../../models/adminModel.js';
 import Product from '../../models/productModel.js'
+import User from '../../models/userDetailsModel.js'
 import moment from "moment";
 
 const getAdminLogin = (req, res) => {
@@ -65,15 +66,7 @@ const getAdminProducts = async (req, res) => {
 
 };
 
-const getAdminUsers = (req, res) => {
-  req.session.pageIn="users";
-  res.render('admin/client',
-  {pageIn:req.session.pageIn,
-    usersPage:"dark:text-gray-100",
-    dashboardPage:"",
-    ordersPage:"",
-    productsPage:""});
-};
+
 
 const getAddProductPage = (req,res)=>{
   req.session.pageIn="products";
@@ -147,8 +140,8 @@ const adminCheck = async (req, res) => {
 
   const uploadProduct=async (req,res)=>{
     try{
-      console.log("form body: ", req.body);
-      console.log(req.files);
+      // console.log("form body: ", req.body);
+      // console.log(req.files);
       const img=[];
       req.files.forEach(el => {
         img.push(el.filename);
@@ -169,7 +162,7 @@ const adminCheck = async (req, res) => {
 
 }
 
-const getAllProduct= ()=>{
+const getAllProduct = ()=>{
   return new Promise (async(resolve,reject)=>{
     let products = await Product.find();
     if(products!=null){
@@ -177,6 +170,64 @@ const getAllProduct= ()=>{
 
     }else{
       reject({status:"failed",message:"no products found"})
+    }
+  })
+}
+
+
+const getAdminUsers =async (req, res) => {
+  try{
+    let users = await getAllClients();
+    req.session.pageIn="users";
+    res.render('admin/client',
+    {users,
+      pageIn:req.session.pageIn,
+      usersPage:"dark:text-gray-100",
+      dashboardPage:"",
+      ordersPage:"",
+      productsPage:"",
+    block:true});
+    }catch(err){
+      res.status(400).json({
+        status:"no data in database",
+        message:err,
+      })
+    }
+
+};
+const blockUser =async (req,res)=>{
+  try{
+    const userId=req.params.id;
+    await User.findByIdAndUpdate(userId,{block:true})
+    res.redirect('/admin/clients');
+  }catch(err){
+    res.status(400).json({
+      status:"blocking error",
+      message:err
+    })
+  }
+    
+}
+const unblockUser =async (req,res)=>{
+  try{
+    const userId=req.params.id;
+    await User.findByIdAndUpdate(userId,{block:false})
+    res.redirect('/admin/clients');
+  }catch(err){
+    res.status(400).json({
+      status:"unblocking error",
+      message:err
+    })
+  }
+    
+}
+const getAllClients = ()=>{
+  return new Promise (async(resolve,reject)=>{
+    let users = await User.find();
+    if(users!=null){
+      resolve(users)
+    }else{
+      reject({status:"failed",message:"no users found"})
     }
   })
 }
@@ -196,5 +247,7 @@ export {
   uploadProduct,
   getEditProductPage,
   editProduct,
+  blockUser,
+  unblockUser,
   deleteProduct,
   adminCheck};

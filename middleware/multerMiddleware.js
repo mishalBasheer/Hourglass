@@ -27,7 +27,7 @@ const imageUpload = multer({
 //      cb(undefined, true)
 //   }
 }) ;
+const upload =imageUpload.array('images',4)
 
 
-
-export { imageUpload };
+export { upload };
