@@ -7,6 +7,7 @@ import {
   getOtpPage,
   sendOtp,
   getOtpPhonePage,
+  getOtpSignUp,
   verifyOtp,
   getAllShop,
   getProductDetails,
@@ -14,6 +15,9 @@ import {
   getForgetPassword,
   getCart,
   getOrderConfirmation,
+  redirectToOtp,
+  redirectToOtpSignin,
+  checkExisting,
   getCheckout,
   getTracking,
   newUser } from '../controllers/user/userController.js';
@@ -21,10 +25,11 @@ import {
 const router = express.Router();
 
 router.route('/').get(getUserHome);
-router.route('/signup').get(getSignUp).post(newUser);
+router.route('/signup').get(getSignUp).post(sendOtp,redirectToOtp);
+router.route('/signup/otp-signup').get(getOtpSignUp).post(verifyOtp,newUser);
 router.route('/signin').get(getSignIn).post(userCheck);
-router.route('/signin/otp-phone').get(getOtpPhonePage).post(sendOtp);
-router.route('/signin/otp-signin').get(getOtpPage).post(verifyOtp);
+router.route('/signin/otp-phone').get(getOtpPhonePage).post(checkExisting,sendOtp,redirectToOtpSignin);
+router.route('/signin/otp-signin').get(getOtpPage).post(verifyOtp,getUserHome);
 router.route('/shop').get(getAllShop)
 router.route('/product-details').get(getProductDetails)
 router.route('/contact').get(getContactUs)

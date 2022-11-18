@@ -7,6 +7,7 @@ const serviceId = process.env.TWILIO_SERVICE;
 const client = twilio(accountSid, authToken);
 
 const getUserHome = (req, res) => {
+  console.log(req.session);
   res.render('user/home');
 };
 
@@ -24,6 +25,9 @@ const getOtpPhonePage = (req, res) => {
 
 const getOtpPage = (req, res) => {
   res.render('user/otp_page');
+};
+const getOtpSignUp = (req, res) => {
+  res.render('user/otp_page_signup');
 };
 
 const getAllShop =(req,res)=>{
@@ -63,11 +67,13 @@ const emailCheck = (userData) => {
 };
 
 const newUser = async (req, res) => {
-  emailCheck(req.body).then((matchFound) => {
+  const newUser = req.session.newUser;
+  emailCheck(newUser).then((matchFound) => {
     if (!matchFound) {
-      console.log(req.body);
-      User.create(req.body);
-      req.session.userEmail = req.body.email;
+      // console.log("new User:",newUser);
+      User.create(newUser);
+      // console.log(newUser);
+      req.session.userEmail = newUser.email;
       req.session.userLogin = true;
       res.redirect('/');
     } else {
@@ -110,38 +116,60 @@ const userCheck = async (req, res) => {
   }
 };
 
-const sendOtp = (req, res) => {
-  req.session.userMobile=req.body.mob;
-  let mobile=req.session.userMobile;
-  client.verify.v2
-    .services(serviceId)
-    .verifications.create({ to: `+91${mobile}`, channel: 'sms' })
-    .then((verification) => {
-      console.log(verification.status);
-      res.redirect('/signin/otp-signin');
-    });
+const sendOtp = (req, res, next) => {
+  next();
+  // req.session.userMobile=req.body.mob;
+  // let mobile=req.session.userMobile;
+  // client.verify.v2
+  //   .services(serviceId)
+  //   .verifications.create({ to: `+91${mobile}`, channel: 'sms' })
+  //   .then((verification) => {
+  //     console.log(verification.status);
+  //     next();
+  //   });
 };
 
-const verifyOtp = (req, res) => {
-  const verificationCode = req.body.otp;
-  let mobile=req.session.userMobile;
-  client.verify.v2
-    .services(serviceId)
-    .verificationChecks.create({ to: `+91${mobile}`, code: verificationCode })
-    .then((verification_check) => {
-      console.log(verification_check.status);
-      if(verification_check.status==="approved"){
-        res.redirect('/');
-      }else{
-        res.redirect('/signup');
-      }
-    });
+const verifyOtp = (req, res, next) => {
+  next();
+  // const verificationCode = req.body.otp;
+  // let mobile=req.session.userMobile;
+  // client.verify.v2
+  //   .services(serviceId)
+  //   .verificationChecks.create({ to: `+91${mobile}`, code: verificationCode })
+  //   .then((verification_check) => {
+  //     console.log(verification_check.status);
+  //     if(verification_check.status==="approved"){
+  //       next();
+  //     }else{
+  //       res.redirect('/signup');
+  //     }
+  //   });
 };
 
 const getCheckout = (req, res)=>{
   res.render('user/checkout')
 }
 
+const redirectToOtp =(req, res)=>{
+  // Object.assign(req.body,{image:req.file.filname})
+  req.session.newUser=req.body;
+  res.redirect('/signup/otp-signup')
+}
+const redirectToOtpSignin =(req, res)=>{
+  // Object.assign(req.body,{image:req.file.filname})
+  req.session.newUser=req.body;
+  res.redirect('/signin/otp-signin')
+}
+
+const checkExisting=async(req,res,next)=>{
+const user = await User.find({mob:req.body.mob})
+if(user!==null){
+  next()
+}else{
+  req.session.errorMsg="User need to signup first to login to account"
+  res.redirect('/signin')
+}
+}
 
 export { getUserHome, getSignIn, getSignUp, newUser, userCheck, getOtpPage, sendOtp, getOtpPhonePage, verifyOtp,getAllShop ,
   getProductDetails,
@@ -149,5 +177,9 @@ export { getUserHome, getSignIn, getSignUp, newUser, userCheck, getOtpPage, send
   getForgetPassword,
   getTracking,
   getCart,
+  redirectToOtp,
+  getOtpSignUp,
+  redirectToOtpSignin,
+  checkExisting,
   getCheckout,
   getOrderConfirmation };
