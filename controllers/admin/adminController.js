@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import Admin from '../../models/adminModel.js';
 import Product from '../../models/productModel.js'
 import User from '../../models/userDetailsModel.js'
+import Category from '../../models/categoryModel.js'
 import moment from "moment";
 
 const getAdminLogin = (req, res) => {
@@ -165,12 +166,12 @@ const adminCheck = async (req, res) => {
 const getAllProduct = ()=>{
   return new Promise (async(resolve,reject)=>{
     let products = await Product.find();
-    if(products!=null){
+    // if(products!=null){
       resolve(products)
 
-    }else{
-      reject({status:"failed",message:"no products found"})
-    }
+    // }else{
+    //   reject({status:"failed",message:"no products found"})
+    // }
   })
 }
 
@@ -237,6 +238,87 @@ const deleteProduct= async(req,res)=>{
   res.redirect('/admin/products')
 }
 
+const getCategory = async (req,res)=>{
+ let category= await Category.find({});
+res.render('admin/category',
+{pageIn:req.session.pageIn,
+  category,
+  productsPage:"dark:text-gray-100",
+  dashboardPage:"",
+  ordersPage:"",
+  usersPage:""})
+}
+
+const getEditCategory =async (req,res)=>{
+  const catId = req.params.id;
+  const category = await Category.find({_id:mongoose.Types.ObjectId(catId)})
+  console.log(category);
+res.render('admin/edit_category',
+{category,
+  catId,
+  pageIn:req.session.pageIn,
+  productsPage:"dark:text-gray-100",
+  dashboardPage:"",
+  ordersPage:"",
+  usersPage:""});
+}
+
+const getAddCategory = (req,res)=>{
+res.render('admin/add_category',
+{pageIn:req.session.pageIn,
+  productsPage:"dark:text-gray-100",
+  dashboardPage:"",
+  ordersPage:"",
+  usersPage:""});
+}
+
+const addCategory =async(req,res)=>{
+  try{
+    console.log(req.file)
+    console.log(req.body);
+
+    const catInfo = req.body;
+    const img = req.file.filename;
+    console.log(img)
+    Object.assign(catInfo,{image:img});
+    console.log(catInfo);
+    await Category.create(catInfo);
+    res.redirect('/admin/category');
+  }catch(err){
+    res.status(400).json({
+      status:"error while adding category",
+      message:err
+    })
+  }
+}
+const editCategory = async(req,res)=>{
+  try{
+    if(req.file==undefined){
+      console.log(req.body)
+      await Category.findByIdAndUpdate(req.params.id,req.body,{
+        upsert:true,
+        new:true,
+        runValidators:true,
+      })
+      res.redirect('/admin/category');
+    }else{
+      
+      console.log(req.file)
+      const catInfo = req.body;
+      const img = req.file.filename;
+      Object.assign(catInfo,{image:img});
+      await Category.findByIdAndUpdate(catInfo);
+      res.redirect('/admin/category');
+    }
+  }catch(err){
+    res.status(400).json({
+      status:"error while editing category",
+      message:err,
+    })
+  }
+    
+}
+
 export { 
   getAdminLogin,
   getAdminDashboard,
@@ -248,6 +330,11 @@ export {
   getEditProductPage,
   editProduct,
   blockUser,
+  getCategory,
+  getEditCategory,
+  getAddCategory,
+  addCategory,
+  editCategory,
   unblockUser,
   deleteProduct,
   adminCheck};

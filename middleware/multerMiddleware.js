@@ -27,7 +27,34 @@ const imageUpload = multer({
 //      cb(undefined, true)
 //   }
 }) ;
-const upload =imageUpload.array('images',4)
+const catImageStorage = multer.diskStorage({
+    // Destination to store image     
+    destination: 'public/category_img', 
+      filename: (req, file, cb) => {
+          cb(null, 'cat-img-' + Date.now() 
+             + path.extname(file.originalname))
+            // file.fieldname is name of the field (image)
+            // path.extname get the uploaded file extension
+    }
+});
+const catImageUpload = multer({
+    storage: catImageStorage,
+//     limits: {
+//       fileSize: 1000000 // 1000000 Bytes = 1 MB
+//     },
+//     fileFilter(req, file, cb) {
+//       if (!file.originalname.match(/\.(png|jpg)$/)) { 
+//          // upload only png and jpg format
+//          return cb(new Error('Please upload a Image'))
+//        }
+//      cb(undefined, true)
+//   }
+}) ;
 
 
-export { upload };
+const uploadMultiple =imageUpload.array('images',4);
+const uploadOne = catImageUpload.single('image');
+
+
+export { uploadMultiple,
+        uploadOne };
