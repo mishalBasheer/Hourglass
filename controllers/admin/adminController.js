@@ -61,6 +61,7 @@ const getAdminProducts = async (req, res) => {
   try {
     // console.log(await getAllProduct());
     let products = await getAllProduct();
+    console.log(products);
     req.session.pageIn = 'products';
     res.render('admin/product_management', {
       products,
@@ -80,9 +81,14 @@ const getAdminProducts = async (req, res) => {
   }
 };
 
-const getAddProductPage = (req, res) => {
+const getAddProductPage = async (req, res) => {
+  const brand = await Brand.find({});
+  const category = await Category.find({});
+  console.log(brand, category);
   req.session.pageIn = 'products';
   res.render('admin/add_product', {
+    brand,
+    category,
     pageIn: req.session.pageIn,
     productsPage: 'dark:text-gray-100',
     dashboardPage: '',
@@ -177,10 +183,9 @@ const uploadProduct = async (req, res) => {
 
 const getAllProduct = () => {
   return new Promise(async (resolve, reject) => {
-    let products = await Product.find();
+    let products = await Product.find().populate('brand').populate('category').exec();
     // if(products!=null){
     resolve(products);
-
     // }else{
     //   reject({status:"failed",message:"no products found"})
     // }
@@ -338,7 +343,6 @@ const editCategory = async (req, res) => {
     });
   }
 };
-
 
 const getBrand = async (req, res) => {
   let brand = await Brand.find({});

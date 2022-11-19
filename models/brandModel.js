@@ -10,10 +10,6 @@ const brandSchema = new mongoose.Schema({
       type:String,
       default:"brand_logo.jpg",
     },
-    products:[{
-      type:mongoose.Schema.Types.ObjectId,
-      ref:"Product",
-    }]
   });
 const Brand = mongoose.model('Brand',brandSchema);
 

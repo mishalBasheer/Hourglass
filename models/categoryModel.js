@@ -10,10 +10,6 @@ const categorySchema = new mongoose.Schema({
       type:String,
       default:"user_icon.jpg",
     },
-    products:[{
-      type:mongoose.Schema.Types.ObjectId,
-      ref:"Product",
-    }]
   });
 const Category = mongoose.model('Category',categorySchema);
 

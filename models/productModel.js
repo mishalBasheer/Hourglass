@@ -13,11 +13,13 @@ const productSchema = new mongoose.Schema({
       default:Date,
     },
     brand: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref:'Brand',
       required:[true,'please specify product brand']
     },
     category: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref:'Category',
       required:[true,'please specify product category']
     },
     price: {
@@ -31,7 +33,7 @@ const productSchema = new mongoose.Schema({
     images: {
       type: Array,
       required:[true,'add atleast 1 image'],
-    }
+    },
   });
   const Product = mongoose.model('Product',productSchema);
 
