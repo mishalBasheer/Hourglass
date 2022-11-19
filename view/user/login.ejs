@@ -1,7 +1,7 @@
 <%- include('partials/header.ejs') %>
-    
-    <!-- breadcrumb start-->
-    <!-- <section class="breadcrumb breadcrumb_bg">
+
+<!-- breadcrumb start-->
+<!-- <section class="breadcrumb breadcrumb_bg">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-8">
@@ -15,53 +15,93 @@
             </div>
         </div>
     </section> -->
-    <!-- breadcrumb start-->
+<!-- breadcrumb start-->
 
-    <!--================login_part Area =================-->
-    <section class="login_part padding_top">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6 col-md-6">
-                    <div class="login_part_text text-center">
-                        <div class="login_part_text_iner">
-                            <h2>New to our Shop?</h2>
-                            <p>There are advances being made in science and technology
-                                everyday, and a good example of this is the</p>
-                            <a href="/signup" class="btn_3">Create an Account</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-6">
-                    <div class="login_part_form">
-                        <div class="login_part_form_iner">
-                            <h3>Welcome Back ! <br>
-                                Please Sign in now</h3>
-                            <form class="row contact_form" action="/signin" method="post">
-                                <div class="col-md-12 form-group p_star">
-                                    <input type="email" class="form-control" id="email" name="email" value=""
-                                        placeholder="Email">
-                                </div>
-                                <div class="col-md-12 form-group p_star">
-                                    <input type="password" class="form-control" id="password" name="password" value=""
-                                        placeholder="Password">
-                                </div>
-                                <div class="col-md-12 form-group">
-                                    <!-- <div class="creat_account d-flex align-items-center">
+<!--================login_part Area =================-->
+<section class="login_part padding_top">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6 col-md-6">
+        <div class="login_part_text text-center">
+          <div class="login_part_text_iner">
+            <h2>New to our Shop?</h2>
+            <p>There are advances being made in science and technology everyday, and a good example of this is the</p>
+            <a href="/signup" class="btn_3">Create an Account</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-6">
+        <div class="login_part_form">
+          <div class="login_part_form_iner">
+            <h3>
+              Welcome Back ! <br />
+              Please Sign in now
+            </h3>
+            <form
+              class="row contact_form"
+              action="/signin"
+              method="post"
+              name="signupForm"
+              onsubmit="return validate() ;"
+            >
+              <div class="col-md-12 form-group p_star">
+                <input type="email" class="form-control" id="email" name="email" value="" placeholder="Email" />
+              </div>
+              <div class="col-md-12 form-group p_star">
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  name="password"
+                  value=""
+                  placeholder="Password"
+                />
+                <span id = "message" style="color:red"> </span>
+              </div>
+              <div class="col-md-12 form-group">
+                <!-- <div class="creat_account d-flex align-items-center">
                                         <input type="checkbox" id="f-option" name="selector">
                                         <label for="f-option">Remember me</label>
                                     </div> -->
-                                    <button type="submit" value="submit" class="btn_3">
-                                        Log In
-                                    </button>
-                                    <a class="lost_pass" href="/signin/otp-phone">Login by SMS otp Verification</a><br>
-                                    <a class="lost_pass" href="/forgot-password">forget password?</a>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                <button type="submit" value="submit" class="btn_3">Log In</button>
+                <a class="lost_pass" href="/signin/otp-phone">Login by SMS otp Verification</a><br />
+                <a class="lost_pass" href="/forgot-password">forget password?</a>
+              </div>
+            </form>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </div>
+</section>
+<script type="text/javascript">
+  // Form validation code will come here.
+  function validate() {
+    let pw = document.getElementById('password').value;
+    if (pw == '') {
+      alert('Please enter the Password!');
+      document.signupForm.password.focus();
+      return false;
+    }
+    if (document.signupForm.email.value == '') {
+      alert('Please enter your email!');
+      document.signupForm.email.focus();
+      return false;
+    }
+    // if (pw.length < 8) {
+    //   document.getElementById('message').innerHTML = '**Password length must be atleast 8 characters';
+    //   document.signupForm.password.focus();
+    //   return false;
+    // }
 
-    <%- include('partials/footer.ejs') %>
+    // if (pw.length > 15) {
+    //   document.getElementById('message').innerHTML = '**Password length must not exceed 15 characters';
+    //   document.signupForm.password.focus();
+    //   return false;
+    // }
+
+    return true;
+  }
+</script>
+
+<%- include('partials/footer.ejs') %>

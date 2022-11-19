@@ -1,5 +1,6 @@
 import User from '../../models/userDetailsModel.js';
 import twilio from 'twilio';
+import flash from 'connect-flash';
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -8,6 +9,10 @@ const client = twilio(accountSid, authToken);
 
 const getUserHome = (req, res) => {
   console.log(req.session);
+
+   
+  // const username = req.flash('user');
+  // const errormsg = req.flash('error');
   res.render('user/home');
 };
 
