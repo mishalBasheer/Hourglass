@@ -147,7 +147,12 @@
 
                 <a href="/signin">
                   <i class="ti-user"></i>
-                  &nbsp; <span class="di-none"> Sign In </span>
+                  &nbsp; 
+                  <% if (user) { %>
+                    <span class="di-none"> <%= user.fname %>  </span>
+                    <% }else{ %>
+                      <span class="di-none"> Sign In </span>
+                      <% } %>
                 </a>
               </div>
             </nav>

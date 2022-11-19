@@ -9,11 +9,13 @@ const serviceId = process.env.TWILIO_SERVICE;
 const client = twilio(accountSid, authToken);
 
 const getUserHome = (req, res) => {
-  console.log(req.session);
+  // show a success message when successfully logged in 
   const msg=req.flash('success');
-  // const username = req.flash('user');
-  // const errormsg = req.flash('error');
-  res.render('user/home',{msg});
+  
+  // getting logged in user details to "user" variable 
+  const user = req.session.user;
+
+  res.render('user/home',{msg,user});
 };
 
 const getSignIn = (req, res) => {
