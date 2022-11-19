@@ -2,6 +2,7 @@ import User from '../../models/userDetailsModel.js';
 import twilio from 'twilio';
 import flash from 'connect-flash';
 
+
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const serviceId = process.env.TWILIO_SERVICE;
@@ -9,19 +10,22 @@ const client = twilio(accountSid, authToken);
 
 const getUserHome = (req, res) => {
   console.log(req.session);
-
-   
+  const msg=req.flash('success');
   // const username = req.flash('user');
   // const errormsg = req.flash('error');
-  res.render('user/home');
+  res.render('user/home',{msg});
 };
 
 const getSignIn = (req, res) => {
-  res.render('user/login');
+  const msg=req.flash('error');
+  console.log(msg);
+  res.render('user/login',{msg});
 };
 
 const getSignUp = (req, res) => {
-  res.render('user/signup');
+  const msg=req.flash('error');
+  console.log(msg);
+  res.render('user/signup',{msg});
 };
 
 const getOtpPhonePage = (req, res) => {
@@ -96,24 +100,28 @@ const userCheck = async (req, res) => {
         user.comparePassword(req.body.password, function (err, isMatch) {
           if (err) throw err;
           if (isMatch) {
-            res.status(200).json({
-              status: 'success',
-              data: {
-                user,
-              },
-            });
+            // res.status(200).json({
+            //   status: 'success',
+            //   data: {
+            //     user,
+            //   },
+            // });
+            req.flash('success',"Successfully Logged In");
+            res.redirect('/')
           } else {
-            res.status(400).json({
-              status: 'error',
-              // message:err,
-            });
+            // res.status(400).json({
+            //   status: 'password not match error',
+            // });
+            req.flash('error','Password not match')
+            res.redirect('/signin');
           }
         });
       } else {
-        res.status(400).json({
-          status: 'error',
-          // message:err,
-        });
+        // res.status(400).json({
+        //   status: 'user not found error',
+        // });
+        req.flash('error','User email not found');
+        res.redirect('/signin');
       }
     });
   } catch (err) {
@@ -135,6 +143,7 @@ const sendOtp = (req, res, next) => {
 };
 
 const verifyOtp = (req, res, next) => {
+  req.flash('success','successfully signed in')
   next();
   // const verificationCode = req.body.otp;
   // let mobile=req.session.userMobile;
@@ -144,6 +153,7 @@ const verifyOtp = (req, res, next) => {
   //   .then((verification_check) => {
   //     console.log(verification_check.status);
   //     if(verification_check.status==="approved"){
+  // req.flash('success','successfully signed in')
   //       next();
   //     }else{
   //       res.redirect('/signup');
@@ -168,11 +178,25 @@ const redirectToOtpSignin =(req, res)=>{
 
 const checkExisting=async(req,res,next)=>{
 const user = await User.find({mob:req.body.mob})
-if(user!==null){
+console.log('user: ',user);
+if(user.length>0){
   next()
 }else{
-  req.session.errorMsg="User need to signup first to login to account"
+  // req.session.errorMsg="User need to signup first to login to account"
+  req.flash('error','new mobile, user need to signup first to login to account')
   res.redirect('/signin')
+}
+}
+
+const checkNotExisting=async(req,res,next)=>{
+const user = await User.find({mob:req.body.mob})
+console.log('user: ',user);
+if(!(user.length>0)){
+  next();
+}else{
+  // req.session.errorMsg="User need to signup first to login to account"
+  req.flash('error','existing mobile user can login to account using login panel');
+  res.redirect('/signup');
 }
 }
 
@@ -186,5 +210,6 @@ export { getUserHome, getSignIn, getSignUp, newUser, userCheck, getOtpPage, send
   getOtpSignUp,
   redirectToOtpSignin,
   checkExisting,
+  checkNotExisting,
   getCheckout,
   getOrderConfirmation };

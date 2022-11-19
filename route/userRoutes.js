@@ -18,6 +18,7 @@ import {
   redirectToOtp,
   redirectToOtpSignin,
   checkExisting,
+  checkNotExisting,
   getCheckout,
   getTracking,
   newUser } from '../controllers/user/userController.js';
@@ -25,7 +26,7 @@ import {
 const router = express.Router();
 
 router.route('/').get(getUserHome);
-router.route('/signup').get(getSignUp).post(sendOtp,redirectToOtp);
+router.route('/signup').get(getSignUp).post(checkNotExisting,sendOtp,redirectToOtp);
 router.route('/signup/otp-signup').get(getOtpSignUp).post(verifyOtp,newUser);
 router.route('/signin').get(getSignIn).post(userCheck);
 router.route('/signin/otp-phone').get(getOtpPhonePage).post(checkExisting,sendOtp,redirectToOtpSignin);

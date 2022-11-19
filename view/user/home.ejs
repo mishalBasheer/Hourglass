@@ -1,5 +1,9 @@
 
    <%- include('partials/header.ejs') %>
+
+   <% if (msg.length>0) { %>
+    <script defer>alert('<%= msg %>')</script>
+   <% } %>
    
    <!-- banner part start-->
     <section class="banner_part">
@@ -563,5 +567,7 @@
         </div>
     </section>
     <!--::subscribe_area part end::-->
+
+    
 
     <%- include('partials/footer.ejs') %>
