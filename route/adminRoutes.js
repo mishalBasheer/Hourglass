@@ -16,11 +16,17 @@ import {
   getAddCategory,
   addCategory,
   editCategory,
+  getBrand,
+  getEditBrand,
+  getAddBrand,
+  addBrand,
+  editBrand,
   deleteProduct,
   getAdminUsers,
 } from '../controllers/admin/adminController.js';
 import { uploadMultiple,
-        uploadOne } from "../middleware/multerMiddleware.js";
+        uploadOne,
+        uploadBrandImg } from "../middleware/multerMiddleware.js";
 import { adminLoginCheck } from "../middleware/adminLoginCheckMiddleware.js";
 
 const router = express.Router();
@@ -38,5 +44,8 @@ router.route('/clients/unblock/:id').get(adminLoginCheck,unblockUser);
 router.route('/category').get(adminLoginCheck,getCategory);
 router.route('/category/add-category').get(adminLoginCheck,getAddCategory).post(adminLoginCheck,uploadOne,addCategory);
 router.route('/category/edit-category/:id').get(adminLoginCheck,getEditCategory).post(adminLoginCheck,uploadOne,editCategory);
+router.route('/brand').get(adminLoginCheck,getBrand);
+router.route('/brand/add-brand').get(adminLoginCheck,getAddBrand).post(adminLoginCheck,uploadBrandImg,addBrand);
+router.route('/brand/edit-brand/:id').get(adminLoginCheck,getEditBrand).post(adminLoginCheck,uploadBrandImg,editBrand);
 
 export default router;

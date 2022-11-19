@@ -1,0 +1,41 @@
+<%- include('partials/header.ejs') %>
+
+<main class="h-full pb-16 overflow-y-auto">
+  <div class="container px-6 mt-8 mx-auto grid">
+    <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+      <!-- General elements -->
+      <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Add Brand</h4>
+      <form action="/admin/brand/add-brand" method="post" enctype="multipart/form-data">
+        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+          
+            <label class="block text-sm">
+            <span class="text-gray-700 dark:text-gray-400">Brand Name</span>
+            <input
+              name="title" value=""
+              type="text"
+              class="block w-full mt-1 text-sm dark:border-gray-600 
+              dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+            required/>
+          </label>
+
+          <label class="block mt-4 text-sm">
+            <span class="text-gray-700 dark:text-gray-400">Image</span>
+            <input
+              name="image"
+              type="file"
+              class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+              required/>
+          </label>
+
+          <button type="submit"
+            class="px-5 py-3 mt-8 w-full font-medium w-64 leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+          >
+            Add Brand
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+
+<%- include('partials/footer.ejs') %>

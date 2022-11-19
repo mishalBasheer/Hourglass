@@ -51,10 +51,35 @@ const catImageUpload = multer({
 //   }
 }) ;
 
+const brandImageStorage = multer.diskStorage({
+    // Destination to store image     
+    destination: 'public/brand_img', 
+      filename: (req, file, cb) => {
+          cb(null, 'brand-logo-' + Date.now() 
+             + path.extname(file.originalname))
+            // file.fieldname is name of the field (image)
+            // path.extname get the uploaded file extension
+    }
+});
+const brandImageUpload = multer({
+    storage: brandImageStorage,
+//     limits: {
+//       fileSize: 1000000 // 1000000 Bytes = 1 MB
+//     },
+//     fileFilter(req, file, cb) {
+//       if (!file.originalname.match(/\.(png|jpg)$/)) { 
+//          // upload only png and jpg format
+//          return cb(new Error('Please upload a Image'))
+//        }
+//      cb(undefined, true)
+//   }
+}) ;
 
 const uploadMultiple =imageUpload.array('images',4);
 const uploadOne = catImageUpload.single('image');
+const uploadBrandImg = brandImageUpload.single('image');
 
 
 export { uploadMultiple,
-        uploadOne };
+        uploadOne,
+        uploadBrandImg };
