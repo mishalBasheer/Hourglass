@@ -25,7 +25,7 @@ import {
   getAdminUsers,
 } from '../controllers/admin/adminController.js';
 import { uploadMultiple,
-        uploadOne,
+        uploadOne,        
         uploadBrandImg } from "../middleware/multerMiddleware.js";
 import { adminLoginCheck } from "../middleware/adminLoginCheckMiddleware.js";
 

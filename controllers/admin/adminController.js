@@ -41,10 +41,14 @@ const getAdminOrders = (req, res) => {
 };
 
 const getEditProductPage = async (req, res) => {
-  let product = await Product.find({ _id: mongoose.Types.ObjectId(req.params.id) });
+  const brand = await Brand.find({});
+  const category = await Category.find({});
+  let product = await Product.find({ _id: mongoose.Types.ObjectId(req.params.id) }).populate('brand').populate('category');
   let userId = req.params.id;
   req.session.pageIn = 'products';
   res.render('admin/edit_product', {
+    brand,
+    category,
     product: product[0],
     userId,
     pageIn: req.session.pageIn,
@@ -84,7 +88,7 @@ const getAdminProducts = async (req, res) => {
 const getAddProductPage = async (req, res) => {
   const brand = await Brand.find({});
   const category = await Category.find({});
-  console.log(brand, category);
+  // console.log(brand, category);
   req.session.pageIn = 'products';
   res.render('admin/add_product', {
     brand,
@@ -100,8 +104,8 @@ const getAddProductPage = async (req, res) => {
 };
 
 const editProduct = async (req, res) => {
-  // console.log(req.files)
-  if (req.files.length === 0) {
+  console.log(req.files)
+  if (Object.keys(req.files).length==0) {
     // console.log(req.body)
     await Product.findByIdAndUpdate(req.params.id, req.body, {
       upsert: true,
@@ -109,12 +113,37 @@ const editProduct = async (req, res) => {
       runValidators: true,
     });
     res.redirect('/admin/products');
-  } else {
-    const img = [];
+  }else if(req.files.images == undefined && req.files.thumbnail.length !== 0){
+  const thumbnail = req.files.thumbnail[0].filename;
+    Object.assign(req.body, { thumbnail });
+    await Product.findByIdAndUpdate(req.params.id, req.body, {
+      upsert: true,
+      new: true,
+      runValidators: true,
+    });
+    res.redirect('/admin/products');
+
+  }else if(req.files.thumbnail == undefined && req.files.images.length !== 0){
+    const img=[];
     req.files.forEach((el) => {
       img.push(el.filename);
     });
-    Object.assign(req.body, { images: img, date: moment().format('MMMM Do YYYY, h:mm a') });
+    Object.assign(req.body, { images: img });
+    await Product.findByIdAndUpdate(req.params.id, req.body, {
+      upsert: true,
+      new: true,
+      runValidators: true,
+    });
+    res.redirect('/admin/products');
+  
+  
+  } else {
+    const img = [];
+    const thumbnail = req.files.thumbnail[0].filename;
+    req.files.forEach((el) => {
+      img.push(el.filename);
+    });
+    Object.assign(req.body, { images: img,thumbnail});
     // const {title,brand,category,price,images,description}=req.body;
     // console.log(req.body)
     await Product.findByIdAndUpdate(req.params.id, req.body, {
@@ -163,12 +192,16 @@ const uploadProduct = async (req, res) => {
     // console.log("form body: ", req.body);
     // console.log(req.files);
     const img = [];
-    req.files.forEach((el) => {
+    const thumbnail = req.files.thumbnail[0].filename;
+    
+    req.files.images.forEach((el) => {
       img.push(el.filename);
     });
-    Object.assign(req.body, { images: img });
+
+    Object.assign(req.body, { images: img, thumbnail });
     const product = await Product.create(req.body);
-    // console.log("product details: ",product);
+
+    console.log("product details: ",product);
     // res.status(200).json({
     //   data:req.body,
     // })

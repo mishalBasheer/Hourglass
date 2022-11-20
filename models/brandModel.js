@@ -10,6 +10,9 @@ const brandSchema = new mongoose.Schema({
       type:String,
       default:"brand_logo.jpg",
     },
+    description:{
+      type:String,
+    }
   });
 const Brand = mongoose.model('Brand',brandSchema);
 

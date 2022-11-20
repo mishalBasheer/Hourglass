@@ -1,16 +1,10 @@
 import mongoose from "mongoose";
-import moment from "moment";
-const Date = moment().format("MMMM Do YYYY, h:mm a")
 
 const productSchema = new mongoose.Schema({
     title: {
       type: String,
       required: [true, 'A product must have a title'],
       // unique: [true, 'A product must have a unique title'],
-    },
-    date:{
-      type:String,
-      default:Date,
     },
     brand: {
       type: mongoose.Schema.Types.ObjectId,
@@ -34,6 +28,30 @@ const productSchema = new mongoose.Schema({
       type: Array,
       required:[true,'add atleast 1 image'],
     },
+    thumbnail:{
+      type:String,
+      required:[true,'a producct must have a thumbnail']
+    },
+    width:{
+      type:Number,
+    },
+    height:{
+      type:Number,
+    },
+    breadth:{
+      type:Number,
+    },
+    warranty:{
+      type:Number,
+    },
+    weight:{
+      type:Number,
+    },
+    material:{
+      type:String,
+    }
+  },{
+    timestamps:true,
   });
   const Product = mongoose.model('Product',productSchema);
 

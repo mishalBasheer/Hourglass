@@ -24,7 +24,7 @@
                 <th class="px-4 py-3">Title</th>
                 <th class="px-4 py-3">Price</th>
                 <th class="px-4 py-3">Category</th>
-                <th class="px-4 py-3">Date</th>
+                <th class="px-4 py-3">Date Last Modified</th>
                 <th class="px-4 py-3">Actions</th>
                 <th class="px-4 py-3"> </th>
               </tr>
@@ -44,7 +44,7 @@
                     >
                       <img
                         class="object-cover w-full h-full rounded-full"
-                        src="/product_img/<%= products[i].images[0] %>"
+                        src="/product_img/<%= products[i].thumbnail%>"
                         alt=""
                         loading="lazy"
                       />
@@ -71,7 +71,7 @@
                     <%= products[i].category.title %>
                   </span>
                 </td>
-                <td class="px-4 py-3 text-sm"><%= products[i].date %></td>
+                <td class="px-4 py-3 text-sm"><%= products[i].updatedAt %></td>
                 <td class="px-4 py-3">
                   <div class="flex items-center space-x-4 text-sm">
                     <a href="/admin/products/edit-product/<%= products[i]._id %>">
