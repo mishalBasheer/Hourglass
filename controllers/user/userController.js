@@ -1,5 +1,8 @@
 import User from '../../models/userDetailsModel.js';
-import Address from '../../models/addressModel.js'
+import Address from '../../models/addressModel.js';
+import Brand from '../../models/brandModel.js';
+import Category from '../../models/categoryModel.js';
+import Product from '../../models/productModel.js';
 import twilio from 'twilio';
 import flash from 'connect-flash';
 
@@ -47,13 +50,18 @@ const getOtpSignUp = (req, res) => {
   res.render('user/otp_page_signup',{user});
 };
 
-const getAllShop =(req,res)=>{
+const getAllShop =async(req,res)=>{
+const brand = await Brand.find();
+const category = await Category.find();
+const product = await Product.find();
   const user = req.session.user;
-  res.render('user/shop',{user});
+  res.render('user/shop',{user,product,brand,category});
 }
-const getProductDetails =(req,res)=>{
+const getProductDetails =async (req,res)=>{
+  const product = await Product.findOne({_id:req.params.id}).populate('category').populate('brand');
+  console.log(product);
   const user = req.session.user;
-  res.render('user/p_details',{user});
+  res.render('user/p_details',{user,product});
 }
 const getContactUs =(req,res)=>{
   const user = req.session.user;

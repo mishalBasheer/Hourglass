@@ -35,7 +35,7 @@ router.route('/signin').get(getSignIn).post(userCheck);
 router.route('/signin/otp-phone').get(getOtpPhonePage).post(checkExisting,sendOtp,redirectToOtpSignin);
 router.route('/signin/otp-signin').get(getOtpPage).post(verifyOtp,getUserHome);
 router.route('/shop').get(getAllShop)
-router.route('/product-details').get(getProductDetails)
+router.route('/product-details/:id').get(getProductDetails)
 router.route('/contact').get(getContactUs)
 router.route('/forgot-password').get(getForgetPassword)
 router.route('/cart').get(getCart)
