@@ -1,4 +1,5 @@
 import User from '../../models/userDetailsModel.js';
+import Address from '../../models/addressModel.js'
 import twilio from 'twilio';
 import flash from 'connect-flash';
 
@@ -11,56 +12,95 @@ const client = twilio(accountSid, authToken);
 const getUserHome = (req, res) => {
   // show a success message when successfully logged in 
   const msg=req.flash('success');
-  
   // getting logged in user details to "user" variable 
   const user = req.session.user;
+  console.log(user);
 
   res.render('user/home',{msg,user});
 };
 
 const getSignIn = (req, res) => {
+  const user = req.session.user;
   const msg=req.flash('error');
   console.log(msg);
-  res.render('user/login',{msg});
+  res.render('user/login',{msg,user});
 };
 
 const getSignUp = (req, res) => {
+  const user = req.session.user;
   const msg=req.flash('error');
   console.log(msg);
-  res.render('user/signup',{msg});
+  res.render('user/signup',{msg,user});
 };
 
 const getOtpPhonePage = (req, res) => {
-  res.render('user/otp_phone');
+  const user = req.session.user;
+  res.render('user/otp_phone',{user});
 };
 
 const getOtpPage = (req, res) => {
-  res.render('user/otp_page');
+  const user = req.session.user;
+  res.render('user/otp_page',{user});
 };
 const getOtpSignUp = (req, res) => {
-  res.render('user/otp_page_signup');
+  const user = req.session.user;
+  res.render('user/otp_page_signup',{user});
 };
 
 const getAllShop =(req,res)=>{
-  res.render('user/shop');
+  const user = req.session.user;
+  res.render('user/shop',{user});
 }
 const getProductDetails =(req,res)=>{
-  res.render('user/p_details');
+  const user = req.session.user;
+  res.render('user/p_details',{user});
 }
 const getContactUs =(req,res)=>{
-  res.render('user/contact');
+  const user = req.session.user;
+  res.render('user/contact',{user});
 }
 const getForgetPassword =(req,res)=>{
-  res.render('user/forgotpass');
+  const user = req.session.user;
+  res.render('user/forgotpass',{user});
 }
 const getCart =(req,res)=>{
-  res.render('user/cart');
+  const user = req.session.user;
+  res.render('user/cart',{user});
 }
 const getOrderConfirmation =(req,res)=>{
-  res.render('user/order');
+  const user = req.session.user;
+  res.render('user/order',{user});
 }
 const getTracking =(req,res)=>{
-  res.render('user/tracking');
+  const user = req.session.user;
+  res.render('user/tracking',{user});
+}
+
+const getProfile = async (req,res)=>{
+  const user = req.session.user;
+  const address = await Address.find({userId:user._id});
+  res.render('user/profile',{user,address});
+}
+
+const   getAddAddress =(req,res)=>{
+  const user = req.session.user;
+  res.render('user/add_address',{user});
+}
+
+const addAddress =async (req,res)=>{
+  try{
+    let newAdd = req.body;
+    const user = req.session.user;
+    Object.assign(newAdd,{userId:user._id})
+    await Address.create(newAdd);
+    res.redirect('/profile');
+  }catch(err){
+    res.json({
+      status:'error while adding address',
+      message:err,
+    })
+  }
+    
 }
 
 const emailCheck = (userData) => {
@@ -78,17 +118,19 @@ const emailCheck = (userData) => {
 };
 
 const newUser = async (req, res) => {
-  const newUser = req.session.newUser;
+  const newUser = req.session.newuser;
   emailCheck(newUser).then((matchFound) => {
     if (!matchFound) {
       // console.log("new User:",newUser);
       User.create(newUser);
       // console.log(newUser);
+      req.session.user=newUser
       req.session.userEmail = newUser.email;
       req.session.userLogin = true;
       res.redirect('/');
     } else {
-      res.render('user/signup');
+      req.flash('error','email already exists')
+      res.redirect('/signup');
     }
   });
 };
@@ -108,6 +150,7 @@ const userCheck = async (req, res) => {
             //     user,
             //   },
             // });
+            req.session.user=user;
             req.flash('success',"Successfully Logged In");
             res.redirect('/')
           } else {
@@ -144,7 +187,7 @@ const sendOtp = (req, res, next) => {
   //   });
 };
 
-const verifyOtp = (req, res, next) => {
+const verifyOtp =async (req, res, next) => {
   req.flash('success','successfully signed in')
   next();
   // const verificationCode = req.body.otp;
@@ -156,6 +199,10 @@ const verifyOtp = (req, res, next) => {
   //     console.log(verification_check.status);
   //     if(verification_check.status==="approved"){
   // req.flash('success','successfully signed in')
+  // await User.findOne({mob:mobile},function(err,user){
+  //   if(err)throw err;
+  //   req.session.user=user;
+  // })
   //       next();
   //     }else{
   //       res.redirect('/signup');
@@ -164,17 +211,18 @@ const verifyOtp = (req, res, next) => {
 };
 
 const getCheckout = (req, res)=>{
-  res.render('user/checkout')
+  const user = req.session.user;
+  res.render('user/checkout',{user})
 }
 
 const redirectToOtp =(req, res)=>{
   // Object.assign(req.body,{image:req.file.filname})
-  req.session.newUser=req.body;
+  req.session.newuser=req.body;
   res.redirect('/signup/otp-signup')
 }
 const redirectToOtpSignin =(req, res)=>{
   // Object.assign(req.body,{image:req.file.filname})
-  req.session.newUser=req.body;
+  req.session.newuser=req.body;
   res.redirect('/signin/otp-signin')
 }
 
@@ -214,4 +262,7 @@ export { getUserHome, getSignIn, getSignUp, newUser, userCheck, getOtpPage, send
   checkExisting,
   checkNotExisting,
   getCheckout,
+  getAddAddress,
+  addAddress,
+  getProfile,
   getOrderConfirmation };

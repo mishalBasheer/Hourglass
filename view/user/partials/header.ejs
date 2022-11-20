@@ -127,33 +127,38 @@
                 <!-- <a id="search_1" href="javascript:void(0)"><i class="ti-search"></i></a> -->
                 <a href="/wishlist" class="di-none"><i class="ti-heart"></i></a>
                 <div class="dropdown cart">
+                  <a href="/cart">
+                    <i class="fas fa-cart-plus"></i>
+                  </a>
+                </div>
+
+                <% if (user) { %>
+                <div class="dropdown">
                   <a
+                    href="/"
                     class="dropdown-toggle"
-                    href="/cart"
                     id="navbarDropdown3"
                     role="button"
                     data-toggle="dropdown"
                     aria-haspopup="true"
                     aria-expanded="false"
                   >
-                    <i class="fas fa-cart-plus"></i>
+                    <i class="ti-user"></i>
+                    &nbsp;
+                    <span class="di-none"> <%= user.fname %> </span>
                   </a>
-                  <!-- <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <div class="single_product">
-    
-                                    </div>
-                                </div> -->
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <div class="single_product"><a href="/profile">Profile</a></div>
+                    <div class="single_product"><a href="/logout">Logout</a></div>
+                  </div>
                 </div>
-
+                <% }else{ %>
                 <a href="/signin">
                   <i class="ti-user"></i>
-                  &nbsp; 
-                  <% if (user) { %>
-                    <span class="di-none"> <%= user.fname %>  </span>
-                    <% }else{ %>
-                      <span class="di-none"> Sign In </span>
-                      <% } %>
+                  &nbsp;
+                  <span class="di-none"> Sign In </span>
                 </a>
+                <% } %>
               </div>
             </nav>
           </div>

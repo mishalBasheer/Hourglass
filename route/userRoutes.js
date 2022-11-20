@@ -21,6 +21,9 @@ import {
   checkNotExisting,
   getCheckout,
   getTracking,
+  getProfile,
+  getAddAddress,
+  addAddress,
   newUser } from '../controllers/user/userController.js';
 
 const router = express.Router();
@@ -39,6 +42,8 @@ router.route('/cart').get(getCart)
 router.route('/checkout').get(getCheckout)
 router.route('/order').get(getOrderConfirmation)
 router.route('/order-tracking').get(getTracking)
+router.route('/profile').get(getProfile)
+router.route('/profile/add-address').get(getAddAddress).post(addAddress)
 // router.route('/forgot-password').get(getForgetPass)
 
 export default router;
