@@ -1,7 +1,7 @@
 <%- include('partials/header.ejs') %>
 
-    <!-- breadcrumb start-->
-    <section class="breadcrumb breadcrumb_bg">
+<!-- breadcrumb start-->
+<!-- <section class="breadcrumb breadcrumb_bg">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-8">
@@ -14,56 +14,167 @@
                 </div>
             </div>
         </div>
-    </section>
-    <!-- breadcrumb start-->
+    </section> -->
+<!-- breadcrumb start-->
 
-    <!--================login_part Area =================-->
-    <section class="login_part padding_top">
-        <div class="container h-100">
-            <div class="row align-items-center justify-content-center h-100">
+<!--================login_part Area =================-->
+<section class="login_part padding_top">
+  <div class="container h-100">
+    <div class="row align-items-center justify-content-center h-100">
+      <div class="col-12">
+        <div class="login_part_form m-auto">
+          <div class="login_part_form_iner ml-5">
+            <h3>
+              Join Zain Family ! <br />
+              Please Sign Up now
+            </h3>
+            <form
+              class="row contact_form"
+              action="/signup"
+              method="post"
+              name="signupForm"
+              onsubmit="return validate()"
+            >
+            <% if (msg.length>0) { %>
+                <div class="alert alert-danger alert-dismissible fade show w-100" role="alert">
+                    <%= msg %>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+            <% } %>
+              <div class="col-md-6 form-group p_star">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="fname"
+                  name="fname"
+                  value=""
+                  placeholder="First Name"
+                  required
+                />
+              </div>
+              <div class="col-md-6 form-group p_star">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="lname"
+                  name="lname"
+                  value=""
+                  placeholder="Last Name"
+                  required
+                />
+              </div>
+              <div class="col-md-12 form-group p_star">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="mob"
+                  name="mob"
+                  value=""
+                  pattern="\d*"
+                  maxlength="10"
+                  placeholder="Phone number"
+                  required
+                />
+              </div>
+              <div class="col-md-12 form-group p_star">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="pincode"
+                  name="pincode"
+                  value=""
+                  pattern="\d*"
+                  maxlength="6"
+                  placeholder="Pincode"
+                  required
+                />
+              </div>
+              <div class="col-md-12 form-group p_star">
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  name="email"
+                  value=""
+                  placeholder="Email Address"
+                  required
+                />
+              </div>
+              <div class="col-md-12 form-group p_star">
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  name="password"
+                  value=""
+                  placeholder="Password"
+                  required
+                />
+                <span id="message" style="color: red"> </span>
+              </div>
 
-                <div class="col-12">
-                    <div class="login_part_form m-auto">
-                        <div class="login_part_form_iner ml-5">
-                            <h3>Join Zain Family ! <br>
-                                Please Sign Up now</h3>
-                            <form class="row contact_form" action="/signup" method="post">
-                                <div class="col-md-6 form-group p_star">
-                                    <input type="text" class="form-control" id="fname" name="fname" value=""
-                                        placeholder="First Name" required>
-                                </div>
-                                <div class="col-md-6 form-group p_star">
-                                    <input type="text" class="form-control" id="lname" name="lname" value=""
-                                        placeholder="Last Name" required>
-                                </div>
-                                <div class="col-md-12 form-group p_star">
-                                    <input type="text" class="form-control" id="mob" name="mob" value="" pattern="\d*" maxlength="10"
-                                        placeholder="Phone number" required>
-                                </div>
-                                <div class="col-md-12 form-group p_star">
-                                    <input type="text" class="form-control" id="pincode" name="pincode" value="" pattern="\d*" maxlength="6"
-                                        placeholder="Pincode" required>
-                                </div>
-                                <div class="col-md-12 form-group p_star">
-                                    <input type="email" class="form-control" id="email" name="email" value=""
-                                        placeholder="Email Address" required>
-                                </div>
-                                <div class="col-md-12 form-group p_star">
-                                    <input type="password" class="form-control" id="password" name="password" value=""
-                                        placeholder="Password" required>
-                                </div>
-                                <div class="col-md-12 form-group">
-                                    <button type="submit" value="submit" class="btn_3">
-                                        Create Profile
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+              <div class="col-md-12 form-group">
+                <button type="submit" value="submit" class="btn_3">Submit</button>
+              </div>
+            </form>
+          </div>
         </div>
-    </section>
-    <!--================login_part end =================-->
+      </div>
+    </div>
+  </div>
+</section>
+<!--================login_part end =================-->
 
-    <%- include('partials/footer.ejs') %>
+<script type="text/javascript">
+  // Form validation code will come here.
+  function validate() {
+    if (document.signupForm.fname.value == '') {
+      alert('Please enter your first name!');
+      document.signupForm.fname.focus();
+      return false;
+    }
+    if (document.signupForm.lname.value == '') {
+      alert('Please enter your last name!');
+      document.signupForm.lname.focus();
+      return false;
+    }
+    if (document.signupForm.mob.value == '') {
+      alert('Please enter your Phone number!');
+      document.signupForm.mob.focus();
+      return false;
+    }
+    if (document.signupForm.pincode.value == '') {
+      alert('Please enter your pincode!');
+      document.signupForm.pincode.focus();
+      return false;
+    }
+    if (document.signupForm.email.value == '') {
+      alert('Please enter your email!');
+      document.signupForm.email.focus();
+      return false;
+    }
+    let pw = document.getElementById('password').value;
+    if (pw == '') {
+      alert('Please enter the Password!');
+      document.signupForm.password.focus();
+      return false;
+    }
+    if (pw.length < 8) {
+      document.getElementById('message').innerHTML = '**Password length must be atleast 8 characters';
+      document.signupForm.password.focus();
+      return false;
+    }
+
+    if (pw.length > 15) {
+      document.getElementById('message').innerHTML = '**Password length must not exceed 15 characters';
+      document.signupForm.password.focus();
+      return false;
+    }
+
+    return true;
+  }
+</script>
+
+<%- include('partials/footer.ejs') %>

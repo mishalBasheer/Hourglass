@@ -1,0 +1,56 @@
+<%- include('partials/header.ejs') %>
+
+<!--================Profile Account =================-->
+<section class="login_part padding_top">
+  <div class="container">
+    <div class="jumbotron">
+      <div class="container">
+        <h1 class="display-3">Hello, <%= user.fname %>!</h1>
+        <p>
+          This is a template for a simple marketing or informational website. It includes a large callout called a
+          jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.
+        </p>
+        <p><a class="btn btn-primary btn-lg" href="/shop" role="button">Continue Shopping &raquo;</a></p>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <% if (address.length>0) { %>
+
+    <h2>Your Address</h2>
+    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center mt-4">
+     <% address.forEach(el => { %>
+      
+      <div class="col col-md-4">
+        <div class="card mb-4 rounded-3 shadow-sm">
+          <div class="card-body">
+            <h1 class="card-title pricing-card-title"><%= el.name %> </h1>
+            <ul class="list-unstyled mt-3 mb-4">
+              <li><%= el.house %></li>
+              <li><%= el.landmark %></li>
+              <li><%= el.city %></li>
+              <li><%= el.district %></li>
+              <li><%= el.state %></li>
+              <li><%= el.pincode %></li>
+              <li><%= el.mob %></li>
+            </ul>
+            <button type="button" class="w-100 btn btn-lg btn-outline-primary">Edit</button>
+          </div>
+        </div>
+      </div>
+      
+      <% }) %>
+    </div>
+    <% }else{ %>
+    <div class="alert alert-warning d-flex align-items-center" role="alert">
+      <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Warning:"></svg>
+      <div>You have not added any address yet</div>
+    </div>
+    <% }%>
+    <a href="/profile/add-address/">
+      <button type="button" class="w-100 btn btn-lg btn-primary">Add Address</button>
+    </a>
+  </div>
+</section>
+
+<%- include('partials/footer.ejs') %>

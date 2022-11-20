@@ -1,0 +1,109 @@
+<%- include('partials/header.ejs') %>
+
+<section class="login_part padding_top">
+  <div class="container">
+    <div class="col-lg-8 col-md-8">
+      <h3 class="mb-30">Add Address</h3>
+      <form action="/profile/add-address" method="post">
+        <div class="mt-10">
+          <input
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            onfocus="this.placeholder = ''"
+            onblur="this.placeholder = 'Full name'"
+            required
+            class="single-input"
+          />
+        </div>
+        <div class="mt-10">
+          <input
+            type="number"
+            name="mob"
+            placeholder="Phone Number"
+            onfocus="this.placeholder = ''"
+            onblur="this.placeholder = 'Phone Number'"
+            required
+            class="single-input"
+          />
+        </div>
+        <div class="mt-10">
+          <input
+            type="text"
+            name="house"
+            placeholder="House Number & Name"
+            onfocus="this.placeholder = ''"
+            onblur="this.placeholder = 'House Number & Name'"
+            required
+            class="single-input"
+          />
+        </div>
+        <div class="mt-10">
+          <input
+            type="text"
+            name="landmark"
+            placeholder="Landmark"
+            onfocus="this.placeholder = ''"
+            onblur="this.placeholder = 'Landmark'"
+            required
+            class="single-input"
+          />
+        </div>
+        <div class="mt-10">
+          <input
+            type="text"
+            name="city"
+            placeholder="City"
+            onfocus="this.placeholder = ''"
+            onblur="this.placeholder = 'City'"
+            required
+            class="single-input"
+          />
+        </div>
+        <div class="input-group-icon mt-10">
+          <div class="icon"><i class="fa fa-plane" aria-hidden="true"></i></div>
+          <div class="form-select" id="default-select">
+            <select name="district">
+              <option value="none" selected disabled hidden>District</option>
+              <option value="Kozhikode">Kozhikode</option>
+              <option value="Malappuram">Malappuram</option>
+              <option value="Ernakulam">Ernakulam</option>
+              <option value="Kollam">Kollam</option>
+              <option value="Trivandrum">Trivandrum</option>
+            </select>
+          </div>
+        </div>
+        <div class="input-group-icon mt-10">
+          <div class="icon"><i class="fa fa-globe" aria-hidden="true"></i></div>
+          <div class="form-select" id="default-select_1">
+            <select name="state">
+                <option value="none" selected disabled hidden>state</option>
+                <option value="Kerala">Kerala</option>
+                <option value="Maharashtra">Maharashtra</option>
+                <option value="Karnataka">Karnataka</option>
+                <option value="Goa">Goa</option>
+                <option value="Tamil Nadu">Tamil Nadu</option>
+            </select>
+          </div>
+        </div>
+        <div class="mt-10">
+            <input
+              type="text"
+              name="pincode"
+              placeholder="Pincode"
+              onfocus="this.placeholder = ''"
+              onblur="this.placeholder = 'Pincode'"
+              required
+              class="single-input"
+            />
+          </div>
+
+          <button type="submit" class="btn btn-primary mt-4">Submit Address</button>
+
+
+      </form>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer.ejs') %>

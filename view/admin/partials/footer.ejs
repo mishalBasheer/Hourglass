@@ -61,6 +61,7 @@
         <p id="modal-description" class="text-sm text-gray-700 dark:text-gray-400">
           
         </p>
+        <div id="images"></div>
       </div>
       <footer
         class="flex flex-col items-center justify-end px-6 py-3 -mx-6 -mb-4 space-y-4 sm:space-y-0 sm:space-x-6 sm:flex-row bg-gray-50 dark:bg-gray-800"
@@ -73,12 +74,25 @@
         </button>
       </footer>
     </div>
-  </div>
+  </div>  
   <!-- End of modal backdrop -->
   <script>
-    function modalSaveDetails(dataObj){
-      document.getElementById('modal-header').innerHTML=dataObj[0];
-      document.getElementById('modal-description').innerHTML=dataObj[1];
+    function modalSaveDetails([header,description,...images]){
+      // document.getElementById('modal-header').innerHTML=dataObj[0];
+      // document.getElementById('modal-description').innerHTML=dataObj[1];
+      document.getElementById('modal-header').innerHTML=header;
+      document.getElementById('modal-description').innerHTML=description;
+      console.log(images);
+      let imagesArray = images.toString().split(',')
+      console.log(imagesArray);
+
+      
+      imagesArray = imagesArray.map(element => {
+        return `<img src="/product_img/${element}" width="200px" style="display: inline;">`
+      });
+      document.getElementById('images').innerHTML=imagesArray.join('')
+      
+      
     }
     </script>
   </body>

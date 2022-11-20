@@ -17,13 +17,23 @@
           </label>
 
           <label class="block mt-4 text-sm">
-            <span class="text-gray-700 dark:text-gray-400">Brand</span>
-            <input
+            <span class="text-gray-700 dark:text-gray-400"> Brand </span>
+            <select
               name="brand"
-              type="text"
-              class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              placeholder="Teak Wood"
-            />
+              class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+            >
+            <option value="none" selected disabled hidden>Select an Option</option>
+            <% brand.forEach(el => { %>
+              <option value="<%= el._id %>"><%= el.title %></option>
+              <% }) %>
+             
+              <!-- <option value="Wall Accent">Wall Accent</option>
+              <option value="Lighting">Lighting</option>
+              <option value="Garden & Outdoor">Garden & Outdoor</option>
+              <option value="Sofa & Recliners">Sofa & Recliners</option>
+              <option value="Storage">Storage</option>
+              <option value="Beds & Mattress">Beds & Mattress</option> -->
+            </select>
           </label>
 
           <label class="block mt-4 text-sm">
@@ -33,13 +43,15 @@
               class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
             >
             <option value="none" selected disabled hidden>Select an Option</option>
-              <option value="Furniture">Furniture</option>
-              <option value="Wall Accent">Wall Accent</option>
+            <% category.forEach(el => { %>
+              <option value="<%= el._id %>"><%= el.title %></option>
+              <% }) %>
+              <!-- <option value="Wall Accent">Wall Accent</option>
               <option value="Lighting">Lighting</option>
               <option value="Garden & Outdoor">Garden & Outdoor</option>
               <option value="Sofa & Recliners">Sofa & Recliners</option>
               <option value="Storage">Storage</option>
-              <option value="Beds & Mattress">Beds & Mattress</option>
+              <option value="Beds & Mattress">Beds & Mattress</option> -->
             </select>
           </label>
           

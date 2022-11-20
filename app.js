@@ -3,6 +3,7 @@ import logger from 'morgan';
 import path from 'path';
 import cookieParser from "cookie-parser";
 import session from 'express-session';
+import flash from 'connect-flash';
 
 import userRouter from './route/userRoutes.js';
 import adminRouter from './route/adminRoutes.js';
@@ -13,9 +14,10 @@ const __dirname = path.resolve();
 app.set('views', path.join(__dirname, 'view'));
 app.set('view engine', 'ejs');
 
+app.use(cookieParser());
 app.use(session({
     secret: 'keyboard cat',
-    resave: false,
+    resave: true,
     saveUninitialized: true,
     cookie: { maxAge: 24*60*60*1000 },
   })
@@ -32,7 +34,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cookieParser());
+app.use(flash());
 
 app.use('/', userRouter);
 app.use('/admin', adminRouter);

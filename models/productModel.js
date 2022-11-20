@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import moment from "moment";
+const Date = moment().format("MMMM Do YYYY, h:mm a")
 
 const productSchema = new mongoose.Schema({
     title: {
@@ -9,14 +10,16 @@ const productSchema = new mongoose.Schema({
     },
     date:{
       type:String,
-      default:moment().format("MMMM Do YYYY, h:mm a"),
+      default:Date,
     },
     brand: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref:'Brand',
       required:[true,'please specify product brand']
     },
     category: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref:'Category',
       required:[true,'please specify product category']
     },
     price: {
@@ -27,11 +30,10 @@ const productSchema = new mongoose.Schema({
       type: String,
       required:[true,'Product must have a desciption']
     },
- 
     images: {
       type: Array,
       required:[true,'add atleast 1 image'],
-    }
+    },
   });
   const Product = mongoose.model('Product',productSchema);
 

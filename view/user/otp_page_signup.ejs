@@ -1,0 +1,42 @@
+<%- include('partials/header.ejs') %>
+
+<!-- breadcrumb start-->
+<!-- <section class="breadcrumb breadcrumb_bg">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="breadcrumb_iner">
+          <div class="breadcrumb_iner_item">
+            <h2>Log In</h2>
+            <p>Home <span>-</span> Log In</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+<!-- breadcrumb start-->
+
+<!--================login_part Area =================-->
+<section class="login_part padding_top">
+  <div class="container">
+    <div class="login_part_form_iner w-50 mx-auto">
+      <h3>
+        Welcome Back ! <br />
+        Please Sign in by OTP-verification
+      </h3>
+      <form class="row contact_form" action="/signup/otp-signup" method="post">
+        <div class="col-md-12 form-group p_star">
+          <input type="number" class="form-control" id="otp" name="otp" placeholder="Verification Code" required/>
+        </div>
+        <div class="col-md-12 form-group">
+
+          <button type="submit" value="submit" class="btn_3">Log in</button>
+          <a class="lost_pass" href="#">Resent OTP</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer.ejs') %>
