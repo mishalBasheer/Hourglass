@@ -22,6 +22,7 @@ import {
   getCheckout,
   getTracking,
   getProfile,
+  getWish,
   getAddAddress,
   addAddress,
   newUser } from '../controllers/user/userController.js';
@@ -39,6 +40,7 @@ router.route('/product-details/:id').get(getProductDetails)
 router.route('/contact').get(getContactUs)
 router.route('/forgot-password').get(getForgetPassword)
 router.route('/cart').get(getCart)
+router.route('/wishlist').get(getWish)
 router.route('/checkout').get(getCheckout)
 router.route('/order').get(getOrderConfirmation)
 router.route('/order-tracking').get(getTracking)

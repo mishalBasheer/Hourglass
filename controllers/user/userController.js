@@ -3,6 +3,8 @@ import Address from '../../models/addressModel.js';
 import Brand from '../../models/brandModel.js';
 import Category from '../../models/categoryModel.js';
 import Product from '../../models/productModel.js';
+import Cart from '../../models/cartModel.js';
+import Wishlist from '../../models/wishlistModel.js';
 import twilio from 'twilio';
 import flash from 'connect-flash';
 
@@ -75,6 +77,10 @@ const getCart =(req,res)=>{
   const user = req.session.user;
   res.render('user/cart',{user});
 }
+const getWish =(req,res)=>{
+  const user = req.session.user;
+  res.render('user/wishlist',{user});
+}
 const getOrderConfirmation =(req,res)=>{
   const user = req.session.user;
   res.render('user/order',{user});
@@ -127,9 +133,14 @@ const emailCheck = (userData) => {
 
 const newUser = async (req, res) => {
   const newUser = req.session.newuser;
-  emailCheck(newUser).then((matchFound) => {
+  emailCheck(newUser).then(async(matchFound) => {
     if (!matchFound) {
-      // console.log("new User:",newUser);
+      const cart = await Cart.create({created:true});
+      const wishlist = await Wishlist.create({created:true});
+      console.log('cart: ',cart)
+      console.log('wishlist: ',wishlist)
+      Object.assign(newUser,{cartId:cart._id,wishlistId:wishlist._id})
+      console.log("new User:",newUser);
       User.create(newUser);
       // console.log(newUser);
       req.session.user=newUser
@@ -195,7 +206,7 @@ const sendOtp = (req, res, next) => {
   //   });
 };
 
-const verifyOtp =async (req, res, next) => {
+const verifyOtp = async (req, res, next) => {
   req.flash('success','successfully signed in')
   next();
   // const verificationCode = req.body.otp;
@@ -203,7 +214,7 @@ const verifyOtp =async (req, res, next) => {
   // client.verify.v2
   //   .services(serviceId)
   //   .verificationChecks.create({ to: `+91${mobile}`, code: verificationCode })
-  //   .then((verification_check) => {
+  //   .then(async(verification_check) => {
   //     console.log(verification_check.status);
   //     if(verification_check.status==="approved"){
   // req.flash('success','successfully signed in')
@@ -272,5 +283,6 @@ export { getUserHome, getSignIn, getSignUp, newUser, userCheck, getOtpPage, send
   getCheckout,
   getAddAddress,
   addAddress,
+  getWish,
   getProfile,
   getOrderConfirmation };

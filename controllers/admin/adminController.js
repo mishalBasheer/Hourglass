@@ -216,7 +216,7 @@ const uploadProduct = async (req, res) => {
 
 const getAllProduct = () => {
   return new Promise(async (resolve, reject) => {
-    let products = await Product.find().populate('brand').populate('category').exec();
+    let products = await Product.find({available:true}).populate('brand').populate('category').exec();
     // if(products!=null){
     resolve(products);
     // }else{
@@ -282,7 +282,7 @@ const getAllClients = () => {
 };
 
 const deleteProduct = async (req, res) => {
-  await Product.deleteOne({ _id: req.params.id });
+  await Product.findByIdAndUpdate(req.params.id,{available:false});
   res.redirect('/admin/products');
 };
 

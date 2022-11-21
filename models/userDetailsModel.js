@@ -16,10 +16,6 @@ const userDetailsSchema = new mongoose.Schema({
     // unique: [true,'number existing'],
     unique: true,
   },
-  pincode: {
-    type: Number,
-    required: [true, 'pincode required'],
-  },
   email: {
     type: String,
     required: [true, 'email field required'],
@@ -36,6 +32,16 @@ const userDetailsSchema = new mongoose.Schema({
   image:{
     type:String,
     default:"user_icon.jpg"
+  },
+  cartId:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:'Cart',
+    required:[true,'category id not added']
+  },
+  wishlistId:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:'Wishlist',
+    required:[true,'wishlist id not added']
   }
 });
 

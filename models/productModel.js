@@ -49,6 +49,13 @@ const productSchema = new mongoose.Schema({
     },
     material:{
       type:String,
+    },
+    stock:{
+      type:Number,
+    },
+    available:{
+      type:Boolean,
+      default:true,
     }
   },{
     timestamps:true,
