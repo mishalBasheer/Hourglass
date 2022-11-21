@@ -22,6 +22,8 @@
   <section class="cart_area padding_top">
     <div class="container">
       <div class="cart_inner">
+        <% if (cart.length>0) { %>
+
         <div class="table-responsive">
           <table class="table">
             <thead>
@@ -33,6 +35,9 @@
               </tr>
             </thead>
             <tbody>
+              <% cart.forEach(element => { %>
+ 
+
               <tr>
                 <td>
                   <div class="media">
@@ -58,66 +63,8 @@
                   <h5>$720.00</h5>
                 </td>
               </tr>
-              <tr>
-                <td>
-                  <div class="media">
-                    <div class="d-flex">
-                      <img src="/user/img/product/single-product/cart-1.jpg" alt="" />
-                    </div>
-                    <div class="media-body">
-                      <p>Minimalistic shop for multipurpose use</p>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <h5>$360.00</h5>
-                </td>
-                <td>
-                  <div class="product_count">
-                    <!-- <input type="text" value="1" min="0" max="10" title="Quantity:"
-                      class="input-text qty input-number" />
-                    <button
-                      class="increase input-number-increment items-count" type="button">
-                      <i class="ti-angle-up"></i>
-                    </button>
-                    <button
-                      class="reduced input-number-decrement items-count" type="button">
-                      <i class="ti-angle-down"></i>
-                    </button> -->
-                    <span class="input-number-decrement"> <i class="ti-angle-down"></i></span>
-                    <input class="input-number" type="text" value="1" min="0" max="10">
-                    <span class="input-number-increment"> <i class="ti-angle-up"></i></span>
-                  </div>
-                </td>
-                <td>
-                  <h5>$720.00</h5>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="media">
-                    <div class="d-flex">
-                      <img src="/user/img/product/single-product/cart-1.jpg" alt="" />
-                    </div>
-                    <div class="media-body">
-                      <p>Minimalistic shop for multipurpose use</p>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <h5>$360.00</h5>
-                </td>
-                <td>
-                  <div class="product_count">
-                    <span class="input-number-decrement"> <i class="ti-angle-down"></i></span>
-                    <input class="input-number" type="text" value="1" min="0" max="10">
-                    <span class="input-number-increment"> <i class="ti-angle-up"></i></span>
-                  </div>
-                </td>
-                <td>
-                  <h5>$720.00</h5>
-                </td>
-              </tr>
+              <% }) %>
+
               <tr class="bottom_button">
                 <td>
                   <a class="btn_1" href="#">Update Cart</a>
@@ -188,8 +135,15 @@
             <a class="btn_1 checkout_btn_1" href="/checkout">Proceed to checkout</a>
           </div>
         </div>
+ 
+        <% }else{ %>
+          <div class="alert alert-warning d-flex align-items-center" role="alert">
+              <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Warning:"></svg>
+              <div>You have not added anything to Cart</div>
+          </div>
+      <% }%>
       </div>
   </section>
   <!--================End Cart Area =================-->
-  
+
   <%- include('partials/footer.ejs') %>

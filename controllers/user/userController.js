@@ -73,13 +73,18 @@ const getForgetPassword =(req,res)=>{
   const user = req.session.user;
   res.render('user/forgotpass',{user});
 }
-const getCart =(req,res)=>{
+const getCart =async (req,res)=>{
   const user = req.session.user;
-  res.render('user/cart',{user});
+  const cart = await Cart.findOne({_id:user.cartId}).populate('product');
+
+  res.render('user/cart',{user,cart:cart.products});
 }
-const getWish =(req,res)=>{
+const getWish =async (req,res)=>{
   const user = req.session.user;
-  res.render('user/wishlist',{user});
+  // console.log(user);
+    const wishlist = await Wishlist.findOne({_id:user.wishlistId}).populate('product');
+    res.render('user/wishlist',{user,wishlist:wishlist.products});
+  
 }
 const getOrderConfirmation =(req,res)=>{
   const user = req.session.user;

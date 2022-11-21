@@ -2912,7 +2912,7 @@ ul {
   text-transform: uppercase;
   font-size: 18px;
   font-weight: 500;
-  display: block;
+  display: inline;
   margin-top: 10px;
   opacity: 0;
   visibility: hidden;
