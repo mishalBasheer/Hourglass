@@ -137,10 +137,10 @@ const newUser = async (req, res) => {
     if (!matchFound) {
       const cart = await Cart.create({created:true});
       const wishlist = await Wishlist.create({created:true});
-      console.log('cart: ',cart)
-      console.log('wishlist: ',wishlist)
+      // console.log('cart: ',cart)
+      // console.log('wishlist: ',wishlist)
       Object.assign(newUser,{cartId:cart._id,wishlistId:wishlist._id})
-      console.log("new User:",newUser);
+      // console.log("new User:",newUser);
       User.create(newUser);
       // console.log(newUser);
       req.session.user=newUser
