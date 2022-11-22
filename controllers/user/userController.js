@@ -103,7 +103,8 @@ res.redirect('/shop')
 const getWish = async (req, res) => {
   const user = req.session.user;
   // console.log(user);
-  const wishlist = await Wishlist.findOne({ _id: user.wishlistId }).populate('product');
+  const wishlist = await Wishlist.findOne({ _id: user.wishlistId }).populate('products.product');
+  // console.log(wishlist);
   res.render('user/wishlist', { user, wishlist: wishlist.products });
 };
 const setWish =async (req, res) => {
