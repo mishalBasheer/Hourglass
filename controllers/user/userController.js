@@ -57,9 +57,16 @@ const getAllShop = async (req, res) => {
   const category = await Category.find();
   const product = await Product.find();
   const user = req.session.user;
-  const wishlistProducts = await Wishlist.findOne({_id:user.wishlistId}).select({"products.product":1,_id:0})
-  const msg = req.flash('cartSuccess');
-  res.render('user/shop', { user, product, brand, category,msg ,wishlistProducts});
+  if(user){
+    const wishlistProducts = await Wishlist.findOne({_id:user.wishlistId}).select({"products.product":1,_id:0})
+    const msg = req.flash('cartSuccess');
+    res.render('user/shop', { user, product, brand, category,msg ,wishlistProducts});
+  }else{
+    const msg = req.flash('cartSuccess');
+    res.render('user/shop', { user, product, brand, category,msg });
+  }
+
+
 };
 const getProductDetails = async (req, res) => {
   const product = await Product.findOne({ _id: req.params.id }).populate('category').populate('brand');
