@@ -29,6 +29,7 @@ import {
   decQuantity,
   incQuantity,
   getAddAddress,
+  logoutUser,
   addAddress,
   newUser,
 } from '../controllers/user/userController.js';
@@ -36,6 +37,7 @@ import {
 const router = express.Router();
 
 router.route('/').get(getUserHome);
+router.route('/logout').get(logoutUser);
 router.route('/signup').get(getSignUp).post(checkNotExisting, sendOtp, redirectToOtp);
 router.route('/signup/otp-signup').get(getOtpSignUp).post(verifyOtp, newUser);
 router.route('/signin').get(getSignIn).post(userCheck);
@@ -57,6 +59,5 @@ router.route('/order').get(getOrderConfirmation);
 router.route('/order-tracking').get(getTracking);
 router.route('/profile').get(getProfile);
 router.route('/profile/add-address').get(getAddAddress).post(addAddress);
-// router.route('/forgot-password').get(getForgetPass)
 
 export default router;
