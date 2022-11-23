@@ -33,6 +33,7 @@ import {
   addAddress,
   newUser,
 } from '../controllers/user/userController.js';
+import { userLoginCheck,checkBlockedUser, } from "../middleware/userLoginCheckMiddleware.js";
 
 const router = express.Router();
 
@@ -47,17 +48,17 @@ router.route('/shop').get(getAllShop);
 router.route('/product-details/:id').get(getProductDetails);
 router.route('/contact').get(getContactUs);
 router.route('/forgot-password').get(getForgetPassword);
-router.route('/cart').get(getCart);
-router.route('/cart/dec-quantity').post(decQuantity);
-router.route('/cart/inc-quantity').post(incQuantity);
-router.route('/add-to-cart/:id').get(setCart);
-router.route('/wishlist').get(getWish);
-router.route('/add-to-wishlist/:id').get(setWish);
-router.route('/remove-from-wishlist/:id').get(removeFromWishlist);
-router.route('/checkout').get(getCheckout);
-router.route('/order').get(getOrderConfirmation);
-router.route('/order-tracking').get(getTracking);
-router.route('/profile').get(getProfile);
-router.route('/profile/add-address').get(getAddAddress).post(addAddress);
+router.route('/cart').get(userLoginCheck,checkBlockedUser,getCart);
+router.route('/cart/dec-quantity').post(userLoginCheck,checkBlockedUser,decQuantity);
+router.route('/cart/inc-quantity').post(userLoginCheck,checkBlockedUser,incQuantity);
+router.route('/add-to-cart/:id').get(userLoginCheck,checkBlockedUser,setCart);
+router.route('/wishlist').get(userLoginCheck,checkBlockedUser,getWish);
+router.route('/add-to-wishlist/:id').get(userLoginCheck,checkBlockedUser,setWish);
+router.route('/remove-from-wishlist/:id').get(userLoginCheck,checkBlockedUser,removeFromWishlist);
+router.route('/checkout').get(userLoginCheck,checkBlockedUser,getCheckout);
+router.route('/order').get(userLoginCheck,checkBlockedUser,getOrderConfirmation);
+router.route('/order-tracking').get(userLoginCheck,checkBlockedUser,getTracking);
+router.route('/profile').get(userLoginCheck,checkBlockedUser,getProfile);
+router.route('/profile/add-address').get(userLoginCheck,checkBlockedUser,getAddAddress).post(userLoginCheck,checkBlockedUser,addAddress);
 
 export default router;

@@ -334,9 +334,9 @@ const newUser = async (req, res) => {
         // console.log(newUser);
         req.session.user = newUser;
         req.session.userEmail = newUser.email;
-        req.session.userLogin = true;
         res.redirect('/');
       } else {
+        req.session.userLogin = false;
         req.flash('error', 'email already exists');
         res.redirect('/signup');
       }
@@ -365,12 +365,14 @@ const userCheck = async (req, res) => {
             // });
             console.log(user);
             req.session.user = user;
+            req.session.userLogin = true;
             req.flash('success', 'Successfully Logged In');
             res.redirect('/');
           } else {
             // res.status(400).json({
             //   status: 'password not match error',
             // });
+            req.session.userLogin = false;
             req.flash('error', 'Password not match');
             res.redirect('/signin');
           }
@@ -421,6 +423,7 @@ const verifyOtp = async (req, res, next) => {
             if (err) throw err;
             req.session.user = user;
           });
+          req.session.userLogin = true;
           next();
         } else {
           req.flash('error','wrong otp given try again!!')
