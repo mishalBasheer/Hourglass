@@ -7,38 +7,23 @@ import Product from '../../models/productModel.js';
 import Cart from '../../models/cartModel.js';
 import Wishlist from '../../models/wishlistModel.js';
 import twilio from 'twilio';
-// import flash from 'connect-flash';
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const serviceId = process.env.TWILIO_SERVICE;
 const client = twilio(accountSid, authToken);
 
+// get user Home Page 
 const getUserHome = (req, res) => {
   // show a success message when successfully logged in
   const msg = req.flash('success');
   // getting logged in user details to "user" variable
   const user = req.session.user;
-  /////////////////////////////////////////////////////////remove
-  // req.session.user = {
-  //   block: false,
-  //   image: 'user_icon.jpg',
-  //   _id: mongoose.Types.ObjectId('637bea89b921d410e4c72d99'),
-  //   fname: 'Joules',
-  //   lname: 'Kounde',
-  //   mob: 9947227758,
-  //   email: 'jkounde@gmail.com',
-  //   password: '$2b$12$dzTVHZOQ425Hn87RRam3ruX.DaSYfC8SkcXEMQmtlGgXGz230fqsG',
-  //   cartId: mongoose.Types.ObjectId('637bea89b921d410e4c72d95'),
-  //   wishlistId: mongoose.Types.ObjectId('637bea89b921d410e4c72d97'),
-  //   __v: 0
-  // };
-  // const user = req.session.user;
-  //////////////////////////////////////////////////////////////
 
   res.render('user/home', { msg, user });
 };
 
+// get SignIn Page 
 const getSignIn = (req, res) => {
   const user = req.session.user;
   const msg = req.flash('error');
@@ -46,6 +31,7 @@ const getSignIn = (req, res) => {
   res.render('user/login', { msg, user });
 };
 
+// get SignUp Page 
 const getSignUp = (req, res) => {
   const user = req.session.user;
   const msg = req.flash('error');
@@ -53,21 +39,25 @@ const getSignUp = (req, res) => {
   res.render('user/signup', { msg, user });
 };
 
+// get OTP Phone number Page (SignIn) 
 const getOtpPhonePage = (req, res) => {
   const user = req.session.user;
   res.render('user/otp_phone', { user });
 };
 
+// get OTP number from user Page(SignIn) 
 const getOtpPage = (req, res) => {
   const user = req.session.user;
   res.render('user/otp_page', { user });
 };
 
+// get OTP number from user Page (SignUp)
 const getOtpSignUp = (req, res) => {
   const user = req.session.user;
   res.render('user/otp_page_signup', { user });
 };
 
+// Shows all products that is listed in shop page
 const getAllShop = async (req, res) => {
   try {
     const brand = await Brand.find();
@@ -90,6 +80,8 @@ const getAllShop = async (req, res) => {
     res.render('user/error-page', { error: err, errorMsg: 'error from getting all products' });
   }
 };
+
+// shows the details of specific product
 const getProductDetails = async (req, res) => {
   try {
     const product = await Product.findOne({ _id: req.params.id }).populate('category').populate('brand');
@@ -101,14 +93,20 @@ const getProductDetails = async (req, res) => {
     res.status(404).render('user/error-page', { error: err, errorMsg: 'error from getting product detail' });
   }
 };
+
+// get ContactUs Page 
 const getContactUs = (req, res) => {
   const user = req.session.user;
   res.render('user/contact', { user });
 };
+
+// get ForgetPassword Page 
 const getForgetPassword = (req, res) => {
   const user = req.session.user;
   res.render('user/forgotpass', { user });
 };
+
+// get Cart Page 
 const getCart = async (req, res) => {
   try {
     const user = req.session.user;
@@ -121,6 +119,7 @@ const getCart = async (req, res) => {
   }
 };
 
+// adding a Product to user's cart 
 const setCart = async (req, res) => {
   try {
     const user = req.session.user;
@@ -147,6 +146,7 @@ const setCart = async (req, res) => {
   }
 };
 
+// ajax increase Quantity of the cart product 
 const incQuantity = async (req, res) => {
   try {
     const user = req.session.user;
@@ -172,6 +172,7 @@ const incQuantity = async (req, res) => {
   }
 };
 
+// ajax decrease Quantity of the cart product 
 const decQuantity = async (req, res) => {
   try {
     const user = req.session.user;
@@ -203,6 +204,7 @@ const decQuantity = async (req, res) => {
   }
 };
 
+// get Wishlist Page 
 const getWish = async (req, res) => {
   try {
     const user = req.session.user;
@@ -215,6 +217,8 @@ const getWish = async (req, res) => {
     res.render('user/error-page', { error: err, errorMsg: 'error while getting wishlist products' });
   }
 };
+
+// putting products to Wishlist 
 const setWish = async (req, res) => {
   try {
     const user = req.session.user;
@@ -240,6 +244,8 @@ const setWish = async (req, res) => {
     res.render('user/error-page', { error: err, errorMsg: 'error while putting products to wishlist' });
   }
 };
+
+// removing products from Wishlist 
 const removeFromWishlist = async (req, res) => {
   try {
     const user = req.session.user;
@@ -253,26 +259,33 @@ const removeFromWishlist = async (req, res) => {
     res.render('user/error-page', { error: err, errorMsg: 'error while removing products from wishlist' });
   }
 };
+
+// get OrderConfirmation Page 
 const getOrderConfirmation = (req, res) => {
   const user = req.session.user;
   res.render('user/order', { user });
 };
+
+// get Tracking Page 
 const getTracking = (req, res) => {
   const user = req.session.user;
   res.render('user/tracking', { user });
 };
 
+// get Profile Page 
 const getProfile = async (req, res) => {
   const user = req.session.user;
   const address = await Address.find({ userId: user._id });
   res.render('user/profile', { user, address });
 };
 
+// get Address profile Page 
 const getAddAddress = (req, res) => {
   const user = req.session.user;
   res.render('user/add_address', { user });
 };
 
+// adding Address to address collection
 const addAddress = async (req, res) => {
   try {
     let newAdd = req.body;
@@ -290,6 +303,7 @@ const addAddress = async (req, res) => {
   }
 };
 
+// Helper - email checking when adding new user
 const emailCheck = (userData) => {
   return new Promise(async (resolve, reject) => {
     let emailMatchFound;
@@ -304,6 +318,7 @@ const emailCheck = (userData) => {
   });
 };
 
+// Verifiying new user,adding user details to DB, setting user data to session.user
 const newUser = async (req, res) => {
   try {
     const newUser = req.session.newuser;
@@ -332,6 +347,7 @@ const newUser = async (req, res) => {
   }
 };
 
+// checking user details by matching details with the DB (Authentication while signIn)
 const userCheck = async (req, res) => {
   try {
     await User.findOne({ email: req.body.email }, function (err, user) {
@@ -373,6 +389,7 @@ const userCheck = async (req, res) => {
   }
 };
 
+// sending OTP to user
 const sendOtp = (req, res, next) => {
   // next();
   req.session.userMobile = req.body.mob;
@@ -386,6 +403,7 @@ const sendOtp = (req, res, next) => {
     });
 };
 
+// verifiying users OTP
 const verifyOtp = async (req, res, next) => {
   // req.flash('success', 'successfully signed in');
   // next();
@@ -415,22 +433,27 @@ const verifyOtp = async (req, res, next) => {
   }
 };
 
+// get Checkout Page 
 const getCheckout = (req, res) => {
   const user = req.session.user;
   res.render('user/checkout', { user });
 };
 
+// redirecting to OTP sign Up page 
 const redirectToOtp = (req, res) => {
   // Object.assign(req.body,{image:req.file.filname})
   req.session.newuser = req.body;
   res.redirect('/signup/otp-signup');
 };
+
+// redirecting to OTP sign in page
 const redirectToOtpSignin = (req, res) => {
   // Object.assign(req.body,{image:req.file.filname})
   req.session.newuser = req.body;
   res.redirect('/signin/otp-signin');
 };
 
+// check whether the user Exists or not( sign In)
 const checkExisting = async (req, res, next) => {
   try{
     const user = await User.find({ mob: req.body.mob });
@@ -449,6 +472,7 @@ const checkExisting = async (req, res, next) => {
     
 };
 
+// user details cannot be the same when sign up
 const checkNotExisting = async (req, res, next) => {
   try{
     const user = await User.find({ mob: req.body.mob });
@@ -467,6 +491,7 @@ const checkNotExisting = async (req, res, next) => {
     
 };
 
+// removing session of the user
 const logoutUser = (req, res) => {
   req.session.user = null;
   res.redirect('/');
