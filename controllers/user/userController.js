@@ -18,8 +18,24 @@ const getUserHome = (req, res) => {
   // show a success message when successfully logged in
   const msg = req.flash('success');
   // getting logged in user details to "user" variable
+  // const user = req.session.user;
+  /////////////////////////////////////////////////////////remove
+  req.session.user = {
+    block: false,
+    image: 'user_icon.jpg',
+    _id: mongoose.Types.ObjectId('637bea89b921d410e4c72d99'),
+    fname: 'Joules',
+    lname: 'Kounde',
+    mob: 9947227758,
+    email: 'jkounde@gmail.com',
+    password: '$2b$12$dzTVHZOQ425Hn87RRam3ruX.DaSYfC8SkcXEMQmtlGgXGz230fqsG',
+    cartId: mongoose.Types.ObjectId('637bea89b921d410e4c72d95'),
+    wishlistId: mongoose.Types.ObjectId('637bea89b921d410e4c72d97'),
+    __v: 0
+  };
   const user = req.session.user;
-  console.log(user);
+  //////////////////////////////////////////////////////////////
+
 
   res.render('user/home', { msg, user });
 };
@@ -47,6 +63,7 @@ const getOtpPage = (req, res) => {
   const user = req.session.user;
   res.render('user/otp_page', { user });
 };
+
 const getOtpSignUp = (req, res) => {
   const user = req.session.user;
   res.render('user/otp_page_signup', { user });
@@ -65,8 +82,6 @@ const getAllShop = async (req, res) => {
     const msg = req.flash('cartSuccess');
     res.render('user/shop', { user, product, brand, category,msg });
   }
-
-
 };
 const getProductDetails = async (req, res) => {
   const product = await Product.findOne({ _id: req.params.id }).populate('category').populate('brand');
@@ -84,8 +99,8 @@ const getForgetPassword = (req, res) => {
 };
 const getCart = async (req, res) => {
   const user = req.session.user;
-  const cart = await Cart.findOne({ _id: user.cartId }).populate('product');
-
+  const cart = await Cart.findOne({ _id: user.cartId }).populate('products.product');
+console.log(cart);
   res.render('user/cart', { user, cart: cart.products });
 };
 
@@ -106,6 +121,57 @@ const setCart =async (req, res) => {
   req.flash('cartSuccess','Successfully added product to cart')
 res.redirect('/shop')
 };
+
+const incQuantity = async(req,res)=>{
+  try{
+    const user = req.session.user;
+    const productId=mongoose.Types.ObjectId(req.body.productId);
+  // const quantity =Number(req.body.quantity);
+  // if(quantity>=15){
+  //   res.status(200).json({
+  //     stat:false,
+  //     message:'cannot increase from 10',
+  //   })
+  // }else{
+    await Cart.findOneAndUpdate({_id:user.cartId,'products.product':productId},{$inc:{'products.$.quantity':1}});
+    res.status(200).json({
+      stat:true,
+    })
+  // }
+}catch(err){
+  res.json({
+    status:"error while decreasing from cart error",
+    message:err,
+  })
+}
+}
+
+const decQuantity =async(req,res)=>{
+  try{
+    const user = req.session.user;
+    const productId=mongoose.Types.ObjectId(req.body.productId);
+    // const quantity =Number(req.body.quantity);
+  // console.log(user,quantity);
+  // console.log(typeof productId)
+  // if(quantity<=1){
+  //   res.json({
+  //     stat:false,
+  //     message:'cannot decrease to zero',
+  //   })
+  // }else{
+    await Cart.findOneAndUpdate({_id:user.cartId,'products.product':productId},{$inc:{'products.$.quantity':-1}});
+    res.json({
+      stat:true,
+    })
+  // }
+}catch(err){
+  res.json({
+    status:"error while decreasing from cart error",
+    message:err,
+  })
+}
+  
+}
 
 const getWish = async (req, res) => {
   const user = req.session.user;
@@ -229,6 +295,7 @@ const userCheck = async (req, res) => {
             //     user,
             //   },
             // });
+            console.log(user);
             req.session.user = user;
             req.flash('success', 'Successfully Logged In');
             res.redirect('/');
@@ -357,6 +424,8 @@ export {
   setCart,
   removeFromWishlist,
   setWish,
+  decQuantity,
+  incQuantity,
   getProfile,
   getOrderConfirmation,
 };

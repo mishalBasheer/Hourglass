@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="/user/css/price_rangs.css" />
     <!-- style CSS -->
     <link rel="stylesheet" href="/user/css/style.css" />
+
   </head>
 
   <body>
@@ -125,14 +126,14 @@
               </div>
               <div class="hearer_icon d-flex">
                 <!-- <a id="search_1" href="javascript:void(0)"><i class="ti-search"></i></a> -->
+
+                <% if (user) { %>
                 <a href="/wishlist" class="di-none"><i class="ti-heart"></i></a>
                 <div class="dropdown cart">
                   <a href="/cart">
                     <i class="fas fa-cart-plus"></i>
                   </a>
                 </div>
-
-                <% if (user) { %>
                 <div class="dropdown">
                   <a
                     href="/"

@@ -26,6 +26,8 @@ import {
   setCart,
   removeFromWishlist,
   setWish,
+  decQuantity,
+  incQuantity,
   getAddAddress,
   addAddress,
   newUser,
@@ -44,6 +46,8 @@ router.route('/product-details/:id').get(getProductDetails);
 router.route('/contact').get(getContactUs);
 router.route('/forgot-password').get(getForgetPassword);
 router.route('/cart').get(getCart);
+router.route('/cart/dec-quantity').post(decQuantity);
+router.route('/cart/inc-quantity').post(incQuantity);
 router.route('/add-to-cart/:id').get(setCart);
 router.route('/wishlist').get(getWish);
 router.route('/add-to-wishlist/:id').get(setWish);
