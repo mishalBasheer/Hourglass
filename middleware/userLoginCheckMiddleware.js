@@ -1,7 +1,7 @@
 import User from '../models/userDetailsModel.js';
 
 const userLoginCheck = (req, res, next)=>{
-    console.log('user login check:',req.session)
+    // console.log('user login check:',req.session)
     if(req.session.userLogin){
         next();
     }else{
@@ -11,7 +11,7 @@ const userLoginCheck = (req, res, next)=>{
 const checkBlockedUser =async (req,res,next)=>{
     const userId = req.session.user._id
     const user = await User.findById(userId)
-    console.log('User bloked or not:',user)
+    // console.log('User bloked or not:',user)
     if(user.block){
         res.render('user/blocked_user');
     }else{

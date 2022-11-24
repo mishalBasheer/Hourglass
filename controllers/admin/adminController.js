@@ -10,13 +10,16 @@ const getAdminLogin = (req, res) => {
   if (req.session.adminLogIn) {
     res.redirect('/admin/dashboard');
   } else {
-    res.render('admin/login');
+    const msg = req.flash('error');
+    res.render('admin/login',{msg});
   }
 };
 
 const getAdminDashboard = (req, res) => {
   req.session.pageIn = 'dashboard';
+  const msg = req.flash('success');
   res.render('admin/dashboard', {
+    msg,
     pageIn: req.session.pageIn,
     dashboardPage: ' text-gray-800 dark:text-gray-100',
     ordersPage: '',
@@ -89,8 +92,10 @@ const getAddProductPage = async (req, res) => {
   const brand = await Brand.find({});
   const category = await Category.find({});
   // console.log(brand, category);
+  const msg = req.flash('error');
   req.session.pageIn = 'products';
   res.render('admin/add_product', {
+    msg,
     brand,
     category,
     pageIn: req.session.pageIn,
@@ -167,23 +172,25 @@ const adminCheck = async (req, res) => {
             // console.log('admin')
             req.session.adminLogIn = true;
             // console.log('SESSION CHECK',req.session)
+            req.flash('success','Successfully Signed In');
             res.redirect('/admin/dashboard');
           } else {
-            res.status(400).json({
-              status: 'admin Password not match',
-              message: err,
-            });
+            // res.status(400).json({
+            //   status: 'admin Password not match',
+            //   message: err,
+            // });
+            req.flash('error','Password not match');
+            res.redirect('/admin')
           }
         });
       } else {
-        res.status(400).json({
-          status: 'admin email not match',
-          // message:err,
-        });
+        req.flash('error','Email not found');
+        res.redirect('/admin')
       }
     });
   } catch (err) {
     console.log(err);
+    res.render('admin/error-page');
   }
 };
 
@@ -208,9 +215,8 @@ const uploadProduct = async (req, res) => {
     res.redirect('/admin/products/add-product');
   } catch (err) {
     console.log(err);
-    res.status(400).json({
-      status: 'failed to upload',
-    });
+    req.flash('error','An Error occured while adding product to database')
+    res.redirect('/admin/products/add-product');
   }
 };
 
@@ -468,6 +474,11 @@ const editBrand = async (req, res) => {
   }
 };
 
+const adminLogout = (req, res)=>{
+  req.session.adminLogIn=false;
+  res.redirect('/admin');
+}
+
 export {
   getAdminLogin,
   getAdminDashboard,
@@ -489,6 +500,7 @@ export {
   getAddBrand,
   addBrand,
   editBrand,
+  adminLogout,
   unblockUser,
   deleteProduct,
   adminCheck,

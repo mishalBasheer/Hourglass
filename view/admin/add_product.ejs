@@ -13,7 +13,7 @@
               type="text"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
               
-            />
+              required/>
           </label>
 
           <label class="block mt-4 text-sm">
@@ -21,7 +21,7 @@
             <select
               name="brand"
               class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-            >
+             required>
             <option value="none" selected disabled hidden>Select an Option</option>
             <% brand.forEach(el => { %>
               <option value="<%= el._id %>"><%= el.title %></option>
@@ -41,7 +41,7 @@
             <select
               name="category"
               class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-            >
+              required>
             <option value="none" selected disabled hidden>Select an Option</option>
             <% category.forEach(el => { %>
               <option value="<%= el._id %>"><%= el.title %></option>
@@ -60,8 +60,9 @@
             <input
             type="file"
               name="thumbnail"
-              class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"/>
-          </label>
+              class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" required/>
+          
+            </label>
           
           <label class="block mt-4 text-sm">
             <span class="text-gray-700 dark:text-gray-400">Images</span>
@@ -69,7 +70,7 @@
             type="file"
               name="images"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-            multiple/>
+            multiple required/>
           </label>
 
           <label class="block mt-4 text-sm">
@@ -78,7 +79,7 @@
               name="price"
               type="number"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              
+              required
             />
           </label>
 
@@ -87,8 +88,8 @@
             <input
               name="width"
               type="number"
-              class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              
+              class="block w-full border-red-600 mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+              required
             />
           </label>
           <label class="block mt-4 text-sm">
@@ -97,7 +98,7 @@
               name="breadth"
               type="number"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              
+              required
             />
           </label>
           <label class="block mt-4 text-sm">
@@ -106,7 +107,7 @@
               name="height"
               type="number"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              
+              required
             />
           </label>
           <label class="block mt-4 text-sm">
@@ -115,7 +116,7 @@
               name="warranty"
               type="number"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              
+              required
             />
           </label>
           <label class="block mt-4 text-sm">
@@ -124,7 +125,7 @@
               name="weight"
               type="number"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              
+              required
             />
           </label>
           <label class="block mt-4 text-sm">
@@ -133,7 +134,7 @@
               name="material"
               type="text"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              
+              required
             />
           </label>
 
@@ -161,7 +162,7 @@
               name="stock"
               type="number"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              
+              required
             />
           </label>
           <label class="block mt-4 text-sm">
@@ -170,7 +171,7 @@
               name="description"
               class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
               rows="3"
-              placeholder="Enter description of the product here....."
+              placeholder="Enter description of the product here....."  required
             ></textarea>
           </label>
 
@@ -184,5 +185,28 @@
     </div>
   </div>
 </main>
+<% if (msg.length>0) { %>
+  <script>
+    alertMsg('<%= msg %>')
+    function alertMsg(msg) {
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer);
+          toast.addEventListener('mouseleave', Swal.resumeTimer);
+        },
+      });
+
+      Toast.fire({
+        icon: 'error',
+        title: msg,
+      });
+    }
+  </script>
+  <% } %>
 
 <%- include('partials/footer.ejs') %>

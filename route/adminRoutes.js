@@ -22,6 +22,7 @@ import {
   addBrand,
   editBrand,
   deleteProduct,
+  adminLogout,
   getAdminUsers,
 } from '../controllers/admin/adminController.js';
 import { uploadMultiple,
@@ -32,6 +33,7 @@ import { adminLoginCheck } from "../middleware/adminLoginCheckMiddleware.js";
 const router = express.Router();
 
 router.route('/').get(getAdminLogin).post(adminCheck);
+router.route('/logout').get(adminLogout)
 router.route('/dashboard').get(adminLoginCheck,getAdminDashboard);
 router.route('/orders').get(adminLoginCheck,getAdminOrders);
 router.route('/products').get(adminLoginCheck,getAdminProducts);
