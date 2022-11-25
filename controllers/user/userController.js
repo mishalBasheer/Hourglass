@@ -26,9 +26,11 @@ const getUserHome = (req, res) => {
 // get SignIn Page 
 const getSignIn = (req, res) => {
   const user = req.session.user;
+  const loginCheck = req.flash('errorLoginCheck');
+  console.log(loginCheck);
   const msg = req.flash('error');
-  console.log(msg);
-  res.render('user/login', { msg, user });
+  // console.log(msg);
+  res.render('user/login', { msg, user, loginCheck });
 };
 
 // get SignUp Page 
@@ -514,6 +516,7 @@ const checkNotExisting = async (req, res, next) => {
 // removing session of the user
 const logoutUser = (req, res) => {
   req.session.user = null;
+  req.session.userLogin=false;
   res.redirect('/');
 };
 

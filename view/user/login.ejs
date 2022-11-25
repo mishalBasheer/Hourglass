@@ -45,7 +45,6 @@
               onsubmit="return validate() ;"
             >
             <% if (msg.length>0) { %>
-
                 <div class="alert alert-danger alert-dismissible fade show w-100" role="alert">
                     <%= msg %>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -112,5 +111,31 @@
     return true;
   }
 </script>
+
+<!-- Sweetalert  -->
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<% if (loginCheck.length>0) { %>
+<script>
+  failedMsg('<%= loginCheck %>')
+  function failedMsg(mssg){
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: false,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer);
+          toast.addEventListener('mouseleave', Swal.resumeTimer);
+        },
+      });
+
+      Toast.fire({
+        icon: 'error',
+        title: mssg,
+      });
+}
+</script>
+<% } %>
 
 <%- include('partials/footer.ejs') %>
