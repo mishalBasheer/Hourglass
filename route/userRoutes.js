@@ -34,6 +34,7 @@ import {
   newUser,
 } from '../controllers/user/userController.js';
 import { userLoginCheck,checkBlockedUser, } from "../middleware/userLoginCheckMiddleware.js";
+import { axiosUserLoginCheck,axiosCheckBlockedUser, } from "../middleware/axiosUserLoginCheck.js";
 
 const router = express.Router();
 
@@ -46,12 +47,12 @@ router.route('/signin/otp-phone').get(getOtpPhonePage).post(checkExisting, sendO
 router.route('/signin/otp-signin').get(getOtpPage).post(verifyOtp, getUserHome);
 router.route('/shop').get(getAllShop);
 router.route('/product-details/:id').get(getProductDetails);
+router.route('/add-to-cart').post(axiosUserLoginCheck,axiosCheckBlockedUser,setCart);
 router.route('/contact').get(getContactUs);
 router.route('/forgot-password').get(getForgetPassword);
 router.route('/cart').get(userLoginCheck,checkBlockedUser,getCart);
 router.route('/cart/dec-quantity').post(userLoginCheck,checkBlockedUser,decQuantity);
 router.route('/cart/inc-quantity').post(userLoginCheck,checkBlockedUser,incQuantity);
-router.route('/add-to-cart/:id').get(userLoginCheck,checkBlockedUser,setCart);
 router.route('/wishlist').get(userLoginCheck,checkBlockedUser,getWish);
 router.route('/add-to-wishlist/:id').get(userLoginCheck,checkBlockedUser,setWish);
 router.route('/remove-from-wishlist/:id').get(userLoginCheck,checkBlockedUser,removeFromWishlist);

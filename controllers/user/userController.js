@@ -85,9 +85,22 @@ const getAllShop = async (req, res) => {
 const getProductDetails = async (req, res) => {
   try {
     const product = await Product.findOne({ _id: req.params.id }).populate('category').populate('brand');
-    console.log(product);
+    // console.log(product);
     const user = req.session.user;
-    res.render('user/p_details', { user, product });
+    // console.log(wishlisted)
+    
+    if (user) {
+      const wishlistProducts = await Wishlist.findOne({ _id: user.wishlistId }).select({
+        'products.product': 1,
+        _id: 0,
+      });
+      const wishlisted = wishlistProducts.products.some(el=>el.product.equals(product._id))
+      const msg = req.flash('cartSuccess');
+      res.render('user/p_details', { user, product, msg, wishlisted });
+    } else{
+      res.render('user/p_details', { user, product });
+    }
+
   } catch (err) {
     console.log(err);
     res.status(404).render('user/error-page', { error: err, errorMsg: 'error from getting product detail' });
@@ -111,7 +124,7 @@ const getCart = async (req, res) => {
   try {
     const user = req.session.user;
     const cart = await Cart.findOne({ _id: user.cartId }).populate('products.product');
-    console.log(cart);
+    console.log(cart.products[0].product.thumbnail);
     res.render('user/cart', { user, cart: cart.products });
   } catch (err) {
     console.log(err);
@@ -120,10 +133,10 @@ const getCart = async (req, res) => {
 };
 
 // adding a Product to user's cart 
-const setCart = async (req, res) => {
+const setCart = async (req, res, next) => {
   try {
     const user = req.session.user;
-    const productId = req.params.id;
+    const productId = req.body.productId;
     const productcheck = await Cart.findOne({ 'products.product': productId });
     // console.log('user:',user.cartId);
     // console.log('checked Product:',productcheck);
@@ -138,8 +151,12 @@ const setCart = async (req, res) => {
       //  await Cart.findOneAndUpdate({_id:user.cartId},{"$set": {[`items.$[outer].${propertyName}`]: value}})
       //  await Cart.updateOne( { _id: user.cartId }, { '$set': { "products.$[].product": mongoose.Types.ObjectId(productId) , "products.$[].quantity": 1, } } )
     }
-    req.flash('cartSuccess', 'Successfully added product to cart');
-    res.redirect('/shop');
+   
+res.json({
+  access:true,
+  msg:'successfully added to cart',
+})
+    // next();
   } catch (err) {
     console.log(err);
     res.render('user/error-page', { error: err, errorMsg: 'error from putting a product to cart' });

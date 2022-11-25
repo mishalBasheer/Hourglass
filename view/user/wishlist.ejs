@@ -31,7 +31,7 @@
           <div class="single_product_text">
             <h4><%= element.product.title%></h4>
             <h3>₹ <%= element.product.price %></h3>
-            <a href="#" class="add_cart">+ add to cart</a>
+            <a onclick="cartAdd('<%= element.product._id %>')" class="add_cart">+ add to cart</a>
           </div>
         </div>
       </div>

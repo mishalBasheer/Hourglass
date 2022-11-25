@@ -1,21 +1,25 @@
 import User from '../models/userDetailsModel.js';
 
-const userLoginCheck = (req, res, next) => {
+const axiosUserLoginCheck = (req, res, next) => {
   // console.log('user login check:',req.session)
   if (req.session.userLogin) {
     next();
   } else {
-    res.redirect('/signin');
+    res.json({
+        access:false,
+    });
   }
 };
-const checkBlockedUser = async (req, res, next) => {
-  const userId = req.session.user._id;
+const axiosCheckBlockedUser = async (req, res, next) => {
+    const userId = req.session.user._id;
   const user = await User.findById(userId);
   // console.log('User bloked or not:',user)
   if (user.block) {
-    res.render('user/blocked_user');
+    res.json({
+        access:false,
+    });
   } else {
     next();
   }
 };
-export { userLoginCheck, checkBlockedUser };
+export { axiosUserLoginCheck, axiosCheckBlockedUser };
