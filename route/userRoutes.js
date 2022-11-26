@@ -31,6 +31,8 @@ import {
   getAddAddress,
   logoutUser,
   addAddress,
+  removeFromCart,
+  setToWish,
   newUser,
 } from '../controllers/user/userController.js';
 import { userLoginCheck,checkBlockedUser, } from "../middleware/userLoginCheckMiddleware.js";
@@ -48,6 +50,8 @@ router.route('/signin/otp-signin').get(getOtpPage).post(verifyOtp, getUserHome);
 router.route('/shop').get(getAllShop);
 router.route('/product-details/:id').get(getProductDetails);
 router.route('/add-to-cart').post(axiosUserLoginCheck,axiosCheckBlockedUser,setCart);
+router.route('/remove-from-cart').post(axiosUserLoginCheck,axiosCheckBlockedUser,removeFromCart);
+router.route('/set-to-wish').post(axiosUserLoginCheck,axiosCheckBlockedUser,setToWish);
 router.route('/contact').get(getContactUs);
 router.route('/forgot-password').get(getForgetPassword);
 router.route('/cart').get(userLoginCheck,checkBlockedUser,getCart);

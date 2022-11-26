@@ -25,19 +25,23 @@
         <% if (cart.length>0) { %>
 
         <div class="table-responsive">
-          <table class="table">
+          <table class="table" id="cartTable">
             <thead>
               <tr>
+                <th scope="col" style="width: 1px;"></th>
                 <th scope="col">Product</th>
                 <th scope="col">Price</th>
-                <th scope="col">Quantity</th>
-                <th scope="col" width="100px">Total</th>
+                <th scope="col" style="width: 100px;">Quantity</th>
+                <th scope="col">Total</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="cartTableBody">
               <% for (let i = 0; i < cart.length; i++) {%>
 
               <tr id="qnty<%= i %>">
+                <td><button onclick="removeFromCart('<%= cart[i].product._id %>','<%= i %>',this)" type="button" class="close" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button></td>
                 <td>
                   <div class="media">
                     <div class="d-flex">
@@ -58,7 +62,7 @@
                           <span>-</span>
                         </button>
                     </span>
-                    <input type="number" id="quantity" name="quantity" class="form-control" value="<%= cart[i].quantity %>" min="1" max="10" disabled>
+                    <input type="number" id="quantity" name="quantity" class="form-control quantity" value="<%= cart[i].quantity %>" min="1" max="10" disabled>
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-dark btn-number" onclick="quantityInc('<%= cart[i].product._id %>','<%= cart[i].quantity %>','<%= i %>')">
                             <span>+</span>
@@ -72,29 +76,9 @@
               </tr>
               <% } %>
 
-              <tr class="bottom_button">
-                <td>
-                  <a class="btn_1" href="#">Update Cart</a>
-                </td>
+
+              <!-- <tr class="shipping_area">
                 <td></td>
-                <td></td>
-                <td>
-                  <div class="cupon_text float-right">
-                    <a class="btn_1" href="#">Close Coupon</a>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td></td>
-                <td></td>
-                <td>
-                  <h5>Subtotal</h5>
-                </td>
-                <td>
-                  <h5>₹ <span id="total"></span></h5>
-                </td>
-              </tr>
-              <tr class="shipping_area">
                 <td></td>
                 <td></td>
                 <td>
@@ -120,7 +104,7 @@
                       Calculate Shipping
                       <i class="fa fa-caret-down" aria-hidden="true"></i>
                     </h6>
-                    <!-- <select class="shipping_select">
+                    <select class="shipping_select">
                       <option value="1">Bangladesh</option>
                       <option value="2">India</option>
                       <option value="4">Pakistan</option>
@@ -129,14 +113,16 @@
                       <option value="1">Select a State</option>
                       <option value="2">Select a State</option>
                       <option value="4">Select a State</option>
-                    </select> -->
+                    </select>
                     <input type="text" placeholder="Postcode/Zipcode" />
-                    <a class="btn_1" href="#">Update Details</a>
                   </div>
                 </td>
-              </tr>
+              </tr> -->
             </tbody>
           </table>
+          <div style="text-align: right;"></div>
+          <h5>Subtotal</h5>
+<h5>₹ <span id="total"></span></h5>
           <div class="checkout_btn_inner float-right">
             <a class="btn_1" href="/shop">Continue Shopping</a>
             <a class="btn_1 checkout_btn_1" href="/checkout">Proceed to checkout</a>
@@ -168,47 +154,101 @@
       }
       document.querySelector(`#total`).innerHTML=sum;
     }
-      
 
-    function quantityDec(id,quantity,index){
-      if(!(document.querySelector(`#qnty${index} #quantity`).value)){
-        document.querySelector(`#qnty${index} #quantity`).value=Number(quantity)
-      }
-      
-      if((document.querySelector(`#qnty${index} #quantity`).value)>1){
-      axios.post('/cart/dec-quantity',{
-        productId:id,
-      }).then((result)=>{
-        if(result.data.stat){
-          let count = Number(document.querySelector(`#qnty${index} #quantity`).value);
-          count--;
-          document.querySelector(`#qnty${index} #quantity`).value = count;
-        }
-        cartUpdate()
-      }).catch((err)=>{
-        console.log({"error":err});
-      })
-    }}
+    function cartUpdateRmv(){
+      let sum = Number(0);
+      $('#cartTableBody tr').each(function(){
 
-    function quantityInc(id,quantity,index){
-      if(!(document.querySelector(`#qnty${index} #quantity`).value)){
-        document.querySelector(`#qnty${index} #quantity`).value=Number(quantity)
-      }
-      if((document.querySelector(`#qnty${index} #quantity`).value)<10){
-        axios.post('/cart/inc-quantity',{
-          productId:id,
-        }).then((result)=>{
-          if(result.data.stat){
-            let count =Number(document.querySelector(`#qnty${index} #quantity`).value)
-            count ++;
-            document.querySelector(`#qnty${index} #quantity`).value=count;
-          }
-          cartUpdate();
-        }).catch((err)=>{
-          console.log({"error":err});
-        })
-      }
+
+      let itemPrice =Number($(this).find('.item-price').text());
+      let itemQuantity = Number($(this).find('#quantity').val());
+      console.log(itemPrice,itemQuantity)
+      let subTotal = Number(itemPrice*itemQuantity);
+      console.log(subTotal)
+      $(this).find('.sub-total').text(subTotal);
+      
+      sum=sum+Number(subTotal);
+
+  })
+  document.querySelector(`#total`).innerHTML=Number(sum);
     }
+      
+
+//     function quantityDec(id,quantity,index){
+//       if(!(document.querySelector(`#qnty${index} #quantity`).value)){
+//         document.querySelector(`#qnty${index} #quantity`).value=Number(quantity)
+//       }
+      
+//       if((document.querySelector(`#qnty${index} #quantity`).value)>1){
+//       axios.post('/cart/dec-quantity',{
+//         productId:id,
+//       }).then((result)=>{
+//         if(result.data.stat){
+//           let count = Number(document.querySelector(`#qnty${index} #quantity`).value);
+//           count--;
+//           document.querySelector(`#qnty${index} #quantity`).value = count;
+//         }
+//         cartUpdate()
+//       }).catch((err)=>{
+//         console.log({"error":err});
+//       })
+//     }}
+
+//     function quantityInc(id,quantity,index){
+//       if(!(document.querySelector(`#qnty${index} #quantity`).value)){
+//         document.querySelector(`#qnty${index} #quantity`).value=Number(quantity)
+//       }
+//       if((document.querySelector(`#qnty${index} #quantity`).value)<10){
+//         axios.post('/cart/inc-quantity',{
+//           productId:id,
+//         }).then((result)=>{
+//           if(result.data.stat){
+//             let count =Number(document.querySelector(`#qnty${index} #quantity`).value)
+//             count ++;
+//             document.querySelector(`#qnty${index} #quantity`).value=count;
+//           }
+//           cartUpdate();
+//         }).catch((err)=>{
+//           console.log({"error":err});
+//         })
+//       }
+//     }
+//     function removeFromCart(id,index){
+//       const swalWithBootstrapButtons = Swal.mixin({
+//   customClass: {
+//     confirmButton: 'btn btn-success',
+//     cancelButton: 'btn btn-danger'
+//   },
+//   buttonsStyling: false
+// })
+
+// swalWithBootstrapButtons.fire({
+//   title: 'Are you sure?',
+//   text: "You won't be able to revert this!",
+//   icon: 'warning',
+//   showCancelButton: true,
+//   confirmButtonText: 'Yes, delete it!',
+//   cancelButtonText: 'No, cancel!',
+//   reverseButtons: true
+// }).then((result) => {
+//   if (result.isConfirmed) {
+//     swalWithBootstrapButtons.fire(
+//       'Deleted!',
+//       'Your file has been deleted.',
+//       'success'
+//     )
+//   } else if (
+//     /* Read more about handling dismissals below */
+//     result.dismiss === Swal.DismissReason.cancel
+//   ) {
+//     swalWithBootstrapButtons.fire(
+//       'Cancelled',
+//       'Your imaginary file is safe :)',
+//       'error'
+//     )
+//   }
+// })
+//     }
 </script>
 
   <%- include('partials/footer.ejs') %>
