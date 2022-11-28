@@ -1,10 +1,22 @@
 <%- include('partials/header.ejs') %>
 
+
 <section class="login_part padding_top">
   <div class="container">
     <div class="col-lg-8 col-md-8">
       <h3 class="mb-30">Add Address</h3>
       <form action="/profile/add-address" method="post">
+        <% if (typeof alert != 'undefined') { %>
+          <% alert.forEach(error => { %>
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+              <%= error.msg %>
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          <% }) %>
+         
+        <% } %>
         <div class="mt-10">
           <input
             type="text"
@@ -12,7 +24,6 @@
             placeholder="Full Name"
             onfocus="this.placeholder = ''"
             onblur="this.placeholder = 'Full name'"
-            required
             class="single-input"
           />
         </div>
@@ -23,7 +34,6 @@
             placeholder="Phone Number"
             onfocus="this.placeholder = ''"
             onblur="this.placeholder = 'Phone Number'"
-            required
             class="single-input"
           />
         </div>
@@ -34,7 +44,6 @@
             placeholder="House Number & Name"
             onfocus="this.placeholder = ''"
             onblur="this.placeholder = 'House Number & Name'"
-            required
             class="single-input"
           />
         </div>
@@ -45,7 +54,6 @@
             placeholder="Landmark"
             onfocus="this.placeholder = ''"
             onblur="this.placeholder = 'Landmark'"
-            required
             class="single-input"
           />
         </div>
@@ -56,7 +64,6 @@
             placeholder="City"
             onfocus="this.placeholder = ''"
             onblur="this.placeholder = 'City'"
-            required
             class="single-input"
           />
         </div>
@@ -93,7 +100,6 @@
               placeholder="Pincode"
               onfocus="this.placeholder = ''"
               onblur="this.placeholder = 'Pincode'"
-              required
               class="single-input"
             />
           </div>

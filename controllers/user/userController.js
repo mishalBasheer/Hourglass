@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+import { validationResult } from "express-validator";
+import twilio from 'twilio';
 import User from '../../models/userDetailsModel.js';
 import Address from '../../models/addressModel.js';
 import Brand from '../../models/brandModel.js';
@@ -6,7 +8,7 @@ import Category from '../../models/categoryModel.js';
 import Product from '../../models/productModel.js';
 import Cart from '../../models/cartModel.js';
 import Wishlist from '../../models/wishlistModel.js';
-import twilio from 'twilio';
+
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -348,17 +350,25 @@ const getProfile = async (req, res) => {
 
 // get Address profile Page
 const getAddAddress = (req, res) => {
+  const alert = req.flash('alert');
   const user = req.session.user;
-  res.render('user/add_address', { user });
+  res.render('user/add_address', { user, alert });
 };
 
 // adding Address to address collection
 const addAddress = async (req, res) => {
   try {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+      const alert = errors.array()
+      req.flash('alert',alert)
+      return res.redirect('/profile/add-address')
+    }
     let newAdd = req.body;
     const user = req.session.user;
     Object.assign(newAdd, { userId: user._id });
     await Address.create(newAdd);
+    
     res.redirect('/profile');
   } catch (err) {
     // res.json({
@@ -366,7 +376,7 @@ const addAddress = async (req, res) => {
     //   message: err,
     // });
     console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error while adding address to profile' });
+    res.render('user/error-page', { error: err, errorMsg: 'error while adding address to profile'});
   }
 };
 
