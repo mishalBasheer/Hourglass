@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { validationResult } from "express-validator";
+import { validationResult } from 'express-validator';
 import twilio from 'twilio';
 import User from '../../models/userDetailsModel.js';
 import Address from '../../models/addressModel.js';
@@ -8,7 +8,7 @@ import Category from '../../models/categoryModel.js';
 import Product from '../../models/productModel.js';
 import Cart from '../../models/cartModel.js';
 import Wishlist from '../../models/wishlistModel.js';
-
+import mongoos from '../../config/connection.js';
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -127,7 +127,6 @@ const getCart = async (req, res) => {
   try {
     const user = req.session.user;
     const cart = await Cart.findOne({ _id: user.cartId }).populate('products.product');
-    console.log(cart.products[0].product.thumbnail);
     res.render('user/cart', { user, cart: cart.products });
   } catch (err) {
     console.log(err);
@@ -135,25 +134,70 @@ const getCart = async (req, res) => {
   }
 };
 
+const TotalCalc =async (id)=>{
+  const totalCalc = await Cart.aggregate([
+    { $match: { _id: mongoose.Types.ObjectId(id)} },
+    { $unwind: { path: '$products' } },
+    {$project:{'products.subtotal':1,_id:0}},
+  ]);
+  let sum = 0;
+  totalCalc.forEach(el=>{
+    sum += el.products.subtotal;
+  });
+  await Cart.updateOne({ _id: id }, {total:sum});
+}
+
+const subTotCalc = async (id, proId)=>{
+  const productcheck = await Cart.aggregate([
+    { $match: { _id: mongoose.Types.ObjectId(id) } },
+    { $unwind: { path: '$products' } },
+    { $match: { 'products.product': mongoose.Types.ObjectId(proId) } },
+  ]);
+  
+  const quantity = Number(productcheck[0].products.quantity);
+  const price = Number(productcheck[0].products.price);
+
+  await Cart.findOneAndUpdate(
+    { _id: id, 'products.product': proId },
+    {$set:{ 'products.$.subtotal': Number(quantity * price) }}
+  );
+
+}
+
 // adding a Product to user's cart
 const setCart = async (req, res, next) => {
   try {
     const user = req.session.user;
     const productId = req.body.productId;
-    const productcheck = await Cart.findOne({ 'products.product': productId });
-    // console.log('user:',user.cartId);
-    // console.log('checked Product:',productcheck);
-    if (productcheck) {
+    const product = await Product.findById(productId);
+
+    const productcheck = await Cart.aggregate([
+      { $match: { _id: mongoose.Types.ObjectId(user.cartId) } },
+      { $unwind: { path: '$products' } },
+      { $match: { 'products.product': mongoose.Types.ObjectId(productId) } },
+    ]);
+
+
+    if (productcheck.length>0) {
       await Cart.findOneAndUpdate(
         { _id: user.cartId, 'products.product': productId },
-        { $inc: { 'products.$.quantity': 1 } }
+        { $inc: { 'products.$.quantity': 1 }},
+        { upsert: true }
       );
+
+      await subTotCalc(user.cartId,productId);
+
+
+
     } else {
-      const newObj = { product: productId, quantity: 1 };
+      const newObj = { product: productId, quantity: 1, price: product.price, subtotal: product.price };
       await Cart.updateOne({ _id: user.cartId }, { $push: { products: newObj } }, { upsert: true });
       //  await Cart.findOneAndUpdate({_id:user.cartId},{"$set": {[`items.$[outer].${propertyName}`]: value}})
       //  await Cart.updateOne( { _id: user.cartId }, { '$set': { "products.$[].product": mongoose.Types.ObjectId(productId) , "products.$[].quantity": 1, } } )
     }
+    
+    await TotalCalc(user.cartId);
+
 
     res.json({
       access: true,
@@ -175,11 +219,12 @@ const removeFromCart = async (req, res) => {
     const removeObj = { product: productId };
     await Cart.updateOne({ _id: user.cartId }, { $pull: { products: removeObj } });
 
+    await TotalCalc(user.cartId);
+
     res.json({
       access: true,
       msg: 'successfully removed from cart',
     });
-
   } catch (err) {
     res.json({
       access: false,
@@ -188,38 +233,37 @@ const removeFromCart = async (req, res) => {
   }
 };
 
-const setToWish = async (req,res)=>{
-  try{
+const setToWish = async (req, res) => {
+  try {
     const user = req.session.user;
     const productId = req.body.productId;
     const newObj = { product: productId };
     const productcheck = await Wishlist.findOne({ 'products.product': productId });
-    
+
     if (!productcheck) {
-      await Wishlist.updateOne({ _id: user.wishlistId }, { $push: { products: newObj } }, { upsert: true });    
+      await Wishlist.updateOne({ _id: user.wishlistId }, { $push: { products: newObj } }, { upsert: true });
     }
 
     await Cart.updateOne({ _id: user.cartId }, { $pull: { products: newObj } });
-    
 
     res.json({
       access: true,
       msg: 'successfully removed from cart',
     });
-  }catch(err){
+  } catch (err) {
     res.json({
       access: false,
       msg: 'error while removing product from cart',
     });
   }
-
-}
+};
 
 // ajax increase Quantity of the cart product
 const incQuantity = async (req, res) => {
   try {
     const user = req.session.user;
     const productId = mongoose.Types.ObjectId(req.body.productId);
+
     // const quantity =Number(req.body.quantity);
     // if(quantity>=15){
     //   res.status(200).json({
@@ -227,10 +271,16 @@ const incQuantity = async (req, res) => {
     //     message:'cannot increase from 10',
     //   })
     // }else{
-    await Cart.findOneAndUpdate(
-      { _id: user.cartId, 'products.product': productId },
-      { $inc: { 'products.$.quantity': 1 } }
-    );
+      await Cart.findOneAndUpdate(
+        { _id: user.cartId, 'products.product': productId },
+        { $inc: { 'products.$.quantity': 1 }}, 
+      );
+      
+      
+      await subTotCalc(user.cartId,productId);
+      await TotalCalc(user.cartId);
+
+
     res.status(200).json({
       stat: true,
     });
@@ -255,10 +305,14 @@ const decQuantity = async (req, res) => {
     //     message:'cannot decrease to zero',
     //   })
     // }else{
-    await Cart.findOneAndUpdate(
-      { _id: user.cartId, 'products.product': productId },
-      { $inc: { 'products.$.quantity': -1 } }
-    );
+      await Cart.findOneAndUpdate(
+        { _id: user.cartId, 'products.product': productId },
+        { $inc: { 'products.$.quantity': -1 }, }
+        );
+        
+      await subTotCalc(user.cartId,productId);
+      await TotalCalc(user.cartId);
+        
     res.json({
       stat: true,
     });
@@ -359,16 +413,16 @@ const getAddAddress = (req, res) => {
 const addAddress = async (req, res) => {
   try {
     const errors = validationResult(req);
-    if(!errors.isEmpty()){
-      const alert = errors.array()
-      req.flash('alert',alert)
-      return res.redirect('/profile/add-address')
+    if (!errors.isEmpty()) {
+      const alert = errors.array();
+      req.flash('alert', alert);
+      return res.redirect('/profile/add-address');
     }
     let newAdd = req.body;
     const user = req.session.user;
     Object.assign(newAdd, { userId: user._id });
     await Address.create(newAdd);
-    
+
     res.redirect('/profile');
   } catch (err) {
     // res.json({
@@ -376,7 +430,7 @@ const addAddress = async (req, res) => {
     //   message: err,
     // });
     console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error while adding address to profile'});
+    res.render('user/error-page', { error: err, errorMsg: 'error while adding address to profile' });
   }
 };
 
