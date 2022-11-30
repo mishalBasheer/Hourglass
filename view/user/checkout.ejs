@@ -124,7 +124,7 @@
                 </h2>
               </div>
               <input type="text" placeholder="Enter coupon code" />
-              <a class="tp_btn" href="#">Apply Coupon</a>
+              <a class="btn_3" href="#">Apply Coupon</a>
             </div>
 
 
@@ -143,51 +143,35 @@
           <div class="order_box">
             <h2>Your Order</h2>
             <ul class="list">
+              <% products.forEach(el => { %>
+
               <li>
-                <a href="#"
-                  >Product
-                  <span>Total</span>
+                <a href="/" aria-hidden="true" 
+                  ><%= el.product.title %> 
+                  <span class="middle">x <%= el.quantity %> </span>
+                  <span class="last">₹<%= el.subtotal %>.00</span>
                 </a>
               </li>
-              <li>
-                <a href="#" 
-                  >Fresh Blackberry
-                  <span class="middle">x 02</span>
-                  <span class="last">$720.00</span>
-                </a>
-              </li>
-              <li>
-                <a href="#"
-                  >Fresh Tomatoes
-                  <span class="middle">x 02</span>
-                  <span class="last">$720.00</span>
-                </a>
-              </li>
-              <li>
-                <a href="#"
-                  >Fresh Brocoli
-                  <span class="middle">x 02</span>
-                  <span class="last">$720.00</span>
-                </a>
-              </li>
+               
+              <% }) %>
             </ul>
             <ul class="list list_2">
               <li>
                 <a href="#"
                   >Subtotal
-                  <span>$2160.00</span>
+                  <span>₹<%= total %>.00</span>
                 </a>
               </li>
               <li>
                 <a href="#"
                   >Shipping
-                  <span>Flat rate: $50.00</span>
+                  <span>Flat rate: ₹50.00</span>
                 </a>
               </li>
               <li>
                 <a href="#"
                   >Total
-                  <span>$2210.00</span>
+                  <span>₹<%= total+50 %>.00</span>
                 </a>
               </li>
             </ul>

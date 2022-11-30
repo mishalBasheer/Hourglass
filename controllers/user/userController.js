@@ -20,7 +20,25 @@ const getUserHome = (req, res) => {
   // show a success message when successfully logged in
   const msg = req.flash('success');
   // getting logged in user details to "user" variable
-  const user = req.session.user;
+  // const user = req.session.user;
+
+  //////////////////////////////////////////remv
+  const user = {
+    block: false,
+    image: 'user_icon.jpg',
+    _id: mongoose.Types.ObjectId('637bea89b921d410e4c72d99'),
+    fname: 'Joules',
+    lname: 'Kounde',
+    mob: 9947227758,
+    email: 'jkounde@gmail.com',
+    password: '$2b$12$dzTVHZOQ425Hn87RRam3ruX.DaSYfC8SkcXEMQmtlGgXGz230fqsG',
+    cartId: mongoose.Types.ObjectId('637bea89b921d410e4c72d95'),
+    wishlistId: mongoose.Types.ObjectId('637bea89b921d410e4c72d97'),
+    __v: 0
+  }
+  req.session.user=user;
+  req.session.userLogin=true;
+  /////////////////////////////////////////
 
   res.render('user/home', { msg, user });
 };
@@ -134,35 +152,34 @@ const getCart = async (req, res) => {
   }
 };
 
-const TotalCalc =async (id)=>{
+const TotalCalc = async (id) => {
   const totalCalc = await Cart.aggregate([
-    { $match: { _id: mongoose.Types.ObjectId(id)} },
+    { $match: { _id: mongoose.Types.ObjectId(id) } },
     { $unwind: { path: '$products' } },
-    {$project:{'products.subtotal':1,_id:0}},
+    { $project: { 'products.subtotal': 1, _id: 0 } },
   ]);
   let sum = 0;
-  totalCalc.forEach(el=>{
+  totalCalc.forEach((el) => {
     sum += el.products.subtotal;
   });
-  await Cart.updateOne({ _id: id }, {total:sum});
-}
+  await Cart.updateOne({ _id: id }, { total: sum });
+};
 
-const subTotCalc = async (id, proId)=>{
+const subTotCalc = async (id, proId) => {
   const productcheck = await Cart.aggregate([
     { $match: { _id: mongoose.Types.ObjectId(id) } },
     { $unwind: { path: '$products' } },
     { $match: { 'products.product': mongoose.Types.ObjectId(proId) } },
   ]);
-  
+
   const quantity = Number(productcheck[0].products.quantity);
   const price = Number(productcheck[0].products.price);
 
   await Cart.findOneAndUpdate(
     { _id: id, 'products.product': proId },
-    {$set:{ 'products.$.subtotal': Number(quantity * price) }}
+    { $set: { 'products.$.subtotal': Number(quantity * price) } }
   );
-
-}
+};
 
 // adding a Product to user's cart
 const setCart = async (req, res, next) => {
@@ -177,27 +194,22 @@ const setCart = async (req, res, next) => {
       { $match: { 'products.product': mongoose.Types.ObjectId(productId) } },
     ]);
 
-
-    if (productcheck.length>0) {
+    if (productcheck.length > 0) {
       await Cart.findOneAndUpdate(
         { _id: user.cartId, 'products.product': productId },
-        { $inc: { 'products.$.quantity': 1 }},
+        { $inc: { 'products.$.quantity': 1 } },
         { upsert: true }
       );
 
-      await subTotCalc(user.cartId,productId);
-
-
-
+      await subTotCalc(user.cartId, productId);
     } else {
       const newObj = { product: productId, quantity: 1, price: product.price, subtotal: product.price };
       await Cart.updateOne({ _id: user.cartId }, { $push: { products: newObj } }, { upsert: true });
       //  await Cart.findOneAndUpdate({_id:user.cartId},{"$set": {[`items.$[outer].${propertyName}`]: value}})
       //  await Cart.updateOne( { _id: user.cartId }, { '$set': { "products.$[].product": mongoose.Types.ObjectId(productId) , "products.$[].quantity": 1, } } )
     }
-    
-    await TotalCalc(user.cartId);
 
+    await TotalCalc(user.cartId);
 
     res.json({
       access: true,
@@ -271,15 +283,13 @@ const incQuantity = async (req, res) => {
     //     message:'cannot increase from 10',
     //   })
     // }else{
-      await Cart.findOneAndUpdate(
-        { _id: user.cartId, 'products.product': productId },
-        { $inc: { 'products.$.quantity': 1 }}, 
-      );
-      
-      
-      await subTotCalc(user.cartId,productId);
-      await TotalCalc(user.cartId);
+    await Cart.findOneAndUpdate(
+      { _id: user.cartId, 'products.product': productId },
+      { $inc: { 'products.$.quantity': 1 } }
+    );
 
+    await subTotCalc(user.cartId, productId);
+    await TotalCalc(user.cartId);
 
     res.status(200).json({
       stat: true,
@@ -305,14 +315,14 @@ const decQuantity = async (req, res) => {
     //     message:'cannot decrease to zero',
     //   })
     // }else{
-      await Cart.findOneAndUpdate(
-        { _id: user.cartId, 'products.product': productId },
-        { $inc: { 'products.$.quantity': -1 }, }
-        );
-        
-      await subTotCalc(user.cartId,productId);
-      await TotalCalc(user.cartId);
-        
+    await Cart.findOneAndUpdate(
+      { _id: user.cartId, 'products.product': productId },
+      { $inc: { 'products.$.quantity': -1 } }
+    );
+
+    await subTotCalc(user.cartId, productId);
+    await TotalCalc(user.cartId);
+
     res.json({
       stat: true,
     });
@@ -568,9 +578,11 @@ const verifyOtp = async (req, res, next) => {
 };
 
 // get Checkout Page
-const getCheckout = (req, res) => {
+const getCheckout = async (req, res) => {
   const user = req.session.user;
-  res.render('user/checkout', { user });
+  const cartProducts = await Cart.findById(user.cartId).populate('products.product');
+  console.log(cartProducts);
+  res.render('user/checkout', { user, total: cartProducts.total, products: cartProducts.products });
 };
 
 // redirecting to OTP sign Up page
