@@ -5534,11 +5534,13 @@ ul {
 .confirmation_part .confirmation_tittle {
   text-align: center;
   margin-bottom: 35px;
+  background-color: #e66686;
 }
 
 /* line 6, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_confirmation_part.scss */
 .confirmation_part .confirmation_tittle span {
-  color: #ff3368;
+  color: #ffffff;
+  vertical-align: middle;
 }
 
 /* line 11, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_confirmation_part.scss */
@@ -6006,7 +6008,7 @@ h6 {
 
 /* line 353, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_elements.scss */
 .progress-table-wrap {
-  overflow-x: scroll;
+  overflow: hidden;
 }
 
 /* line 357, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_elements.scss */

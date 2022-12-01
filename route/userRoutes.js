@@ -33,11 +33,13 @@ import {
   addAddress,
   removeFromCart,
   setToWish,
+  OrderConfirmation,
+  getOrders,
   newUser,
 } from '../controllers/user/userController.js';
 import { userLoginCheck, checkBlockedUser } from '../middleware/userLoginCheckMiddleware.js';
 import { axiosUserLoginCheck, axiosCheckBlockedUser } from '../middleware/axiosUserLoginCheck.js';
-import { addressValidator } from "../middleware/expressValidation.js";
+import { addressValidator } from '../middleware/expressValidation.js';
 
 const router = express.Router();
 
@@ -61,8 +63,12 @@ router.route('/cart/inc-quantity').post(userLoginCheck, checkBlockedUser, incQua
 router.route('/wishlist').get(userLoginCheck, checkBlockedUser, getWish);
 router.route('/add-to-wishlist/:id').get(userLoginCheck, checkBlockedUser, setWish);
 router.route('/remove-from-wishlist/:id').get(userLoginCheck, checkBlockedUser, removeFromWishlist);
-router.route('/checkout').get(userLoginCheck, checkBlockedUser, getCheckout);
-router.route('/order').get(userLoginCheck, checkBlockedUser, getOrderConfirmation);
+router
+  .route('/checkout')
+  .get(userLoginCheck, checkBlockedUser, getCheckout)
+  .post(userLoginCheck, checkBlockedUser, OrderConfirmation);
+router.route('/order-confirmation').get(userLoginCheck, checkBlockedUser, getOrderConfirmation);
+router.route('/orders').get(userLoginCheck, checkBlockedUser, getOrders);
 router.route('/order-tracking').get(userLoginCheck, checkBlockedUser, getTracking);
 router.route('/profile').get(userLoginCheck, checkBlockedUser, getProfile);
 router

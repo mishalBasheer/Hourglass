@@ -56,11 +56,11 @@
       </div> -->
 
     <div class="billing_details">
-      <div class="row">
-        <div class="col-lg-8">
-          <h3>Billing Details</h3>
-          <form class="row contact_form" action="#" method="post" novalidate="novalidate">
-            <div class="col-md-6 form-group p_star">
+      <form name="checkoutForm" action="/checkout" onsubmit="return validate()" method="post">
+        <div class="row">
+          <div class="col-lg-8">
+            <h3>Shipping Address</h3>
+            <!-- <div class="col-md-6 form-group p_star">
               <input type="text" class="form-control" id="first" name="name" />
               <span class="placeholder" data-placeholder="First name"></span>
             </div>
@@ -113,69 +113,97 @@
                 <input type="checkbox" id="f-option2" name="selector" />
                 <label for="f-option2">Create an account?</label>
               </div>
-            </div>
-
-            <!-- Coupon Details entering area  -->
-            <div class="cupon_area">
-              <div class="check_title">
-                <h2>
-                  Have a coupon?
-                  <a href="#">Click here to enter your code</a>
-                </h2>
+            </div> -->
+            <div class="row">
+              <% for( let i = 0; i < address.length; i++ ) { %>
+              <div class="col col-md-6">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="address"
+                    id="orderAddress<%= i %>"
+                    value="<%= address[i]._id %>"
+                    checked
+                  />
+                  <label class="form-check-label" for="orderAddress<%= i %>">
+                    <div class="card mb-4 rounded-3 shadow-sm">
+                      <div class="card-body">
+                        <h1 class="card-title pricing-card-title"><%= address[i].name %></h1>
+                        <ul class="list-unstyled mt-3 mb-4">
+                          <li><%= address[i].house %></li>
+                          <li><%= address[i].landmark %></li>
+                          <li><%= address[i].city %></li>
+                          <li><%= address[i].district %></li>
+                          <li><%= address[i].state %></li>
+                          <li><%= address[i].pincode %></li>
+                          <li><%= address[i].mob %></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </label>
+                </div>
               </div>
-              <input type="text" placeholder="Enter coupon code" />
-              <a class="btn_3" href="#">Apply Coupon</a>
+              <% } %>
             </div>
-
 
             <!-- Shipping details -->
-            <div class="col-md-12 form-group">
+            <!-- <div class="col-md-12 form-group">
               <div class="creat_account">
                 <h3>Shipping Details</h3>
                 <input type="checkbox" id="f-option3" name="selector" />
                 <label for="f-option3">Ship to a different address?</label>
               </div>
               <textarea class="form-control" name="message" id="message" rows="1" placeholder="Order Notes"></textarea>
-            </div>
-          </form>
-        </div>
-        <div class="col-lg-4">
-          <div class="order_box">
-            <h2>Your Order</h2>
-            <ul class="list">
-              <% products.forEach(el => { %>
+            </div> -->
+          </div>
+          <div class="col-lg-4">
+                        <!-- Coupon Details entering area  -->
+                        <div class="card" style="width: 18rem; padding: 1rempx;">
+                          <div class="card-body">
+                            <div class="card-title">
+                              Have a coupon?
+                            </div>
+                            <input type="text" class="mt-3" placeholder="Enter coupon code" />
+                            <a class="btn_3 mt-3" href="#">Apply Coupon</a>
+                          </div>
+                        </div>
+            <div class="order_box mt-3">
+              <h2>Your Order</h2>
+              <ul class="list">
+                <% products.forEach(el => { %>
 
-              <li>
-                <a href="/" aria-hidden="true" 
-                  ><%= el.product.title %> 
-                  <span class="middle">x <%= el.quantity %> </span>
-                  <span class="last">₹<%= el.subtotal %>.00</span>
-                </a>
-              </li>
-               
-              <% }) %>
-            </ul>
-            <ul class="list list_2">
-              <li>
-                <a href="#"
-                  >Subtotal
-                  <span>₹<%= total %>.00</span>
-                </a>
-              </li>
-              <li>
-                <a href="#"
-                  >Shipping
-                  <span>Flat rate: ₹50.00</span>
-                </a>
-              </li>
-              <li>
-                <a href="#"
-                  >Total
-                  <span>₹<%= total+50 %>.00</span>
-                </a>
-              </li>
-            </ul>
-            <!-- <div class="payment_item">
+                <li>
+                  <a href="/" aria-hidden="true"
+                    ><%= el.product.title %>
+                    <span class="middle">x <%= el.quantity %> </span>
+                    <span class="last">₹<%= el.subtotal %>.00</span>
+                  </a>
+                </li>
+
+                <% }) %>
+              </ul>
+              <ul class="list list_2">
+                <li>
+                  <a href="#"
+                    >Subtotal
+                    <span>₹<%= total %>.00</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#"
+                    >Shipping
+                    <span>Flat rate: ₹50.00</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#"
+                    >Total
+                    <span>₹<%= total+50 %>.00</span>
+                  </a>
+                </li>
+              </ul>
+              <!-- <div class="payment_item">
               <div class="radion_btn">
                 <input type="radio" id="f-option5" name="selector" />
                 <label for="f-option5">Check payments</label>
@@ -192,27 +220,47 @@
               </div>
               <p>Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</p>
             </div> -->
-            <div class="payment_item active">
-              <div class="radion_btn">
-                <input type="radio" id="f-option6" name="selector" />
-                <label for="f-option6">COD </label>
-                <img src="img/product/single-product/card.jpg" alt="" />
-                <div class="check"></div>
+
+              <div class="payment_item active">
+                <div class="radion_btn">
+                  <input type="radio" id="f-option6" name="payment" value="cod" />
+                  <label for="f-option6">COD </label>
+                  <img src="img/product/single-product/card.jpg" alt="" />
+                  <div class="check"></div>
+                </div>
+                <p>
+                  Please fill in the adddress to Deliver Ensure you filled Name, Store Street, Store Town, Store State /
+                  County, Store Postcode.
+                </p>
               </div>
-              <p>Please fill in the adddress to Deliver Ensure you filled Name, Store Street, Store Town, Store State / County, Store Postcode.</p>
+              <div class="creat_account">
+                <input type="checkbox" id="f-option4" name="tnc" />
+                <label for="f-option4">I’ve read and accept the </label>
+                <a href="#">terms & conditions*</a>
+              </div>
+              <button type="submit" class="btn_3">Confirm Order</button>
             </div>
-            <div class="creat_account">
-              <input type="checkbox" id="f-option4" name="tnc" />
-              <label for="f-option4">I’ve read and accept the </label>
-              <a href="#">terms & conditions*</a>
-            </div>
-            <a class="btn_3" href="/order">Proceed to Payment</a>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   </div>
 </section>
 <!--================End Checkout Area =================-->
+
+<script>
+  function validate() {
+    if (document.querySelector('input[name="payment"]:checked') == null) {
+      alert('Please select a payment type!');
+      return false;
+    }
+    if (!document.checkoutForm.tnc.checked) {
+      alert('Please accept terms and conditions.');
+      return false;
+    }
+
+    return true;
+  }
+</script>
 
 <%- include('partials/footer.ejs') %>

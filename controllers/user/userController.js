@@ -9,6 +9,7 @@ import Product from '../../models/productModel.js';
 import Cart from '../../models/cartModel.js';
 import Wishlist from '../../models/wishlistModel.js';
 import mongoos from '../../config/connection.js';
+import Order from '../../models/orderModel.js';
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -393,10 +394,43 @@ const removeFromWishlist = async (req, res) => {
   }
 };
 
-// get OrderConfirmation Page
-const getOrderConfirmation = (req, res) => {
+// get Orders
+const getOrders = async (req, res)=>{
   const user = req.session.user;
-  res.render('user/order', { user });
+  const orders = await Order.find({userId:user._id}).populate('address').select({'products._id':0,_id:0,userId:0,'address.userId':0,'address._id':0});
+  console.log(orders);
+  res.render('user/order_confirmation', { user,orders });
+}
+
+
+// OrderConfirmation
+const OrderConfirmation = async(req, res) => {
+  const user = req.session.user;
+  console.log(req.body);
+  const cartProducts = await Cart.findById(user.cartId).populate('products.product').select({'products.product':1,'products.subtotal':1,'products.quantity':1,total:1,_id:0});
+  console.log(cartProducts );
+  
+
+  const newOrder = {
+    userId:user._id,
+    payment:req.body.payment,
+    address:mongoose.Types.ObjectId(req.body.address),
+    message:req.body.message,
+    products:cartProducts.products,
+    total:cartProducts.total,
+  }
+  await Order.create(newOrder);
+
+
+  res.redirect('/order-confirmation')
+};
+
+// get OrderConfirmation Page
+const getOrderConfirmation = async(req, res) => {
+  const user = req.session.user;
+  const orders = await Order.find({userId:user._id}).populate('address').select({'products._id':0,_id:0,userId:0,'address.userId':0,'address._id':0});
+  console.log(orders);
+  res.render('user/order_confirmation', { user,orders });
 };
 
 // get Tracking Page
@@ -581,8 +615,8 @@ const verifyOtp = async (req, res, next) => {
 const getCheckout = async (req, res) => {
   const user = req.session.user;
   const cartProducts = await Cart.findById(user.cartId).populate('products.product');
-  console.log(cartProducts);
-  res.render('user/checkout', { user, total: cartProducts.total, products: cartProducts.products });
+  const address = await Address.find({userId:user._id})
+  res.render('user/checkout', { user, total: cartProducts.total, products: cartProducts.products,address });
 };
 
 // redirecting to OTP sign Up page
@@ -677,4 +711,6 @@ export {
   getProfile,
   setToWish,
   getOrderConfirmation,
+  OrderConfirmation,
+  getOrders,
 };
