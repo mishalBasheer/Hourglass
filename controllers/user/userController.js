@@ -8,6 +8,7 @@ import Category from '../../models/categoryModel.js';
 import Product from '../../models/productModel.js';
 import Cart from '../../models/cartModel.js';
 import Wishlist from '../../models/wishlistModel.js';
+import Banner from '../../models/bannerModel.js';
 import mongoos from '../../config/connection.js';
 import Order from '../../models/orderModel.js';
 
@@ -17,7 +18,7 @@ const serviceId = process.env.TWILIO_SERVICE;
 const client = twilio(accountSid, authToken);
 
 // get user Home Page
-const getUserHome = (req, res) => {
+const getUserHome = async(req, res) => {
   // show a success message when successfully logged in
   const msg = req.flash('success');
   // getting logged in user details to "user" variable
@@ -41,7 +42,9 @@ const getUserHome = (req, res) => {
   req.session.userLogin=true;
   /////////////////////////////////////////
 
-  res.render('user/home', { msg, user });
+  const banner = await Banner.find();
+  console.log(banner);
+  res.render('user/home', { msg, user, banner });
 };
 
 // get SignIn Page

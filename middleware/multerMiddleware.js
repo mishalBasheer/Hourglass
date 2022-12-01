@@ -70,8 +70,32 @@ const brandImageUpload = multer({
   //   }
 });
 
+const bannerImageStorage = multer.diskStorage({
+  // Destination to store image
+  destination: 'public/banner_img',
+  filename: (req, file, cb) => {
+    cb(null, 'banner-img-' + Date.now() + path.extname(file.originalname));
+    // file.fieldname is name of the field (image)
+    // path.extname get the uploaded file extension
+  },
+});
+const bannerImageUpload = multer({
+  storage: bannerImageStorage,
+  //     limits: {
+  //       fileSize: 1000000 // 1000000 Bytes = 1 MB
+  //     },
+  //     fileFilter(req, file, cb) {
+  //       if (!file.originalname.match(/\.(png|jpg)$/)) {
+  //          // upload only png and jpg format
+  //          return cb(new Error('Please upload a Image'))
+  //        }
+  //      cb(undefined, true)
+  //   }
+});
+
 const uploadMultiple = imageUpload.fields([{name:'thumbnail',maxCount:1},{name:'images',maxCount:4}]);
 const uploadOne = catImageUpload.single('image');
 const uploadBrandImg = brandImageUpload.single('image');
+const uploadBannerImg = bannerImageUpload.single('image');
 
-export { uploadMultiple, uploadOne, uploadBrandImg };
+export { uploadMultiple, uploadOne, uploadBrandImg, uploadBannerImg };

@@ -5,13 +5,14 @@ import User from '../../models/userDetailsModel.js';
 import Category from '../../models/categoryModel.js';
 import Brand from '../../models/brandModel.js';
 import moment from 'moment';
+import Banner from '../../models/bannerModel.js';
 
 const getAdminLogin = (req, res) => {
   if (req.session.adminLogIn) {
     res.redirect('/admin/dashboard');
   } else {
     const msg = req.flash('error');
-    res.render('admin/login',{msg});
+    res.render('admin/login', { msg });
   }
 };
 
@@ -24,6 +25,7 @@ const getAdminDashboard = (req, res) => {
     dashboardPage: ' text-gray-800 dark:text-gray-100',
     ordersPage: '',
     productsPage: '',
+    bannerPage: '',
     usersPage: '',
     categoryPage: '',
     brandPage: '',
@@ -37,6 +39,7 @@ const getAdminOrders = (req, res) => {
     ordersPage: 'dark:text-gray-100',
     dashboardPage: '',
     productsPage: '',
+    bannerPage: '',
     usersPage: '',
     categoryPage: '',
     brandPage: '',
@@ -46,7 +49,9 @@ const getAdminOrders = (req, res) => {
 const getEditProductPage = async (req, res) => {
   const brand = await Brand.find({});
   const category = await Category.find({});
-  let product = await Product.find({ _id: mongoose.Types.ObjectId(req.params.id) }).populate('brand').populate('category');
+  let product = await Product.find({ _id: mongoose.Types.ObjectId(req.params.id) })
+    .populate('brand')
+    .populate('category');
   let userId = req.params.id;
   req.session.pageIn = 'products';
   res.render('admin/edit_product', {
@@ -56,6 +61,7 @@ const getEditProductPage = async (req, res) => {
     userId,
     pageIn: req.session.pageIn,
     productsPage: 'dark:text-gray-100',
+    bannerPage: '',
     dashboardPage: '',
     ordersPage: '',
     usersPage: '',
@@ -74,6 +80,7 @@ const getAdminProducts = async (req, res) => {
       products,
       pageIn: req.session.pageIn,
       productsPage: 'dark:text-gray-100',
+      bannerPage: '',
       dashboardPage: '',
       ordersPage: '',
       usersPage: '',
@@ -100,6 +107,7 @@ const getAddProductPage = async (req, res) => {
     category,
     pageIn: req.session.pageIn,
     productsPage: 'dark:text-gray-100',
+    bannerPage: '',
     dashboardPage: '',
     ordersPage: '',
     usersPage: '',
@@ -109,8 +117,8 @@ const getAddProductPage = async (req, res) => {
 };
 
 const editProduct = async (req, res) => {
-  console.log(req.files)
-  if (Object.keys(req.files).length==0) {
+  console.log(req.files);
+  if (Object.keys(req.files).length == 0) {
     // console.log(req.body)
     await Product.findByIdAndUpdate(req.params.id, req.body, {
       upsert: true,
@@ -118,8 +126,8 @@ const editProduct = async (req, res) => {
       runValidators: true,
     });
     res.redirect('/admin/products');
-  }else if(req.files.images == undefined && req.files.thumbnail.length !== 0){
-  const thumbnail = req.files.thumbnail[0].filename;
+  } else if (req.files.images == undefined && req.files.thumbnail.length !== 0) {
+    const thumbnail = req.files.thumbnail[0].filename;
     Object.assign(req.body, { thumbnail });
     await Product.findByIdAndUpdate(req.params.id, req.body, {
       upsert: true,
@@ -127,9 +135,8 @@ const editProduct = async (req, res) => {
       runValidators: true,
     });
     res.redirect('/admin/products');
-
-  }else if(req.files.thumbnail == undefined && req.files.images.length !== 0){
-    const img=[];
+  } else if (req.files.thumbnail == undefined && req.files.images.length !== 0) {
+    const img = [];
     req.files.forEach((el) => {
       img.push(el.filename);
     });
@@ -140,15 +147,13 @@ const editProduct = async (req, res) => {
       runValidators: true,
     });
     res.redirect('/admin/products');
-  
-  
   } else {
     const img = [];
     const thumbnail = req.files.thumbnail[0].filename;
     req.files.forEach((el) => {
       img.push(el.filename);
     });
-    Object.assign(req.body, { images: img,thumbnail});
+    Object.assign(req.body, { images: img, thumbnail });
     // const {title,brand,category,price,images,description}=req.body;
     // console.log(req.body)
     await Product.findByIdAndUpdate(req.params.id, req.body, {
@@ -172,20 +177,20 @@ const adminCheck = async (req, res) => {
             // console.log('admin')
             req.session.adminLogIn = true;
             // console.log('SESSION CHECK',req.session)
-            req.flash('success','Successfully Signed In');
+            req.flash('success', 'Successfully Signed In');
             res.redirect('/admin/dashboard');
           } else {
             // res.status(400).json({
             //   status: 'admin Password not match',
             //   message: err,
             // });
-            req.flash('error','Password not match');
-            res.redirect('/admin')
+            req.flash('error', 'Password not match');
+            res.redirect('/admin');
           }
         });
       } else {
-        req.flash('error','Email not found');
-        res.redirect('/admin')
+        req.flash('error', 'Email not found');
+        res.redirect('/admin');
       }
     });
   } catch (err) {
@@ -200,7 +205,7 @@ const uploadProduct = async (req, res) => {
     // console.log(req.files);
     const img = [];
     const thumbnail = req.files.thumbnail[0].filename;
-    
+
     req.files.images.forEach((el) => {
       img.push(el.filename);
     });
@@ -208,21 +213,21 @@ const uploadProduct = async (req, res) => {
     Object.assign(req.body, { images: img, thumbnail });
     const product = await Product.create(req.body);
 
-    console.log("product details: ",product);
+    console.log('product details: ', product);
     // res.status(200).json({
     //   data:req.body,
     // })
     res.redirect('/admin/products/add-product');
   } catch (err) {
     console.log(err);
-    req.flash('error','An Error occured while adding product to database')
+    req.flash('error', 'An Error occured while adding product to database');
     res.redirect('/admin/products/add-product');
   }
 };
 
 const getAllProduct = () => {
   return new Promise(async (resolve, reject) => {
-    let products = await Product.find({available:true}).populate('brand').populate('category').exec();
+    let products = await Product.find({ available: true }).populate('brand').populate('category').exec();
     // if(products!=null){
     resolve(products);
     // }else{
@@ -242,6 +247,7 @@ const getAdminUsers = async (req, res) => {
       dashboardPage: '',
       ordersPage: '',
       productsPage: '',
+      bannerPage: '',
       categoryPage: '',
       brandPage: '',
     });
@@ -288,7 +294,7 @@ const getAllClients = () => {
 };
 
 const deleteProduct = async (req, res) => {
-  await Product.findByIdAndUpdate(req.params.id,{available:false});
+  await Product.findByIdAndUpdate(req.params.id, { available: false });
   res.redirect('/admin/products');
 };
 
@@ -299,6 +305,7 @@ const getCategory = async (req, res) => {
     pageIn: req.session.pageIn,
     category,
     productsPage: '',
+    bannerPage: '',
     dashboardPage: '',
     ordersPage: '',
     usersPage: '',
@@ -317,6 +324,7 @@ const getEditCategory = async (req, res) => {
     catId,
     pageIn: req.session.pageIn,
     productsPage: '',
+    bannerPage: '',
     dashboardPage: '',
     ordersPage: '',
     usersPage: '',
@@ -330,6 +338,7 @@ const getAddCategory = (req, res) => {
   res.render('admin/add_category', {
     pageIn: req.session.pageIn,
     productsPage: '',
+    bannerPage: '',
     dashboardPage: '',
     ordersPage: '',
     usersPage: '',
@@ -390,6 +399,7 @@ const getBrand = async (req, res) => {
     pageIn: req.session.pageIn,
     brand,
     productsPage: '',
+    bannerPage: '',
     dashboardPage: '',
     ordersPage: '',
     usersPage: '',
@@ -408,6 +418,7 @@ const getEditBrand = async (req, res) => {
     brandId,
     pageIn: req.session.pageIn,
     productsPage: '',
+    bannerPage: '',
     dashboardPage: '',
     ordersPage: '',
     usersPage: '',
@@ -421,6 +432,7 @@ const getAddBrand = (req, res) => {
   res.render('admin/add_brand', {
     pageIn: req.session.pageIn,
     productsPage: '',
+    bannerPage: '',
     dashboardPage: '',
     ordersPage: '',
     usersPage: '',
@@ -448,6 +460,7 @@ const addBrand = async (req, res) => {
     });
   }
 };
+
 const editBrand = async (req, res) => {
   try {
     if (req.file == undefined) {
@@ -474,10 +487,105 @@ const editBrand = async (req, res) => {
   }
 };
 
-const adminLogout = (req, res)=>{
-  req.session.adminLogIn=false;
+const getBanner = async (req, res) => {
+  let banner = await Banner.find({});
+  req.session.pageIn = 'banner';
+  res.render('admin/banner', {
+    pageIn: req.session.pageIn,
+    banner,
+    productsPage: '',
+    bannerPage: 'dark:text-gray-100',
+    dashboardPage: '',
+    ordersPage: '',
+    usersPage: '',
+    categoryPage: '',
+    brandPage: '',
+  });
+};
+
+const getEditBanner = async (req, res) => {
+  const bannerId = req.params.id;
+  req.session.pageIn = 'banner';
+  const banner = await Banner.find({ _id: mongoose.Types.ObjectId(bannerId) });
+  // console.log(brand);
+  res.render('admin/edit_banner', {
+    banner,
+    bannerId,
+    pageIn: req.session.pageIn,
+    productsPage: '',
+    bannerPage: 'dark:text-gray-100',
+    dashboardPage: '',
+    ordersPage: '',
+    usersPage: '',
+    categoryPage: '',
+    brandPage: '',
+  });
+};
+
+const getAddBanner = (req, res) => {
+  req.session.pageIn = 'banner';
+  res.render('admin/add_banner', {
+    pageIn: req.session.pageIn,
+    productsPage: '',
+    bannerPage: 'dark:text-gray-100',
+    dashboardPage: '',
+    ordersPage: '',
+    usersPage: '',
+    categoryPage: '',
+    brandPage: '',
+  });
+};
+
+const addBanner = async (req, res) => {
+  try {
+    // console.log(req.file)
+    // console.log(req.body);
+
+    const bannerInfo = req.body;
+    const img = req.file.filename;
+    // console.log(img)
+    Object.assign(bannerInfo, { image: img });
+    // console.log(bannerInfo);
+    await Banner.create(bannerInfo);
+    res.redirect('/admin/banner');
+  } catch (err) {
+    res.status(400).json({
+      status: 'error while adding banner',
+      message: err,
+    });
+  }
+};
+
+const editBanner = async (req, res) => {
+  try {
+    if (req.file == undefined) {
+      // console.log(req.body)
+      await Banner.findByIdAndUpdate(req.params.id, req.body, {
+        upsert: true,
+        new: true,
+        runValidators: true,
+      });
+      res.redirect('/admin/banner');
+    } else {
+      // console.log(req.file)
+      const bannerInfo = req.body;
+      const img = req.file.filename;
+      Object.assign(bannerInfo, { image: img });
+      await Banner.findByIdAndUpdate(bannerInfo);
+      res.redirect('/admin/banner');
+    }
+  } catch (err) {
+    res.status(400).json({
+      status: 'error while editing banner',
+      message: err,
+    });
+  }
+};
+
+const adminLogout = (req, res) => {
+  req.session.adminLogIn = false;
   res.redirect('/admin');
-}
+};
 
 export {
   getAdminLogin,
@@ -504,4 +612,9 @@ export {
   unblockUser,
   deleteProduct,
   adminCheck,
+  getBanner,
+  getAddBanner,
+  addBanner,
+  getEditBanner,
+  editBanner,
 };

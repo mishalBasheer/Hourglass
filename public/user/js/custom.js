@@ -137,7 +137,7 @@
       return (number < 10 ? '0' : '') + number
     }
     var carousel = e.relatedTarget;
-    $('.slider-counter').text(pad2(carousel.current()));
+    $('.slider-counter').text(pad2(carousel.current()-1));
 
   }).owlCarousel({
     items: 1,
