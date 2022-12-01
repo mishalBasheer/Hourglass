@@ -36,6 +36,8 @@ import {
   OrderConfirmation,
   getOrders,
   newUser,
+  getShopCategory,
+  getShopBrand,
 } from '../controllers/user/userController.js';
 import { userLoginCheck, checkBlockedUser } from '../middleware/userLoginCheckMiddleware.js';
 import { axiosUserLoginCheck, axiosCheckBlockedUser } from '../middleware/axiosUserLoginCheck.js';
@@ -51,6 +53,8 @@ router.route('/signin').get(getSignIn).post(userCheck);
 router.route('/signin/otp-phone').get(getOtpPhonePage).post(checkExisting, sendOtp, redirectToOtpSignin);
 router.route('/signin/otp-signin').get(getOtpPage).post(verifyOtp, getUserHome);
 router.route('/shop').get(getAllShop);
+router.route('/shop/category/:id').get(getShopCategory);
+router.route('/shop/brand/:id').get(getShopBrand);
 router.route('/product-details/:id').get(getProductDetails);
 router.route('/add-to-cart').post(axiosUserLoginCheck, axiosCheckBlockedUser, setCart);
 router.route('/remove-from-cart').post(axiosUserLoginCheck, axiosCheckBlockedUser, removeFromCart);

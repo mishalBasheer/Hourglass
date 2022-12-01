@@ -110,13 +110,11 @@
                       Category
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown_2">
-                      <a class="dropdown-item" href="/shop/furniture"> Furniture</a>
-                      <a class="dropdown-item" href="/shop/wall-accent">Wall Accent</a>
-                      <a class="dropdown-item" href="/shop/lighting">Lighting</a>
-                      <a class="dropdown-item" href="/shop/garden">Garden</a>
-                      <a class="dropdown-item" href="/shop/Storage">Storage</a>
-                      <a class="dropdown-item" href="/shop/beds">Beds & Mattress</a>
-                      <a class="dropdown-item" href="/shop/sofa">Sofa & Recliners</a>
+                      
+                      <% navCat.forEach(element => { %>
+                        <a class="dropdown-item" href="/shop/category/<%= element._id %> "> <%= element.title %> </a>
+                      <% }) %>
+                        
                     </div>
                   </li>
 

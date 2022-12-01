@@ -18,7 +18,7 @@ const serviceId = process.env.TWILIO_SERVICE;
 const client = twilio(accountSid, authToken);
 
 // get user Home Page
-const getUserHome = async(req, res) => {
+const getUserHome = async (req, res) => {
   // show a success message when successfully logged in
   const msg = req.flash('success');
   // getting logged in user details to "user" variable
@@ -36,51 +36,57 @@ const getUserHome = async(req, res) => {
     password: '$2b$12$dzTVHZOQ425Hn87RRam3ruX.DaSYfC8SkcXEMQmtlGgXGz230fqsG',
     cartId: mongoose.Types.ObjectId('637bea89b921d410e4c72d95'),
     wishlistId: mongoose.Types.ObjectId('637bea89b921d410e4c72d97'),
-    __v: 0
-  }
-  req.session.user=user;
-  req.session.userLogin=true;
+    __v: 0,
+  };
+  req.session.user = user;
+  req.session.userLogin = true;
   /////////////////////////////////////////
 
   const banner = await Banner.find();
+  const navCat = await Category.find();
   console.log(banner);
-  res.render('user/home', { msg, user, banner });
+  res.render('user/home', { msg, user, banner,navCat ,navCat});
 };
 
 // get SignIn Page
-const getSignIn = (req, res) => {
+const getSignIn = async(req, res) => {
   const user = req.session.user;
+  const navCat = await Category.find();
   const loginCheck = req.flash('errorLoginCheck');
   console.log(loginCheck);
   const msg = req.flash('error');
   // console.log(msg);
-  res.render('user/login', { msg, user, loginCheck });
+  res.render('user/login', { msg, user, loginCheck ,navCat});
 };
 
 // get SignUp Page
-const getSignUp = (req, res) => {
+const getSignUp = async(req, res) => {
   const user = req.session.user;
+  const navCat = await Category.find();
   const msg = req.flash('error');
   console.log(msg);
-  res.render('user/signup', { msg, user });
+  res.render('user/signup', { msg, user ,navCat});
 };
 
 // get OTP Phone number Page (SignIn)
-const getOtpPhonePage = (req, res) => {
+const getOtpPhonePage = async(req, res) => {
   const user = req.session.user;
-  res.render('user/otp_phone', { user });
+  const navCat = await Category.find();
+  res.render('user/otp_phone', { user ,navCat});
 };
 
 // get OTP number from user Page(SignIn)
-const getOtpPage = (req, res) => {
+const getOtpPage = async(req, res) => {
   const user = req.session.user;
-  res.render('user/otp_page', { user });
+  const navCat = await Category.find();
+  res.render('user/otp_page', { user ,navCat});
 };
 
 // get OTP number from user Page (SignUp)
-const getOtpSignUp = (req, res) => {
+const getOtpSignUp = async(req, res) => {
   const user = req.session.user;
-  res.render('user/otp_page_signup', { user });
+  const navCat = await Category.find();
+  res.render('user/otp_page_signup', { user ,navCat});
 };
 
 // Shows all products that is listed in shop page
@@ -89,6 +95,24 @@ const getAllShop = async (req, res) => {
     const brand = await Brand.find();
     const category = await Category.find();
     const product = await Product.find();
+    const cat = await Product.aggregate([
+      {
+        $group: {
+          _id: '$category',
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $lookup: {
+          from: Category.collection.name,
+          localField: '_id',
+          foreignField: '_id',
+          as: 'cat',
+        },
+      },
+    ]);
+
+    const count = product.length;
     const user = req.session.user;
     if (user) {
       const wishlistProducts = await Wishlist.findOne({ _id: user.wishlistId }).select({
@@ -96,10 +120,94 @@ const getAllShop = async (req, res) => {
         _id: 0,
       });
       const msg = req.flash('cartSuccess');
-      res.render('user/shop', { user, product, brand, category, msg, wishlistProducts });
+      res.render('user/shop', { user, product, brand, msg, wishlistProducts, count,navCat:category ,cat});
     } else {
       const msg = req.flash('cartSuccess');
-      res.render('user/shop', { user, product, brand, category, msg });
+      res.render('user/shop', { user, product, brand, msg, count,navCat:category ,cat});
+    }
+  } catch (err) {
+    console.log(err);
+    res.render('user/error-page', { error: err, errorMsg: 'error from getting all products' });
+  }
+};
+
+// Shows all products that is listed in shop page
+const getShopCategory = async (req, res) => {
+  try {
+    const brand = await Brand.find();
+    const category = await Category.find();
+    const product = await Product.find({category:req.params.id});
+    const cat = await Product.aggregate([
+      {
+        $group: {
+          _id: '$category',
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $lookup: {
+          from: Category.collection.name,
+          localField: '_id',
+          foreignField: '_id',
+          as: 'cat',
+        },
+      },
+    ]);
+
+    const count = product.length;
+    const user = req.session.user;
+    if (user) {
+      const wishlistProducts = await Wishlist.findOne({ _id: user.wishlistId }).select({
+        'products.product': 1,
+        _id: 0,
+      });
+      const msg = req.flash('cartSuccess');
+      res.render('user/shop', { user, product, brand, msg, wishlistProducts, count,navCat:category ,cat});
+    } else {
+      const msg = req.flash('cartSuccess');
+      res.render('user/shop', { user, product, brand, msg, count,navCat:category ,cat});
+    }
+  } catch (err) {
+    console.log(err);
+    res.render('user/error-page', { error: err, errorMsg: 'error from getting all products' });
+  }
+};
+
+// Shows all products that is listed in shop page
+const getShopBrand = async (req, res) => {
+  try {
+    const brand = await Brand.find();
+    const category = await Category.find();
+    const product = await Product.find({brand:req.params.id});
+    const cat = await Product.aggregate([
+      {
+        $group: {
+          _id: '$category',
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $lookup: {
+          from: Category.collection.name,
+          localField: '_id',
+          foreignField: '_id',
+          as: 'cat',
+        },
+      },
+    ]);
+
+    const count = product.length;
+    const user = req.session.user;
+    if (user) {
+      const wishlistProducts = await Wishlist.findOne({ _id: user.wishlistId }).select({
+        'products.product': 1,
+        _id: 0,
+      });
+      const msg = req.flash('cartSuccess');
+      res.render('user/shop', { user, product, brand, msg, wishlistProducts, count,navCat:category ,cat});
+    } else {
+      const msg = req.flash('cartSuccess');
+      res.render('user/shop', { user, product, brand, msg, count,navCat:category ,cat});
     }
   } catch (err) {
     console.log(err);
@@ -110,9 +218,12 @@ const getAllShop = async (req, res) => {
 // shows the details of specific product
 const getProductDetails = async (req, res) => {
   try {
+
     const product = await Product.findOne({ _id: req.params.id }).populate('category').populate('brand');
     // console.log(product);
     const user = req.session.user;
+    
+  const navCat = await Category.find();
     // console.log(wishlisted)
 
     if (user) {
@@ -122,9 +233,9 @@ const getProductDetails = async (req, res) => {
       });
       const wishlisted = wishlistProducts.products.some((el) => el.product.equals(product._id));
       const msg = req.flash('cartSuccess');
-      res.render('user/p_details', { user, product, msg, wishlisted });
+      res.render('user/p_details', { user, product, msg, wishlisted ,navCat});
     } else {
-      res.render('user/p_details', { user, product });
+      res.render('user/p_details', { user, product ,navCat});
     }
   } catch (err) {
     console.log(err);
@@ -133,26 +244,29 @@ const getProductDetails = async (req, res) => {
 };
 
 // get ContactUs Page
-const getContactUs = (req, res) => {
+const getContactUs = async(req, res) => {
   const user = req.session.user;
-  res.render('user/contact', { user });
+  const navCat = await Category.find();
+  res.render('user/contact', { user ,navCat});
 };
 
 // get ForgetPassword Page
-const getForgetPassword = (req, res) => {
+const getForgetPassword =async (req, res) => {
   const user = req.session.user;
-  res.render('user/forgotpass', { user });
+  const navCat = await Category.find();
+  res.render('user/forgotpass', { user ,navCat});
 };
 
 // get Cart Page
 const getCart = async (req, res) => {
   try {
     const user = req.session.user;
+    const navCat = await Category.find();
     const cart = await Cart.findOne({ _id: user.cartId }).populate('products.product');
-    res.render('user/cart', { user, cart: cart.products });
+    res.render('user/cart', { user, cart: cart.products ,navCat});
   } catch (err) {
     console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error from getting cart products' });
+    res.render('user/error-page', { error: err, errorMsg: 'error from getting cart products' ,navCat});
   }
 };
 
@@ -222,7 +336,7 @@ const setCart = async (req, res, next) => {
     // next();
   } catch (err) {
     console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error from putting a product to cart' });
+    res.render('user/error-page', { error: err, errorMsg: 'error from putting a product to cart' ,navCat});
   }
 };
 
@@ -301,7 +415,7 @@ const incQuantity = async (req, res) => {
     // }
   } catch (err) {
     console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error when increasing quantity from the cart' });
+    res.render('user/error-page', { error: err, errorMsg: 'error when increasing quantity from the cart' ,navCat});
   }
 };
 
@@ -337,7 +451,7 @@ const decQuantity = async (req, res) => {
     //   message: err,
     // });
     console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error from decreasing quantity from the cart' });
+    res.render('user/error-page', { error: err, errorMsg: 'error from decreasing quantity from the cart' ,navCat});
   }
 };
 
@@ -345,13 +459,14 @@ const decQuantity = async (req, res) => {
 const getWish = async (req, res) => {
   try {
     const user = req.session.user;
+  const navCat = await Category.find();
     // console.log(user);
     const wishlist = await Wishlist.findOne({ _id: user.wishlistId }).populate('products.product');
     // console.log(wishlist);
-    res.render('user/wishlist', { user, wishlist: wishlist.products });
+    res.render('user/wishlist', { user, wishlist: wishlist.products ,navCat});
   } catch (err) {
     console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error while getting wishlist products' });
+    res.render('user/error-page', { error: err, errorMsg: 'error while getting wishlist products' ,navCat});
   }
 };
 
@@ -378,7 +493,7 @@ const setWish = async (req, res) => {
     res.redirect('/shop');
   } catch (err) {
     console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error while putting products to wishlist' });
+    res.render('user/error-page', { error: err, errorMsg: 'error while putting products to wishlist' ,navCat});
   }
 };
 
@@ -393,67 +508,75 @@ const removeFromWishlist = async (req, res) => {
     res.redirect('/shop');
   } catch (err) {
     console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error while removing products from wishlist' });
+    res.render('user/error-page', { error: err, errorMsg: 'error while removing products from wishlist' ,navCat});
   }
 };
 
 // get Orders
-const getOrders = async (req, res)=>{
+const getOrders = async (req, res) => {
   const user = req.session.user;
-  const orders = await Order.find({userId:user._id}).populate('address').select({'products._id':0,_id:0,userId:0,'address.userId':0,'address._id':0});
+  const navCat = await Category.find();
+  const orders = await Order.find({ userId: user._id })
+    .populate('address')
+    .select({ 'products._id': 0, _id: 0, userId: 0, 'address.userId': 0, 'address._id': 0 });
   console.log(orders);
-  res.render('user/order_confirmation', { user,orders });
-}
-
+  res.render('user/order_confirmation', { user, orders ,navCat});
+};
 
 // OrderConfirmation
-const OrderConfirmation = async(req, res) => {
+const OrderConfirmation = async (req, res) => {
   const user = req.session.user;
   console.log(req.body);
-  const cartProducts = await Cart.findById(user.cartId).populate('products.product').select({'products.product':1,'products.subtotal':1,'products.quantity':1,total:1,_id:0});
-  console.log(cartProducts );
-  
+  const cartProducts = await Cart.findById(user.cartId)
+    .populate('products.product')
+    .select({ 'products.product': 1, 'products.subtotal': 1, 'products.quantity': 1, total: 1, _id: 0 });
+  console.log(cartProducts);
 
   const newOrder = {
-    userId:user._id,
-    payment:req.body.payment,
-    address:mongoose.Types.ObjectId(req.body.address),
-    message:req.body.message,
-    products:cartProducts.products,
-    total:cartProducts.total,
-  }
+    userId: user._id,
+    payment: req.body.payment,
+    address: mongoose.Types.ObjectId(req.body.address),
+    message: req.body.message,
+    products: cartProducts.products,
+    total: cartProducts.total,
+  };
   await Order.create(newOrder);
 
-
-  res.redirect('/order-confirmation')
+  res.redirect('/order-confirmation');
 };
 
 // get OrderConfirmation Page
-const getOrderConfirmation = async(req, res) => {
+const getOrderConfirmation = async (req, res) => {
   const user = req.session.user;
-  const orders = await Order.find({userId:user._id}).populate('address').select({'products._id':0,_id:0,userId:0,'address.userId':0,'address._id':0});
+  const navCat = await Category.find();
+  const orders = await Order.find({ userId: user._id })
+    .populate('address')
+    .select({ 'products._id': 0, _id: 0, userId: 0, 'address.userId': 0, 'address._id': 0 });
   console.log(orders);
-  res.render('user/order_confirmation', { user,orders });
+  res.render('user/order_confirmation', { user, orders ,navCat});
 };
 
 // get Tracking Page
-const getTracking = (req, res) => {
+const getTracking = async(req, res) => {
   const user = req.session.user;
-  res.render('user/tracking', { user });
+  const navCat = await Category.find();
+  res.render('user/tracking', { user ,navCat});
 };
 
 // get Profile Page
 const getProfile = async (req, res) => {
   const user = req.session.user;
+  const navCat = await Category.find();
   const address = await Address.find({ userId: user._id });
-  res.render('user/profile', { user, address });
+  res.render('user/profile', { user, address ,navCat});
 };
 
 // get Address profile Page
-const getAddAddress = (req, res) => {
+const getAddAddress =async (req, res) => {
   const alert = req.flash('alert');
   const user = req.session.user;
-  res.render('user/add_address', { user, alert });
+  const navCat = await Category.find();
+  res.render('user/add_address', { user, alert ,navCat});
 };
 
 // adding Address to address collection
@@ -477,7 +600,7 @@ const addAddress = async (req, res) => {
     //   message: err,
     // });
     console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error while adding address to profile' });
+    res.render('user/error-page', { error: err, errorMsg: 'error while adding address to profile' ,navCat});
   }
 };
 
@@ -521,7 +644,7 @@ const newUser = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error while inserting new user' });
+    res.render('user/error-page', { error: err, errorMsg: 'error while inserting new user' ,navCat});
   }
 };
 
@@ -565,7 +688,7 @@ const userCheck = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error while checking user from the database' });
+    res.render('user/error-page', { error: err, errorMsg: 'error while checking user from the database' ,navCat});
   }
 };
 
@@ -610,16 +733,17 @@ const verifyOtp = async (req, res, next) => {
       });
   } catch (err) {
     console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error while verifying otp!!' });
+    res.render('user/error-page', { error: err, errorMsg: 'error while verifying otp!!' ,navCat});
   }
 };
 
 // get Checkout Page
 const getCheckout = async (req, res) => {
   const user = req.session.user;
+  const navCat = await Category.find();
   const cartProducts = await Cart.findById(user.cartId).populate('products.product');
-  const address = await Address.find({userId:user._id})
-  res.render('user/checkout', { user, total: cartProducts.total, products: cartProducts.products,address });
+  const address = await Address.find({ userId: user._id });
+  res.render('user/checkout', { user, total: cartProducts.total, products: cartProducts.products, address ,navCat});
 };
 
 // redirecting to OTP sign Up page
@@ -650,7 +774,7 @@ const checkExisting = async (req, res, next) => {
     }
   } catch (err) {
     console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error while checking "existing" user' });
+    res.render('user/error-page', { error: err, errorMsg: 'error while checking "existing" user' ,navCat});
   }
 };
 
@@ -668,7 +792,7 @@ const checkNotExisting = async (req, res, next) => {
     }
   } catch (err) {
     console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error while checking "not an existing" user' });
+    res.render('user/error-page', { error: err, errorMsg: 'error while checking "not an existing" user' ,navCat});
   }
 };
 
@@ -716,4 +840,6 @@ export {
   getOrderConfirmation,
   OrderConfirmation,
   getOrders,
+  getShopCategory,
+  getShopBrand,
 };
