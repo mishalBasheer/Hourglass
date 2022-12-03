@@ -17,6 +17,9 @@ const orderSchema = new mongoose.Schema({
   total: {
     type: Number,
   },
+  totalPaid: {
+    type: Number,
+  },
   payment: {
     type: String,
   },
@@ -45,7 +48,7 @@ const orderSchema = new mongoose.Schema({
   ],
   orderstat:{
     type:String,
-    enum:['CONFIRMED','SHIPPED','OUT_FOR_DELIVERY','DELIVERED'],
+    enum:['CONFIRMED','SHIPPED','OUT FOR DELIVERY','DELIVERED','CANCELLED'],
     default:'CONFIRMED',
   }
 });

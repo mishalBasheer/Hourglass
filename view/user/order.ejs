@@ -1,68 +1,303 @@
-  
-    <%- include('partials/header.ejs') %>
-  <!--================Home Banner Area =================-->
-  <!-- breadcrumb start-->
-  <section class="breadcrumb breadcrumb_bg">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-lg-8">
-          <div class="breadcrumb_iner">
-            <div class="breadcrumb_iner_item">
-              <h2>Order Confirmation</h2>
-              <p>Home <span>-</span> Order Confirmation</p>
-            </div>
+<%- include('partials/header.ejs') %>
+
+<!--================Home Banner Area =================-->
+<!-- breadcrumb start-->
+<section class="breadcrumb breadcrumb_bg">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="breadcrumb_iner">
+          <div class="breadcrumb_iner_item">
+            <h2>Your Orders</h2>
+            <p>Home <span>-</span> Your Orders</p>
           </div>
         </div>
       </div>
     </div>
-  </section>
-  <!-- breadcrumb start-->
+  </div>
+</section>
+<!-- breadcrumb start-->
 
-  <!--================ confirmation part start =================-->
-  <section class="confirmation_part padding_top">
-    <div class="container">
+<!--================ confirmation part start =================-->
+<section class="confirmation_part padding_top">
+  <div class="progress-table-wrap">
+    <div class="progress-table">
+      <div class="table-head">
+        <div class="serial">#Order</div>
+        <div class="country">Date</div>
+        <div class="visit">Status</div>
+        <div class="visit">Total</div>
+        <div class="visit">Product</div>
+      </div>
+      <% orders.forEach((el,index) => { %>
 
+      <div class="table-row">
+        <div class="serial"><%= index+1 %></div>
+        <div class="country"><%= el.date %></div>
+        <div class="visit"><%= el.orderstat %></div>
+        <div class="visit">₹ <%= el.total %></div>
+        <!-- <div class="visit"> -->
+        <button class="btn_3" data-toggle="modal" data-target="#myModal" onclick="modalOrderDetails('<%= el._id %>')">
+          Details
+        </button>
+        <!-- </div> -->
+        <div class="progress">
+          <div
+            class="progress-bar color-1"
+            role="progressbar"
+            style="width: 80%"
+            aria-valuenow="80"
+            aria-valuemin="0"
+            aria-valuemax="100"
+          ></div>
+        </div>
+      </div>
 
-      <div class="section-top-border">
-				<h3 class="mb-30">Your Orders</h3>
-				<div class="progress-table-wrap">
-					<div class="progress-table">
-						<div class="table-head">
-							<div class="serial">#Order</div>
-							<div class="country">Date</div>
-							<div class="visit">Status</div>
-							<div class="visit">Total</div>
-							<div class="visit">Details</div>
-						</div>
-            <% orders.forEach(el => { %>
-             
-						<div class="table-row">
-							<div class="serial">01</div>
-							<div class="country"><%= el.date %> </div>
-							<div class="visit"><%= el.orderstat %> </div>
-							<div class="visit">₹<%= el.total %> </div>
-							<!-- <div class="visit"> -->
-                <button class="btn_3" onclick="modalOrderDetails('<%= el.products %>')">View</button>
-              <!-- </div> -->
-								<div class="progress">
-									<div class="progress-bar color-1" role="progressbar" style="width: 80%"
-										aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-								</div>
-						</div>
-
-            <% }) %>
-					</div>
-				</div>
-			</div>
-
+      <% }) %>
     </div>
-  </section>
-  <!--================ confirmation part end =================-->
+  </div>
+</section>
+<!--================ confirmation part end =================-->
 
-  <script>
-    function modalOrderDetails(data){
-      alert('data');
+<div class="modal" id="myModal">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Order Details</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <div class="container px-1 px-md-4 mx-auto">
+        <div class="card">
+            <div class="row d-flex justify-content-between px-3 top">
+                <div class="d-flex">
+                    <h5>ORDER <span class="text-primary font-weight-bold">#Y34XDHR</span></h5>
+                </div>
+                <div class="d-flex flex-column text-sm-right">
+                    <p class="mb-0">Expected Arrival <span>01/12/19</span></p>
+                    <p>USPS <span class="font-weight-bold">234094567242423422898</span></p>
+                </div>
+            </div>
+            <!-- Add class 'active' to progress -->
+            <div class="row d-flex justify-content-center">
+                <div class="col-12">
+                <ul id="progressbar" class="text-center">
+                    <li class="active step0"></li>
+                    <li class="step0"></li>
+                    <li class="step0"></li>
+                    <li class="step0"></li>
+                </ul>
+                </div>
+            </div>
+            <div class="row justify-content-between top">
+                <div class="row d-flex icon-content">
+                    <img class="icon" src="https://i.imgur.com/9nnc9Et.png">
+                    <div class="d-flex flex-column">
+                        <p class="font-weight-bold">Order<br>Processed</p>
+                    </div>
+                </div>
+                <div class="row d-flex icon-content">
+                    <img class="icon" src="https://i.imgur.com/u1AzR7w.png">
+                    <div class="d-flex flex-column">
+                        <p class="font-weight-bold">Order<br>Shipped</p>
+                    </div>
+                </div>
+                <div class="row d-flex icon-content">
+                    <img class="icon" src="https://i.imgur.com/TkPm63y.png">
+                    <div class="d-flex flex-column">
+                        <p class="font-weight-bold">Order<br>En Route</p>
+                    </div>
+                </div>
+                <div class="row d-flex icon-content">
+                    <img class="icon" src="https://i.imgur.com/HdsziHP.png">
+                    <div class="d-flex flex-column">
+                        <p class="font-weight-bold">Order<br>Arrived</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <table class="table">
+          <h5>Product Details</h5>
+          <thead class="thead-dark">
+            <tr>
+              <th>#</th>
+              <th>Title</th>
+              <th>Quantity</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody id="table_body12">
+          </tbody>
+        </table>
+      </div>
+
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  body {
+    color: #000;
+    overflow-x: hidden;
+    height: 100%;
+    background-repeat: no-repeat;
+}
+
+.card {
+    z-index: 0;
+    background-color: #ECEFF1;
+    padding-bottom: 20px;
+    margin-top: 90px;
+    margin-bottom: 90px;
+    border-radius: 10px;
+}
+
+.top {
+    padding-top: 40px;
+    padding-left: 13% !important;
+    padding-right: 13% !important;
+}
+
+/*Icon progressbar*/
+#progressbar {
+    margin-bottom: 30px;
+    overflow: hidden;
+    color: #455A64;
+    padding-left: 0px;
+    margin-top: 30px;
+} 
+
+#progressbar li {
+    list-style-type: none;
+    font-size: 13px;
+    width: 25%;
+    float: left;
+    position: relative;
+    font-weight: 400;
+}
+
+#progressbar .step0:before {
+    font-family: FontAwesome;
+    content: "\f10c";
+    color: #fff;
+}
+
+#progressbar li:before {
+    width: 40px;
+    height: 40px;
+    line-height: 45px;
+    display: block;
+    font-size: 20px;
+    background: #C5CAE9;
+    border-radius: 50%;
+    margin: auto;
+    padding: 0px;
+}
+
+/*ProgressBar connectors*/
+#progressbar li:after {
+    content: '';
+    width: 100%;
+    height: 12px;
+    background: #C5CAE9;
+    position: absolute;
+    left: 0;
+    top: 16px;
+    z-index: -1;
+}
+
+#progressbar li:last-child:after {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    position: absolute;
+    left: -50%;
+}
+
+#progressbar li:nth-child(2):after, #progressbar li:nth-child(3):after {
+    left: -50%;
+}
+
+#progressbar li:first-child:after {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    position: absolute;
+    left: 50%;
+}
+
+#progressbar li:last-child:after {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+#progressbar li:first-child:after {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+/*Color number of the step and the connector before it*/
+#progressbar li.active:before, #progressbar li.active:after {
+    background: #651FFF;
+}
+
+#progressbar li.active:before {
+    font-family: FontAwesome;
+    content: "\f00c";
+}
+
+.icon {
+    width: 60px;
+    height: 60px;
+    margin-right: 15px;
+}
+
+.icon-content { 
+    padding-bottom: 20px;
+}
+
+@media screen and (max-width: 992px) {
+    .icon-content {
+        width: 50%;
     }
-  </script>
+}
+</style>
 
-  <%- include('partials/footer.ejs') %>
+<script src="https://kit.fontawesome.com/b02fd68529.js" crossorigin="anonymous"></script>
+<script>
+  function modalOrderDetails(id) {
+    $.ajax({
+      url: '/orders',
+      method: 'POST',
+      data: {
+        orderId: id,
+      },
+    }).then((response) => {
+      console.log(response);
+      let order = response.order;
+
+      console.log(order);
+      let table_data = '';
+      $.each(order.products, function (index, value) {
+        /*console.log(value);*/
+        table_data += '<tr>';
+        table_data += '<td>' + (index+1) + '</td>';
+        table_data += '<td>' + value.product.title + '</td>';
+        table_data += '<td>' + value.quantity + '</td>';
+        table_data += '<td>₹' + value.subtotal + '</td>';
+        table_data += '<tr>';
+      });
+      // $('tbody').append(table_data);
+      $('#table_body12').html(table_data);
+    });
+  }
+</script>
+
+<%- include('partials/footer.ejs') %>

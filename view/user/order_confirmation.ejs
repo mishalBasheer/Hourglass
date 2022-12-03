@@ -86,8 +86,6 @@
                 </table>
               </div>
             </div>
-
-
           </div>
         </div>
       </div>
@@ -96,7 +94,7 @@
         <div class="order_box mt-3">
           <h2>Payment Method</h2>
 
-          <a href="#">
+          <a href="#" id="cod12">
             <button type="button" class="btn btn-dark btn-lg btn-block mt-3">Cash On Delivery</button>
           </a>
           <a href="#">
@@ -145,9 +143,7 @@
       image: 'https://example.com/your_logo',
       order_id: orderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
       handler: function (response) {
-        alert(response.razorpay_payment_id);
-        alert(response.razorpay_order_id);
-        alert(response.razorpay_signature);
+        location.href="/order-success";
       },
       theme: {
         color: '#3399cc',
@@ -155,16 +151,35 @@
     };
     var rzp1 = new Razorpay(options);
     rzp1.on('payment.failed', function (response) {
-      alert(response.error.code);
-      alert(response.error.description);
-      alert(response.error.source);
-      alert(response.error.step);
-      alert(response.error.reason);
-      alert(response.error.metadata.order_id);
-      alert(response.error.metadata.payment_id);
+      customFailedAlert(response.error.message);
     });
     rzp1.open();
     e.preventDefault();
+    function customFailedAlert(message) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: message,
+      });
+    }
   };
+
+  document.getElementById('cod12').onclick = ()=>{
+    $.ajax({
+      url: '/order-confirmation',
+      method: 'POST',
+      // timeout: 0,
+      // headers: {
+      //   'Content-Type': 'application/json',
+      // },
+      // data: JSON.stringify({
+      //   amount: '',
+      // }),
+    }).then((response)=>{
+      location.href="/order-success"
+    }
+    )
+  }
+
 </script>
 <%- include('partials/footer.ejs') %>

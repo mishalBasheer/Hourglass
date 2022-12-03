@@ -518,9 +518,20 @@ const getOrders = async (req, res) => {
   const navCat = await Category.find();
   const orders = await Order.find({ userId: user._id })
     .populate('address')
-    .select({ 'products._id': 0, _id: 0, userId: 0, 'address.userId': 0, 'address._id': 0 });
+    .select({ 'products._id': 0, userId: 0, 'address.userId': 0, 'address._id': 0 });
   console.log(orders);
-  res.render('user/order_confirmation', { user, orders, navCat });
+  res.render('user/order', { user, orders, navCat });
+};
+
+// get Orders
+const getOrderData = async (req, res) => {
+  const order = await Order.findOne({ _id: req.body.orderId })
+    .populate('address')
+    .select({ 'products._id': 0, userId: 0, 'address.userId': 0, 'address._id': 0 });
+    
+  res.json({
+    order
+  })
 };
 
 // checkoutConfirm
@@ -539,7 +550,6 @@ const checkoutConfirm = async (req, res) => {
     total: cartProducts.total,
   };
   req.session.newOrder = newOrder;
-  // await Order.create(newOrder);
   res.redirect('/order-confirmation');
 };
 
@@ -556,7 +566,6 @@ const getPayment = async (req, res) => {
 
 // razor payment from axios
 const razorOrderGenerate = async(req, res) => {
-  // const order = req.session.newOrder;
   const newOrder = req.session.newOrder;
   let instance = new Razorpay({
     key_id: process.env.RAZOR_KEY_ID,
@@ -569,37 +578,34 @@ const razorOrderGenerate = async(req, res) => {
   };
   instance.orders.create(options, function (err, order) {
     console.log(order);
+    Object.assign(order,{payment:"Razorpay"})
     Object.assign(req.session.newOrder,order);
     res.send({orderId:order.id})
   });
 };
 
-const razorVerifyPayment = async(req, res) => {
-  // let body = req.body.response.razorpay_order_id + '|' + req.body.response.razorpay_payment_id;
-  // var crypto = require('crypto');
-  // var expectedSignature = crypto
-  //   .createHmac('sha256', process.env.RAZOR_KEY_SECRET)
-  //   .update(body.toString())
-  //   .digest('hex');
-  // console.log('sig received ', req.body.response.razorpay_signature);
-  // console.log('sig generated ', expectedSignature);
-  // var response = { signatureIsValid: 'false' };
-  // if (expectedSignature === req.body.response.razorpay_signature) response = { signatureIsValid: 'true' };
-  // // await Order.create(req.session.newOrder)
-  // console.log(req.session.newOrder);
-  // res.send(response);
+// setting payment to COD
+const setCOD = async (req, res) => {
+  Object.assign(req.session.newOrder,{payment:"Cash On Delivery"})
+  res.json({stat:"ok"});
 };
 
-// get OrderConfirmation Page
-const getOrderConfirmation = async (req, res) => {
+// get OrderSuccess Page
+const getOrderSuccess = async (req, res) => {
   const user = req.session.user;
+  console.log(req.session.newOrder);
+  const newOrder = req.session.newOrder;
   const navCat = await Category.find();
-  const orders = await Order.find({ userId: user._id })
-    .populate('address')
-    .select({ 'products._id': 0, _id: 0, userId: 0, 'address.userId': 0, 'address._id': 0 });
-  console.log(orders);
-  res.render('user/order_confirmation', { user, orders, navCat });
+  // const orders = await Order.find({ userId: user._id })
+  //   .populate('address')
+  //   .select({ 'products._id': 0, _id: 0, userId: 0, 'address.userId': 0, 'address._id': 0 });
+  // console.log(orders);
+  const order = await Order.create(newOrder);
+  const order_address = await Address.populate(order,{path:"address"})
+
+  res.render('user/order_success', { user, order:order_address, navCat });
 };
+
 
 // get Tracking Page
 const getTracking = async (req, res) => {
@@ -640,10 +646,6 @@ const addAddress = async (req, res) => {
 
     res.redirect('/profile');
   } catch (err) {
-    // res.json({
-    //   status: 'error while adding address',
-    //   message: err,
-    // });
     console.log(err);
     res.render('user/error-page', { error: err, errorMsg: 'error while adding address to profile', navCat });
   }
@@ -887,6 +889,8 @@ export {
   getShopCategory,
   getShopBrand,
   getPayment,
+  setCOD,
   razorOrderGenerate,
-  razorVerifyPayment,
+  getOrderSuccess,
+  getOrderData,
 };
