@@ -11,6 +11,7 @@ import Wishlist from '../../models/wishlistModel.js';
 import Banner from '../../models/bannerModel.js';
 import mongoos from '../../config/connection.js';
 import Order from '../../models/orderModel.js';
+import Razorpay from 'razorpay';
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -45,48 +46,48 @@ const getUserHome = async (req, res) => {
   const banner = await Banner.find();
   const navCat = await Category.find();
   console.log(banner);
-  res.render('user/home', { msg, user, banner,navCat ,navCat});
+  res.render('user/home', { msg, user, banner, navCat, navCat });
 };
 
 // get SignIn Page
-const getSignIn = async(req, res) => {
+const getSignIn = async (req, res) => {
   const user = req.session.user;
   const navCat = await Category.find();
   const loginCheck = req.flash('errorLoginCheck');
   console.log(loginCheck);
   const msg = req.flash('error');
   // console.log(msg);
-  res.render('user/login', { msg, user, loginCheck ,navCat});
+  res.render('user/login', { msg, user, loginCheck, navCat });
 };
 
 // get SignUp Page
-const getSignUp = async(req, res) => {
+const getSignUp = async (req, res) => {
   const user = req.session.user;
   const navCat = await Category.find();
   const msg = req.flash('error');
   console.log(msg);
-  res.render('user/signup', { msg, user ,navCat});
+  res.render('user/signup', { msg, user, navCat });
 };
 
 // get OTP Phone number Page (SignIn)
-const getOtpPhonePage = async(req, res) => {
+const getOtpPhonePage = async (req, res) => {
   const user = req.session.user;
   const navCat = await Category.find();
-  res.render('user/otp_phone', { user ,navCat});
+  res.render('user/otp_phone', { user, navCat });
 };
 
 // get OTP number from user Page(SignIn)
-const getOtpPage = async(req, res) => {
+const getOtpPage = async (req, res) => {
   const user = req.session.user;
   const navCat = await Category.find();
-  res.render('user/otp_page', { user ,navCat});
+  res.render('user/otp_page', { user, navCat });
 };
 
 // get OTP number from user Page (SignUp)
-const getOtpSignUp = async(req, res) => {
+const getOtpSignUp = async (req, res) => {
   const user = req.session.user;
   const navCat = await Category.find();
-  res.render('user/otp_page_signup', { user ,navCat});
+  res.render('user/otp_page_signup', { user, navCat });
 };
 
 // Shows all products that is listed in shop page
@@ -120,10 +121,10 @@ const getAllShop = async (req, res) => {
         _id: 0,
       });
       const msg = req.flash('cartSuccess');
-      res.render('user/shop', { user, product, brand, msg, wishlistProducts, count,navCat:category ,cat});
+      res.render('user/shop', { user, product, brand, msg, wishlistProducts, count, navCat: category, cat });
     } else {
       const msg = req.flash('cartSuccess');
-      res.render('user/shop', { user, product, brand, msg, count,navCat:category ,cat});
+      res.render('user/shop', { user, product, brand, msg, count, navCat: category, cat });
     }
   } catch (err) {
     console.log(err);
@@ -136,7 +137,7 @@ const getShopCategory = async (req, res) => {
   try {
     const brand = await Brand.find();
     const category = await Category.find();
-    const product = await Product.find({category:req.params.id});
+    const product = await Product.find({ category: req.params.id });
     const cat = await Product.aggregate([
       {
         $group: {
@@ -162,10 +163,10 @@ const getShopCategory = async (req, res) => {
         _id: 0,
       });
       const msg = req.flash('cartSuccess');
-      res.render('user/shop', { user, product, brand, msg, wishlistProducts, count,navCat:category ,cat});
+      res.render('user/shop', { user, product, brand, msg, wishlistProducts, count, navCat: category, cat });
     } else {
       const msg = req.flash('cartSuccess');
-      res.render('user/shop', { user, product, brand, msg, count,navCat:category ,cat});
+      res.render('user/shop', { user, product, brand, msg, count, navCat: category, cat });
     }
   } catch (err) {
     console.log(err);
@@ -178,7 +179,7 @@ const getShopBrand = async (req, res) => {
   try {
     const brand = await Brand.find();
     const category = await Category.find();
-    const product = await Product.find({brand:req.params.id});
+    const product = await Product.find({ brand: req.params.id });
     const cat = await Product.aggregate([
       {
         $group: {
@@ -204,10 +205,10 @@ const getShopBrand = async (req, res) => {
         _id: 0,
       });
       const msg = req.flash('cartSuccess');
-      res.render('user/shop', { user, product, brand, msg, wishlistProducts, count,navCat:category ,cat});
+      res.render('user/shop', { user, product, brand, msg, wishlistProducts, count, navCat: category, cat });
     } else {
       const msg = req.flash('cartSuccess');
-      res.render('user/shop', { user, product, brand, msg, count,navCat:category ,cat});
+      res.render('user/shop', { user, product, brand, msg, count, navCat: category, cat });
     }
   } catch (err) {
     console.log(err);
@@ -218,12 +219,11 @@ const getShopBrand = async (req, res) => {
 // shows the details of specific product
 const getProductDetails = async (req, res) => {
   try {
-
     const product = await Product.findOne({ _id: req.params.id }).populate('category').populate('brand');
     // console.log(product);
     const user = req.session.user;
-    
-  const navCat = await Category.find();
+
+    const navCat = await Category.find();
     // console.log(wishlisted)
 
     if (user) {
@@ -233,9 +233,9 @@ const getProductDetails = async (req, res) => {
       });
       const wishlisted = wishlistProducts.products.some((el) => el.product.equals(product._id));
       const msg = req.flash('cartSuccess');
-      res.render('user/p_details', { user, product, msg, wishlisted ,navCat});
+      res.render('user/p_details', { user, product, msg, wishlisted, navCat });
     } else {
-      res.render('user/p_details', { user, product ,navCat});
+      res.render('user/p_details', { user, product, navCat });
     }
   } catch (err) {
     console.log(err);
@@ -244,17 +244,17 @@ const getProductDetails = async (req, res) => {
 };
 
 // get ContactUs Page
-const getContactUs = async(req, res) => {
+const getContactUs = async (req, res) => {
   const user = req.session.user;
   const navCat = await Category.find();
-  res.render('user/contact', { user ,navCat});
+  res.render('user/contact', { user, navCat });
 };
 
 // get ForgetPassword Page
-const getForgetPassword =async (req, res) => {
+const getForgetPassword = async (req, res) => {
   const user = req.session.user;
   const navCat = await Category.find();
-  res.render('user/forgotpass', { user ,navCat});
+  res.render('user/forgotpass', { user, navCat });
 };
 
 // get Cart Page
@@ -263,10 +263,10 @@ const getCart = async (req, res) => {
     const user = req.session.user;
     const navCat = await Category.find();
     const cart = await Cart.findOne({ _id: user.cartId }).populate('products.product');
-    res.render('user/cart', { user, cart: cart.products ,navCat});
+    res.render('user/cart', { user, cart: cart.products, navCat });
   } catch (err) {
     console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error from getting cart products' ,navCat});
+    res.render('user/error-page', { error: err, errorMsg: 'error from getting cart products', navCat });
   }
 };
 
@@ -336,7 +336,7 @@ const setCart = async (req, res, next) => {
     // next();
   } catch (err) {
     console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error from putting a product to cart' ,navCat});
+    res.render('user/error-page', { error: err, errorMsg: 'error from putting a product to cart', navCat });
   }
 };
 
@@ -415,7 +415,7 @@ const incQuantity = async (req, res) => {
     // }
   } catch (err) {
     console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error when increasing quantity from the cart' ,navCat});
+    res.render('user/error-page', { error: err, errorMsg: 'error when increasing quantity from the cart', navCat });
   }
 };
 
@@ -451,7 +451,7 @@ const decQuantity = async (req, res) => {
     //   message: err,
     // });
     console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error from decreasing quantity from the cart' ,navCat});
+    res.render('user/error-page', { error: err, errorMsg: 'error from decreasing quantity from the cart', navCat });
   }
 };
 
@@ -459,14 +459,14 @@ const decQuantity = async (req, res) => {
 const getWish = async (req, res) => {
   try {
     const user = req.session.user;
-  const navCat = await Category.find();
+    const navCat = await Category.find();
     // console.log(user);
     const wishlist = await Wishlist.findOne({ _id: user.wishlistId }).populate('products.product');
     // console.log(wishlist);
-    res.render('user/wishlist', { user, wishlist: wishlist.products ,navCat});
+    res.render('user/wishlist', { user, wishlist: wishlist.products, navCat });
   } catch (err) {
     console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error while getting wishlist products' ,navCat});
+    res.render('user/error-page', { error: err, errorMsg: 'error while getting wishlist products', navCat });
   }
 };
 
@@ -493,7 +493,7 @@ const setWish = async (req, res) => {
     res.redirect('/shop');
   } catch (err) {
     console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error while putting products to wishlist' ,navCat});
+    res.render('user/error-page', { error: err, errorMsg: 'error while putting products to wishlist', navCat });
   }
 };
 
@@ -508,7 +508,7 @@ const removeFromWishlist = async (req, res) => {
     res.redirect('/shop');
   } catch (err) {
     console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error while removing products from wishlist' ,navCat});
+    res.render('user/error-page', { error: err, errorMsg: 'error while removing products from wishlist', navCat });
   }
 };
 
@@ -520,17 +520,15 @@ const getOrders = async (req, res) => {
     .populate('address')
     .select({ 'products._id': 0, _id: 0, userId: 0, 'address.userId': 0, 'address._id': 0 });
   console.log(orders);
-  res.render('user/order_confirmation', { user, orders ,navCat});
+  res.render('user/order_confirmation', { user, orders, navCat });
 };
 
-// OrderConfirmation
-const OrderConfirmation = async (req, res) => {
+// checkoutConfirm
+const checkoutConfirm = async (req, res) => {
   const user = req.session.user;
-  console.log(req.body);
   const cartProducts = await Cart.findById(user.cartId)
     .populate('products.product')
     .select({ 'products.product': 1, 'products.subtotal': 1, 'products.quantity': 1, total: 1, _id: 0 });
-  console.log(cartProducts);
 
   const newOrder = {
     userId: user._id,
@@ -540,9 +538,56 @@ const OrderConfirmation = async (req, res) => {
     products: cartProducts.products,
     total: cartProducts.total,
   };
-  await Order.create(newOrder);
-
+  req.session.newOrder = newOrder;
+  // await Order.create(newOrder);
   res.redirect('/order-confirmation');
+};
+
+// getPayment Page
+const getPayment = async (req, res) => {
+  const user = req.session.user;
+  const navCat = await Category.find();
+
+  const order = req.session.newOrder;
+  const address = await Address.findById(order.address);
+
+  res.render('user/order_confirmation', { user, navCat, order, address, key: process.env.RAZOR_KEY_ID });
+};
+
+// razor payment from axios
+const razorOrderGenerate = async(req, res) => {
+  // const order = req.session.newOrder;
+  const newOrder = req.session.newOrder;
+  let instance = new Razorpay({
+    key_id: process.env.RAZOR_KEY_ID,
+    key_secret: process.env.RAZOR_KEY_SECRET,
+  });
+  var options = {
+    amount: (newOrder.total + 50)*100, // amount in the smallest currency unit
+    currency: 'INR',
+    receipt: 'order_rcptid_11',
+  };
+  instance.orders.create(options, function (err, order) {
+    console.log(order);
+    Object.assign(req.session.newOrder,order);
+    res.send({orderId:order.id})
+  });
+};
+
+const razorVerifyPayment = async(req, res) => {
+  // let body = req.body.response.razorpay_order_id + '|' + req.body.response.razorpay_payment_id;
+  // var crypto = require('crypto');
+  // var expectedSignature = crypto
+  //   .createHmac('sha256', process.env.RAZOR_KEY_SECRET)
+  //   .update(body.toString())
+  //   .digest('hex');
+  // console.log('sig received ', req.body.response.razorpay_signature);
+  // console.log('sig generated ', expectedSignature);
+  // var response = { signatureIsValid: 'false' };
+  // if (expectedSignature === req.body.response.razorpay_signature) response = { signatureIsValid: 'true' };
+  // // await Order.create(req.session.newOrder)
+  // console.log(req.session.newOrder);
+  // res.send(response);
 };
 
 // get OrderConfirmation Page
@@ -553,14 +598,14 @@ const getOrderConfirmation = async (req, res) => {
     .populate('address')
     .select({ 'products._id': 0, _id: 0, userId: 0, 'address.userId': 0, 'address._id': 0 });
   console.log(orders);
-  res.render('user/order_confirmation', { user, orders ,navCat});
+  res.render('user/order_confirmation', { user, orders, navCat });
 };
 
 // get Tracking Page
-const getTracking = async(req, res) => {
+const getTracking = async (req, res) => {
   const user = req.session.user;
   const navCat = await Category.find();
-  res.render('user/tracking', { user ,navCat});
+  res.render('user/tracking', { user, navCat });
 };
 
 // get Profile Page
@@ -568,15 +613,15 @@ const getProfile = async (req, res) => {
   const user = req.session.user;
   const navCat = await Category.find();
   const address = await Address.find({ userId: user._id });
-  res.render('user/profile', { user, address ,navCat});
+  res.render('user/profile', { user, address, navCat });
 };
 
 // get Address profile Page
-const getAddAddress =async (req, res) => {
+const getAddAddress = async (req, res) => {
   const alert = req.flash('alert');
   const user = req.session.user;
   const navCat = await Category.find();
-  res.render('user/add_address', { user, alert ,navCat});
+  res.render('user/add_address', { user, alert, navCat });
 };
 
 // adding Address to address collection
@@ -600,7 +645,7 @@ const addAddress = async (req, res) => {
     //   message: err,
     // });
     console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error while adding address to profile' ,navCat});
+    res.render('user/error-page', { error: err, errorMsg: 'error while adding address to profile', navCat });
   }
 };
 
@@ -644,7 +689,7 @@ const newUser = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error while inserting new user' ,navCat});
+    res.render('user/error-page', { error: err, errorMsg: 'error while inserting new user', navCat });
   }
 };
 
@@ -688,7 +733,7 @@ const userCheck = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error while checking user from the database' ,navCat});
+    res.render('user/error-page', { error: err, errorMsg: 'error while checking user from the database', navCat });
   }
 };
 
@@ -733,7 +778,7 @@ const verifyOtp = async (req, res, next) => {
       });
   } catch (err) {
     console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error while verifying otp!!' ,navCat});
+    res.render('user/error-page', { error: err, errorMsg: 'error while verifying otp!!', navCat });
   }
 };
 
@@ -743,7 +788,7 @@ const getCheckout = async (req, res) => {
   const navCat = await Category.find();
   const cartProducts = await Cart.findById(user.cartId).populate('products.product');
   const address = await Address.find({ userId: user._id });
-  res.render('user/checkout', { user, total: cartProducts.total, products: cartProducts.products, address ,navCat});
+  res.render('user/checkout', { user, total: cartProducts.total, products: cartProducts.products, address, navCat });
 };
 
 // redirecting to OTP sign Up page
@@ -774,7 +819,7 @@ const checkExisting = async (req, res, next) => {
     }
   } catch (err) {
     console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error while checking "existing" user' ,navCat});
+    res.render('user/error-page', { error: err, errorMsg: 'error while checking "existing" user', navCat });
   }
 };
 
@@ -792,7 +837,7 @@ const checkNotExisting = async (req, res, next) => {
     }
   } catch (err) {
     console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error while checking "not an existing" user' ,navCat});
+    res.render('user/error-page', { error: err, errorMsg: 'error while checking "not an existing" user', navCat });
   }
 };
 
@@ -836,10 +881,12 @@ export {
   incQuantity,
   removeFromCart,
   getProfile,
-  setToWish,
-  getOrderConfirmation,
-  OrderConfirmation,
+  setToWish,  
+  checkoutConfirm,
   getOrders,
   getShopCategory,
   getShopBrand,
+  getPayment,
+  razorOrderGenerate,
+  razorVerifyPayment,
 };

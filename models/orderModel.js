@@ -6,6 +6,10 @@ const orderSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
+  ordernum: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
   date: {
     type: String,
     default: moment().format('MMMM Do YYYY'),

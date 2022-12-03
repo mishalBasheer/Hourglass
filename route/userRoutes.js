@@ -14,7 +14,6 @@ import {
   getContactUs,
   getForgetPassword,
   getCart,
-  getOrderConfirmation,
   redirectToOtp,
   redirectToOtpSignin,
   checkExisting,
@@ -33,11 +32,13 @@ import {
   addAddress,
   removeFromCart,
   setToWish,
-  OrderConfirmation,
+  checkoutConfirm,
   getOrders,
   newUser,
+  getPayment,
   getShopCategory,
   getShopBrand,
+  razorOrderGenerate,
 } from '../controllers/user/userController.js';
 import { userLoginCheck, checkBlockedUser } from '../middleware/userLoginCheckMiddleware.js';
 import { axiosUserLoginCheck, axiosCheckBlockedUser } from '../middleware/axiosUserLoginCheck.js';
@@ -70,8 +71,12 @@ router.route('/remove-from-wishlist/:id').get(userLoginCheck, checkBlockedUser, 
 router
   .route('/checkout')
   .get(userLoginCheck, checkBlockedUser, getCheckout)
-  .post(userLoginCheck, checkBlockedUser, OrderConfirmation);
-router.route('/order-confirmation').get(userLoginCheck, checkBlockedUser, getOrderConfirmation);
+  .post(userLoginCheck, checkBlockedUser, checkoutConfirm);
+router.route('/order-confirmation').get(userLoginCheck, checkBlockedUser, getPayment);
+router.route('/create/orderId').post(razorOrderGenerate);
+
+
+// router.route('/order-confirmation').get(userLoginCheck, checkBlockedUser, getOrderConfirmation);
 router.route('/orders').get(userLoginCheck, checkBlockedUser, getOrders);
 router.route('/order-tracking').get(userLoginCheck, checkBlockedUser, getTracking);
 router.route('/profile').get(userLoginCheck, checkBlockedUser, getProfile);

@@ -114,39 +114,43 @@
                 <label for="f-option2">Create an account?</label>
               </div>
             </div> -->
-            <div class="row">
+            <div class="panel-group" id="accordion">
               <% for( let i = 0; i < address.length; i++ ) { %>
-              <div class="col col-md-6">
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="address"
-                    id="orderAddress<%= i %>"
-                    value="<%= address[i]._id %>"
-                    checked
-                  />
-                  <label class="form-check-label" for="orderAddress<%= i %>">
-                    <div class="card mb-4 rounded-3 shadow-sm">
-                      <div class="card-body">
-                        <h1 class="card-title pricing-card-title"><%= address[i].name %></h1>
-                        <ul class="list-unstyled mt-3 mb-4">
-                          <li><%= address[i].house %></li>
-                          <li><%= address[i].landmark %></li>
-                          <li><%= address[i].city %></li>
-                          <li><%= address[i].district %></li>
-                          <li><%= address[i].state %></li>
-                          <li><%= address[i].pincode %></li>
-                          <li><%= address[i].mob %></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </label>
+              <div class="panel panel-default order_box">
+                <div class="panel-heading">
+                  <h4 class="panel-title">
+                    <label for="r<%= i %>">
+                      <input type="radio" id="r<%= i %>" name="address" value="<%= address[i]._id %>" />
+                      <%= address[i].house %>
+                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse<%= i %>"></a>
+                    </label>
+                  </h4>
+                </div>
+                <div id="collapse<%= i %>" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                      <li><%= address[i].landmark %></li>
+                      <li><%= address[i].city %></li>
+                      <li><%= address[i].district %></li>
+                      <li><%= address[i].state %></li>
+                      <li><%= address[i].pincode %></li>
+                      <li><%= address[i].mob %></li>
+                    </ul>
+                  </div>
                 </div>
               </div>
+
               <% } %>
             </div>
-
+            <a class="btn_3 mt-3" href="#">Add Address</a>
+         <!-- Coupon Details entering area  -->
+         <div class="card mt-4" style="width: 18rem; padding: 1rempx">
+          <div class="card-body">
+            <div class="card-title">Have a coupon?</div>
+            <input type="text" class="mt-3" placeholder="Enter coupon code" />
+            <a class="btn_3 mt-3" href="#">Apply Coupon</a>
+          </div>
+        </div>
             <!-- Shipping details -->
             <!-- <div class="col-md-12 form-group">
               <div class="creat_account">
@@ -158,16 +162,7 @@
             </div> -->
           </div>
           <div class="col-lg-4">
-                        <!-- Coupon Details entering area  -->
-                        <div class="card" style="width: 18rem; padding: 1rempx;">
-                          <div class="card-body">
-                            <div class="card-title">
-                              Have a coupon?
-                            </div>
-                            <input type="text" class="mt-3" placeholder="Enter coupon code" />
-                            <a class="btn_3 mt-3" href="#">Apply Coupon</a>
-                          </div>
-                        </div>
+   
             <div class="order_box mt-3">
               <h2>Your Order</h2>
               <ul class="list">
@@ -203,6 +198,12 @@
                   </a>
                 </li>
               </ul>
+              
+            <div class="creat_account">
+              <input type="checkbox" id="f-option4" name="tnc" />
+              <label for="f-option4">I’ve read and accept the </label>
+              <a href="#">terms & conditions*</a>
+            </div>
               <!-- <div class="payment_item">
               <div class="radion_btn">
                 <input type="radio" id="f-option5" name="selector" />
@@ -221,7 +222,7 @@
               <p>Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</p>
             </div> -->
 
-              <div class="payment_item active">
+              <!-- <div class="payment_item active">
                 <div class="radion_btn">
                   <input type="radio" id="f-option6" name="payment" value="cod" />
                   <label for="f-option6">COD </label>
@@ -237,8 +238,8 @@
                 <input type="checkbox" id="f-option4" name="tnc" />
                 <label for="f-option4">I’ve read and accept the </label>
                 <a href="#">terms & conditions*</a>
-              </div>
-              <button type="submit" class="btn_3">Confirm Order</button>
+              </div> -->
+              <button type="submit" class="btn_3 mt-4 mx-auto">Proceed to Payment</button>
             </div>
           </div>
         </div>
@@ -249,17 +250,30 @@
 <!--================End Checkout Area =================-->
 
 <script>
+  for (let i = 0; i < Number('<%= address.length %>'); i++) {
+    $(`#r${i}`).on('click', function () {
+      $(this).parent().find('a').trigger('click');
+    });
+  }
+
+  // $('#r12').on('click', function(){
+  //   $(this).parent().find('a').trigger('click')
+  // })
   function validate() {
-    if (document.querySelector('input[name="payment"]:checked') == null) {
-      alert('Please select a payment type!');
+    if (document.querySelector('input[name="address"]:checked') == null) {
+      customAlert('Please select a shipping address.')
       return false;
     }
+    
     if (!document.checkoutForm.tnc.checked) {
-      alert('Please accept terms and conditions.');
+      customAlert('Please accept terms and conditions.')
       return false;
     }
 
     return true;
+  }
+  function customAlert(message) {
+    Swal.fire(message)
   }
 </script>
 
