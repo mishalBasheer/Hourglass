@@ -4,6 +4,7 @@ import Product from '../../models/productModel.js';
 import User from '../../models/userDetailsModel.js';
 import Category from '../../models/categoryModel.js';
 import Brand from '../../models/brandModel.js';
+import Order from '../../models/orderModel.js';
 import moment from 'moment';
 import Banner from '../../models/bannerModel.js';
 
@@ -32,9 +33,11 @@ const getAdminDashboard = (req, res) => {
   });
 };
 
-const getAdminOrders = (req, res) => {
+const getAdminOrders = async(req, res) => {
+  const orders = await Order.find({}).sort({_id:-1}).populate('userId').populate('address');
   req.session.pageIn = 'orders';
   res.render('admin/orders', {
+    orders,
     pageIn: req.session.pageIn,
     ordersPage: 'dark:text-gray-100',
     dashboardPage: '',
@@ -443,8 +446,6 @@ const getAddBrand = (req, res) => {
 
 const addBrand = async (req, res) => {
   try {
-    // console.log(req.file)
-    // console.log(req.body);
 
     const brandInfo = req.body;
     const img = req.file.filename;

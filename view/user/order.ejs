@@ -144,6 +144,7 @@
     </div>
   </div>
 </div>
+
 <style>
   body {
     color: #000;
@@ -280,10 +281,8 @@
         orderId: id,
       },
     }).then((response) => {
-      console.log(response);
       let order = response.order;
 
-      console.log(order);
       let table_data = '';
       $.each(order.products, function (index, value) {
         /*console.log(value);*/
