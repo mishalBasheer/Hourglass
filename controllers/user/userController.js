@@ -516,7 +516,7 @@ const removeFromWishlist = async (req, res) => {
 const getOrders = async (req, res) => {
   const user = req.session.user;
   const navCat = await Category.find();
-  const orders = await Order.find({ userId: user._id })
+  const orders = await Order.find({ userId: user._id }).sort({_id:-1})
     .populate('address')
     .select({ 'products._id': 0, userId: 0, 'address.userId': 0, 'address._id': 0 });
   console.log(orders);
