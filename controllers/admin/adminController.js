@@ -17,10 +17,12 @@ const getAdminLogin = (req, res) => {
   }
 };
 
-const getAdminDashboard = (req, res) => {
+const getAdminDashboard =async (req, res) => {
+  const orders = await Order.find({}).sort({_id:-1}).populate('userId').populate('address');
   req.session.pageIn = 'dashboard';
   const msg = req.flash('success');
   res.render('admin/dashboard', {
+    orders,
     msg,
     pageIn: req.session.pageIn,
     dashboardPage: ' text-gray-800 dark:text-gray-100',
@@ -48,6 +50,19 @@ const getAdminOrders = async(req, res) => {
     brandPage: '',
   });
 };
+const orderUpdate = async(req,res)=>{
+  console.log(req.body);
+  const order = await Order.findByIdAndUpdate(req.body.orderId,{orderstat:req.body.newOrderStatus});
+  if(order){
+    res.json({
+      orderUpdate:'success',
+    })
+  }else{
+    res.json({
+      orderUpdate:'failed',
+    })
+  }
+}
 
 const getEditProductPage = async (req, res) => {
   const brand = await Brand.find({});
@@ -616,6 +631,7 @@ export {
   getBanner,
   getAddBanner,
   addBanner,
+  orderUpdate,
   getEditBanner,
   editBanner,
 };

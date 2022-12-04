@@ -28,6 +28,7 @@ import {
   getAddBanner,
   addBanner,
   getEditBanner,
+  orderUpdate,
   editBanner,
 } from '../controllers/admin/adminController.js';
 import { uploadMultiple, uploadOne, uploadBannerImg, uploadBrandImg } from '../middleware/multerMiddleware.js';
@@ -39,6 +40,7 @@ router.route('/').get(getAdminLogin).post(adminCheck);
 router.route('/logout').get(adminLogout);
 router.route('/dashboard').get(adminLoginCheck, getAdminDashboard);
 router.route('/orders').get(adminLoginCheck, getAdminOrders);
+router.route('/update-order').post(orderUpdate);
 router.route('/products').get(adminLoginCheck, getAdminProducts);
 router.route('/products/add-product').get(adminLoginCheck, getAddProductPage).post(uploadMultiple, uploadProduct);
 router.route('/products/edit-product/:id').get(adminLoginCheck, getEditProductPage).post(uploadMultiple, editProduct);

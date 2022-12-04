@@ -68,7 +68,7 @@
                 >
                   Shipped
                 </span>
-                <% } else if (el.orderstat=='CANCELLED') { %>
+                <% } else { %>
                 <span
                   class="px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-full dark:text-gray-100 dark:bg-gray-700"
                 >
@@ -213,24 +213,24 @@
       <label class="block mt-4 text-sm">
         <span class="text-gray-700 dark:text-gray-400"> Order status </span>
         <select
-          name="brand"
+          id="order_status_select12"
+          name="orderstat"
           class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-          required
         >
-          <option value="none" selected disabled hidden>CONFIRMED</option>
+          <!-- <option value="CONFIRMED" selected disabled hidden>CONFIRMED</option>
           <option value="CONFIRMED">CONFIRMED</option>
           <option value="SHIPPED">SHIPPED</option>
           <option value="OUT FOR DELIVERY">OUT FOR DELIVERY</option>
           <option value="DELIVERED">DELIVERED</option>
-          <option value="CANCELLED">CANCELLED</option>
+          <option value="CANCELLED">CANCELLED</option> -->
         </select>
-
       </label>
       <button
-      class="px-4 py-2 mt-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-     onclick="updateOrderStat(this)">
-      Update Order Status
-    </button>
+        id="order_update12"
+        class="px-4 py-2 mt-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+      >
+        Update Order Status
+      </button>
 
       <!-- Order shipping address and order details cards -->
       <div class="grid gap-6 mb-8 md:grid-cols-2 mt-4">
@@ -269,9 +269,7 @@
               <th class="px-4 py-3">Total</th>
             </tr>
           </thead>
-          <tbody id="table_body13" class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-
-          </tbody>
+          <tbody id="table_body13" class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800"></tbody>
         </table>
       </div>
     </div>
@@ -299,7 +297,6 @@
         orderId: id,
       },
     }).then((response) => {
-      console.log(response);
       let order = response.order;
 
       console.log(order);
@@ -307,23 +304,80 @@
       $.each(order.products, function (index, value) {
         /*console.log(value);*/
         table_data += '<tr class="text-gray-700 dark:text-gray-400">';
-        table_data += '<td class="px-4 py-3 text-sm">' + (index+1) + '</td>';
+        table_data += '<td class="px-4 py-3 text-sm">' + (index + 1) + '</td>';
         table_data += '<td class="px-4 py-3 text-sm">' + value.product.title + '</td>';
         table_data += '<td class="px-4 py-3 text-sm">' + value.quantity + '</td>';
         table_data += '<td class="px-4 py-3 text-sm">₹' + value.subtotal + '</td>';
         table_data += '</tr>';
       });
-      // $('tbody').append(table_data);
       $('#table_body13').html(table_data);
+
+      if (order.orderstat === 'CONFIRMED') {
+        var order_option =
+          '<option value="CONFIRMED" selected disabled hidden>CONFIRMED</option><option value="SHIPPED">SHIPPED</option><option value="OUT FOR DELIVERY">OUT FOR DELIVERY</option><option value="DELIVERED">DELIVERED</option><option value="CANCELLED">CANCEL</option>';
+      } else if (order.orderstat === 'SHIPPED') {
+        var order_option =
+          '<option value="SHIPPED" selected disabled hidden>SHIPPED</option><option value="OUT FOR DELIVERY">OUT FOR DELIVERY</option><option value="DELIVERED">DELIVERED</option><option value="CANCEL">CANCELLED</option>';
+      } else if (order.orderstat === 'OUT FOR DELIVERY') {
+        var order_option =
+          '<option value="OUT FOR DELIVERY" selected disabled hidden>OUT FOR DELIVERY</option><option value="DELIVERED">DELIVERED</option><option value="CANCELLED">CANCEL</option>';
+      } else if (order.orderstat === 'DELIVERED') {
+        var order_option = '<option value="DELIVERED" selected disabled hidden>DELIVERED</option>';
+      } else {
+        var order_option = '<option value="CANCELLED" selected disabled hidden>CANCELLED</option>';
+      }
+      $('#order_status_select12').empty().append(order_option);
+
       $('#tracking_id').text(order._id);
       $('#order_number').text(order.address._id);
       $('#order_date').text(order.date);
-      $('#order_amount').text(order.total+50);
+      $('#order_amount').text(order.total + 50);
       $('#add_home').text(order.address.house);
       $('#add_city').text(order.address.city);
       $('#add_district').text(order.address.district);
       $('#add_state').text(order.address.state);
       $('#add_pin').text(order.address.pincode);
+
+      $('#order_update12').on('click', () => {
+        updateOrderStatus(order._id, $('#order_status_select12 option:selected').val());
+      });
+    });
+  }
+  function updateOrderStatus(id, status) {
+    $.ajax({
+      url: '/admin/update-order',
+      method: 'POST',
+      data: {
+        orderId: id,
+        newOrderStatus: status,
+      },
+    }).then((response) => {
+      response.orderUpdate;
+      if (response.orderUpdate == 'success') {
+        successAlert();
+        setTimeout(() => {
+          location.reload(true);
+        }, 300);
+      } else {
+        failedAlert();
+        setTimeout(() => {
+          location.reload(true);
+        }, 300);
+      }
+    });
+  }
+  function successAlert() {
+    Swal.fire({
+      icon: 'success',
+      title: 'Update Success',
+      text: 'You are good to go',
+    });
+  }
+  function failedAlert() {
+    Swal.fire({
+      icon: 'error',
+      title: 'Update failed',
+      text: 'You  can try again later',
     });
   }
 </script>
