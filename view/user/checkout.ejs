@@ -1,168 +1,47 @@
 <%- include('partials/header.ejs') %>
 
-<!--================Home Banner Area =================-->
-<!-- breadcrumb start-->
-<!-- <section class="breadcrumb breadcrumb_bg">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-lg-8">
-          <div class="breadcrumb_iner">
-            <div class="breadcrumb_iner_item">
-              <h2>Product Checkout</h2>
-              <p>Home <span>-</span> Product Checkout</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section> -->
-<!-- breadcrumb start-->
-
 <!--================Checkout Area =================-->
 <section class="checkout_area padding_top">
   <div class="container">
-    <!-- <div class="returning_customer">
-        <div class="check_title">
-          <h2>
-            Returning Customer?
-            <a href="#">Click here to login</a>
-          </h2>
-        </div>
-        <p>
-          If you have shopped with us before, please enter your details in the
-          boxes below. If you are a new customer, please proceed to the
-          Billing & Shipping section.
-        </p>
-        <form class="row contact_form" action="#" method="post" novalidate="novalidate">
-          <div class="col-md-6 form-group p_star">
-            <input type="text" class="form-control" id="name" name="name" value=" " />
-            <span class="placeholder" data-placeholder="Username or Email"></span>
-          </div>
-          <div class="col-md-6 form-group p_star">
-            <input type="password" class="form-control" id="password" name="password" value="" />
-            <span class="placeholder" data-placeholder="Password"></span>
-          </div>
-          <div class="col-md-12 form-group">
-            <button type="submit" value="submit" class="btn_3">
-              log in
-            </button>
-            <div class="creat_account">
-              <input type="checkbox" id="f-option" name="selector" />
-              <label for="f-option">Remember me</label>
-            </div>
-            <a class="lost_pass" href="#">Lost your password?</a>
-          </div>
-        </form>
-      </div> -->
-
     <div class="billing_details">
       <form name="checkoutForm" action="/checkout" onsubmit="return validate()" method="post">
         <div class="row">
           <div class="col-lg-8">
-            <h3>Shipping Address</h3>
-            <!-- <div class="col-md-6 form-group p_star">
-              <input type="text" class="form-control" id="first" name="name" />
-              <span class="placeholder" data-placeholder="First name"></span>
-            </div>
-            <div class="col-md-6 form-group p_star">
-              <input type="text" class="form-control" id="last" name="name" />
-              <span class="placeholder" data-placeholder="Last name"></span>
-            </div>
-            <div class="col-md-12 form-group">
-              <input type="text" class="form-control" id="company" name="company" placeholder="Company name" />
-            </div>
-            <div class="col-md-6 form-group p_star">
-              <input type="text" class="form-control" id="number" name="number" />
-              <span class="placeholder" data-placeholder="Phone number"></span>
-            </div>
-            <div class="col-md-6 form-group p_star">
-              <input type="text" class="form-control" id="email" name="compemailany" />
-              <span class="placeholder" data-placeholder="Email Address"></span>
-            </div>
-            <div class="col-md-12 form-group p_star">
-              <select class="country_select">
-                <option value="1">Country</option>
-                <option value="2">Country</option>
-                <option value="4">Country</option>
-              </select>
-            </div>
-            <div class="col-md-12 form-group p_star">
-              <input type="text" class="form-control" id="add1" name="add1" />
-              <span class="placeholder" data-placeholder="Address line 01"></span>
-            </div>
-            <div class="col-md-12 form-group p_star">
-              <input type="text" class="form-control" id="add2" name="add2" />
-              <span class="placeholder" data-placeholder="Address line 02"></span>
-            </div>
-            <div class="col-md-12 form-group p_star">
-              <input type="text" class="form-control" id="city" name="city" />
-              <span class="placeholder" data-placeholder="Town/City"></span>
-            </div>
-            <div class="col-md-12 form-group p_star">
-              <select class="country_select">
-                <option value="1">District</option>
-                <option value="2">District</option>
-                <option value="4">District</option>
-              </select>
-            </div>
-            <div class="col-md-12 form-group">
-              <input type="text" class="form-control" id="zip" name="zip" placeholder="Postcode/ZIP" />
-            </div>
-            <div class="col-md-12 form-group">
-              <div class="creat_account">
-                <input type="checkbox" id="f-option2" name="selector" />
-                <label for="f-option2">Create an account?</label>
-              </div>
-            </div> -->
-            <div class="panel-group" id="accordion">
+            <h2>Shipping Address</h2>
+            <div class="row mt-4">
               <% for( let i = 0; i < address.length; i++ ) { %>
-              <div class="panel panel-default order_box">
-                <div class="panel-heading">
-                  <h4 class="panel-title">
-                    <label for="r<%= i %>">
-                      <input type="radio" id="r<%= i %>" name="address" value="<%= address[i]._id %>" />
-                      <%= address[i].house %>
-                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse<%= i %>"></a>
-                    </label>
-                  </h4>
-                </div>
-                <div id="collapse<%= i %>" class="panel-collapse collapse">
-                  <div class="panel-body">
-                    <ul class="list-unstyled mt-3 mb-4">
-                      <li><%= address[i].landmark %></li>
-                      <li><%= address[i].city %></li>
-                      <li><%= address[i].district %></li>
-                      <li><%= address[i].state %></li>
-                      <li><%= address[i].pincode %></li>
-                      <li><%= address[i].mob %></li>
-                    </ul>
-                  </div>
-                </div>
+              <div class="col-lg-6">
+                <label class="card">
+                  <input name="address" id="r<%= i %>" class="radio" type="radio" value="<%= address[i]._id %>" />
+
+                  <span class="plan-details">
+                    <span class="plan-type"><%= address[i].name %></span>
+                    <span class="plan-cost"><%= address[i].house %></span>
+                    <span><%= address[i].mob %></span>
+                    <span><%= address[i].city %></span>
+                    <span><%= address[i].pincode%></span>
+                  </span>
+                </label>
               </div>
 
               <% } %>
             </div>
-            <a class="btn_3 mt-3" href="#">Add Address</a>
-         <!-- Coupon Details entering area  -->
-         <div class="card mt-4" style="width: 18rem; padding: 1rempx">
-          <div class="card-body">
-            <div class="card-title">Have a coupon?</div>
-            <input type="text" class="mt-3" placeholder="Enter coupon code" />
-            <a class="btn_3 mt-3" href="#">Apply Coupon</a>
-          </div>
-        </div>
-            <!-- Shipping details -->
-            <!-- <div class="col-md-12 form-group">
-              <div class="creat_account">
-                <h3>Shipping Details</h3>
-                <input type="checkbox" id="f-option3" name="selector" />
-                <label for="f-option3">Ship to a different address?</label>
-              </div>
-              <textarea class="form-control" name="message" id="message" rows="1" placeholder="Order Notes"></textarea>
-            </div> -->
+
+            <a class="btn_3 mt-3" href="/profile/add-address">Add Address</a>
           </div>
           <div class="col-lg-4">
-   
+            <div class="order_box mt-3">
+              <h2>Add Coupons</h2>
+              <input
+                type="text"
+                name="coupon"
+                placeholder="Enter Your Code Here"
+                onfocus="this.placeholder = ''"
+                onblur="this.placeholder = 'Enter Your Code Here'"
+                class="single-input" style="background-color: white;"
+              />
+              <a class="genric-btn info radius text-center mt-4">Redeem</a>
+            </div>
             <div class="order_box mt-3">
               <h2>Your Order</h2>
               <ul class="list">
@@ -198,47 +77,13 @@
                   </a>
                 </li>
               </ul>
-              
-            <div class="creat_account">
-              <input type="checkbox" id="f-option4" name="tnc" />
-              <label for="f-option4">I’ve read and accept the </label>
-              <a href="#">terms & conditions*</a>
-            </div>
-              <!-- <div class="payment_item">
-              <div class="radion_btn">
-                <input type="radio" id="f-option5" name="selector" />
-                <label for="f-option5">Check payments</label>
-                <div class="check"></div>
-              </div>
-              <p>Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</p>
-            </div>
-            <div class="payment_item active">
-              <div class="radion_btn">
-                <input type="radio" id="f-option6" name="selector" />
-                <label for="f-option6">Paypal </label>
-                <img src="img/product/single-product/card.jpg" alt="" />
-                <div class="check"></div>
-              </div>
-              <p>Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</p>
-            </div> -->
 
-              <!-- <div class="payment_item active">
-                <div class="radion_btn">
-                  <input type="radio" id="f-option6" name="payment" value="cod" />
-                  <label for="f-option6">COD </label>
-                  <img src="img/product/single-product/card.jpg" alt="" />
-                  <div class="check"></div>
-                </div>
-                <p>
-                  Please fill in the adddress to Deliver Ensure you filled Name, Store Street, Store Town, Store State /
-                  County, Store Postcode.
-                </p>
-              </div>
               <div class="creat_account">
                 <input type="checkbox" id="f-option4" name="tnc" />
                 <label for="f-option4">I’ve read and accept the </label>
                 <a href="#">terms & conditions*</a>
-              </div> -->
+              </div>
+
               <button type="submit" class="btn_3 mt-4 mx-auto">Proceed to Payment</button>
             </div>
           </div>
@@ -248,6 +93,168 @@
   </div>
 </section>
 <!--================End Checkout Area =================-->
+<style>
+  :root {
+    --card-line-height: 1.2em;
+    --card-padding: 1em;
+    --card-radius: 0.5em;
+    --color-green: #21cbfe;
+    --color-gray: #e2ebf6;
+    --color-dark-gray: #c4d1e1;
+    --radio-border-width: 2px;
+    --radio-size: 1.5em;
+  }
+
+  body {
+    color: #263238;
+    font-family: 'Noto Sans', sans-serif;
+    margin: 0;
+    padding: 2em 6vw;
+  }
+
+  .grid {
+    display: grid;
+    grid-gap: var(--card-padding);
+    margin: 0 auto;
+    max-width: 60em;
+    padding: 0;
+
+    @media (min-width: 42em) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .card {
+    background-color: #fff;
+    border-radius: var(--card-radius);
+    position: relative;
+
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15);
+  }
+
+  .radio {
+    font-size: inherit;
+    margin: 0;
+    position: absolute;
+    right: calc(var(--card-padding) + var(--radio-border-width));
+    top: calc(var(--card-padding) + var(--radio-border-width));
+  }
+
+  @supports (-webkit-appearance: none) or (-moz-appearance: none) {
+    .radio {
+      background: #fff;
+      border: var(--radio-border-width) solid var(--color-gray);
+      border-radius: 50%;
+      cursor: pointer;
+      height: var(--radio-size);
+      outline: none;
+      transition: background 0.2s ease-out, border-color 0.2s ease-out;
+      width: var(--radio-size);
+    }
+    .radio::after {
+      border: var(--radio-border-width) solid #fff;
+      border-top: 0;
+      border-left: 0;
+      content: '';
+      display: block;
+      height: 0.75rem;
+      left: 25%;
+      position: absolute;
+      top: 50%;
+      transform: rotate(45deg) translate(-50%, -50%);
+      width: 0.375rem;
+    }
+
+    .radio:checked {
+      background: var(--color-green);
+      border-color: var(--color-green);
+    }
+
+    .card:hover .radio {
+      border-color: var(--color-dark-gray);
+    }
+    .card:checked {
+      border-color: var(--color-green);
+    }
+  }
+
+  .plan-details {
+    border: var(--radio-border-width) solid var(--color-gray);
+    border-radius: var(--card-radius);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    padding: var(--card-padding);
+    transition: border-color 0.2s ease-out;
+  }
+
+  .card:hover .plan-details {
+    border-color: var(--color-dark-gray);
+  }
+
+  .radio:checked ~ .plan-details {
+    border-color: var(--color-green);
+  }
+
+  .radio:focus ~ .plan-details {
+    box-shadow: 0 0 0 2px var(--color-dark-gray);
+  }
+
+  .radio:disabled ~ .plan-details {
+    color: var(--color-dark-gray);
+    cursor: default;
+  }
+
+  .radio:disabled ~ .plan-details .plan-type {
+    color: var(--color-dark-gray);
+  }
+
+  .card:hover .radio:disabled ~ .plan-details {
+    border-color: var(--color-gray);
+    box-shadow: none;
+  }
+
+  .card:hover .radio:disabled {
+    border-color: var(--color-gray);
+  }
+
+  .plan-type {
+    color: var(--color-green);
+    font-size: 1.5rem;
+    font-weight: bold;
+    line-height: 1em;
+  }
+
+  .plan-cost {
+    font-size: 2.5rem;
+    font-weight: bold;
+    padding: 0.5rem 0;
+  }
+
+  .slash {
+    font-weight: normal;
+  }
+
+  .plan-cycle {
+    font-size: 2rem;
+    font-variant: none;
+    border-bottom: none;
+    cursor: inherit;
+    text-decoration: none;
+  }
+
+  .hidden-visually {
+    border: 0;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
+</style>
 
 <script>
   for (let i = 0; i < Number('<%= address.length %>'); i++) {
@@ -261,19 +268,19 @@
   // })
   function validate() {
     if (document.querySelector('input[name="address"]:checked') == null) {
-      customAlert('Please select a shipping address.')
+      customAlert('Please select a shipping address.');
       return false;
     }
-    
+
     if (!document.checkoutForm.tnc.checked) {
-      customAlert('Please accept terms and conditions.')
+      customAlert('Please accept terms and conditions.');
       return false;
     }
 
     return true;
   }
   function customAlert(message) {
-    Swal.fire(message)
+    Swal.fire(message);
   }
 </script>
 
