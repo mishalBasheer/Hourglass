@@ -40,6 +40,7 @@ import {
   setCOD,
   getOrderData,
   getShopBrand,
+  getAddress,
   getOrderSuccess,
   razorOrderGenerate,
 } from '../controllers/user/userController.js';
@@ -85,6 +86,8 @@ router.route('/orders').get(userLoginCheck, checkBlockedUser, getOrders).post(ge
 
 router.route('/order-tracking').get(userLoginCheck, checkBlockedUser, getTracking);
 router.route('/profile').get(userLoginCheck, checkBlockedUser, getProfile);
+router.route('/address').get(userLoginCheck, checkBlockedUser, getAddress);
+
 router
   .route('/profile/add-address')
   .get(userLoginCheck, checkBlockedUser, getAddAddress)

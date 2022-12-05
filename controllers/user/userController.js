@@ -618,11 +618,18 @@ const getTracking = async (req, res) => {
 const getProfile = async (req, res) => {
   const user = req.session.user;
   const navCat = await Category.find();
-  const address = await Address.find({ userId: user._id });
-  res.render('user/profile', { user, address, navCat });
+  res.render('user/profile', { user, navCat });
 };
 
 // get Address profile Page
+const getAddress = async (req, res) => {
+  const user = req.session.user;
+  const navCat = await Category.find();
+  const address = await Address.find({ userId: user._id });
+  res.render('user/address', { user, navCat, address });
+};
+
+// get add Address Page
 const getAddAddress = async (req, res) => {
   const alert = req.flash('alert');
   const user = req.session.user;
@@ -892,5 +899,6 @@ export {
   setCOD,
   razorOrderGenerate,
   getOrderSuccess,
+  getAddress,
   getOrderData,
 };

@@ -1,56 +1,148 @@
 <%- include('partials/header.ejs') %>
 
 <!--================Profile Account =================-->
+<link rel="stylesheet" type="text/css" href="https://pixinvent.com/stack-responsive-bootstrap-4-admin-template/app-assets/css/bootstrap-extended.min.css">
+<link rel="stylesheet" type="text/css" href="https://pixinvent.com/stack-responsive-bootstrap-4-admin-template/app-assets/fonts/simple-line-icons/style.min.css">
+<link rel="stylesheet" type="text/css" href="https://pixinvent.com/stack-responsive-bootstrap-4-admin-template/app-assets/css/colors.min.css">
+<link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+
+
+
 <section class="login_part padding_top">
   <div class="container">
-    <div class="jumbotron">
-      <div class="container">
-        <h1 class="display-3">Hello, <%= user.fname %>!</h1>
-        <p>
-          This is a template for a simple marketing or informational website. It includes a large callout called a
-          jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.
-        </p>
-        <p><a class="btn btn-primary btn-lg" href="/shop" role="button">Continue Shopping &raquo;</a></p>
+    <div class="row">
+      <div class="col-lg-3 col-md-4 col-sm-12">
+      <div class="text-center card-box mx-auto">
+          <div class="member-card pt-2 pb-2">
+              <div class="thumb-lg member-thumb mx-auto"><img src="https://bootdey.com/img/Content/avatar/avatar2.png" class="rounded-circle img-thumbnail" alt="profile-image"></div>
+              <div class="">
+                  <h4>Freddie J. Plourde</h4>
+                  <p class="text-muted">Email: mishal2mk2@gmail.com</p>
+                  <p class="text-muted">Phone: 9072441214</p>
+              </div>
+              <ul class="social-links list-inline">
+                  <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="" data-original-title="Facebook"><i class="fa fa-facebook"></i></a></li>
+                  <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="" data-original-title="Twitter"><i class="fa fa-twitter"></i></a></li>
+                  <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="" data-original-title="Skype"><i class="fa fa-skype"></i></a></li>
+              </ul>
+              <button type="button" class="btn btn-primary mt-3 btn-rounded waves-effect w-md waves-light">Edit Profile</button>
+          </div>
       </div>
-    </div>
-  </div>
-  <div class="container">
-    <% if (address.length>0) { %>
 
-    <h2>Your Address</h2>
-    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center mt-4">
-     <% address.forEach(el => { %>
-      
-      <div class="col col-md-4">
-        <div class="card mb-4 rounded-3 shadow-sm">
-          <div class="card-body">
-            <h1 class="card-title pricing-card-title"><%= el.name %> </h1>
-            <ul class="list-unstyled mt-3 mb-4">
-              <li><%= el.house %></li>
-              <li><%= el.landmark %></li>
-              <li><%= el.city %></li>
-              <li><%= el.district %></li>
-              <li><%= el.state %></li>
-              <li><%= el.pincode %></li>
-              <li><%= el.mob %></li>
-            </ul>
-            <button type="button" class="w-100 btn btn-lg btn-outline-primary">Edit</button>
+      </div>
+      <div class="col-lg-9 col-md-8 col-sm-12">
+    <section id="minimal-statistics">
+
+          <h4 class="text-uppercase">Your Profile Page</h4>
+          <p>Your Profile.</p>
+
+      <div class="row">
+        <div class="col-lg-4 col-md-12">
+          <a href="/address"><div class="card">
+            <div class="card-content">
+              <div class="card-body">
+                <div class="media d-flex">
+                  <div class="media-body text-left">
+                    <span style="color: black;">Addresses</span>
+                  </div>
+                  <div class="align-self-center">
+                    <i class="icon-user success font-large-2 float-right"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div></a>
+          
+        </div>
+        <div class="col-lg-4 col-md-12">
+          <a href="/orders"><div class="card">
+            <div class="card-content">
+              <div class="card-body">
+                <div class="media d-flex">
+                  <div class="media-body text-left">
+                    <span style="color: black;">Your Orders</span>
+                  </div>
+                  <div class="align-self-center">
+                    <i class="icon-book-open primary font-large-2 float-right"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div></a>
+          
+        </div>
+        <div class="col-lg-4 col-md-12">
+          <a href="#"><div class="card">
+            <div class="card-content">
+              <div class="card-body">
+                <div class="media d-flex">
+                  <div class="align-self-center">
+                    <i class="icon-speech warning font-large-2 float-left"></i>
+                  </div>
+                  <div class="media-body text-right">
+                    <span style="color: black;">Your Comments</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div></a>
+          
+      </div>
+    
+
+    </section>
+  
+    <div class="row">
+      <div class=" col-lg-6 col-md-12">
+        <a href="/wishlist"><div class="card">
+          <div class="card-content">
+            <div class="card-body cleartfix">
+              <div class="media align-items-stretch">
+                <div class="align-self-center">
+                </div>
+                <div class="media-body">
+                  <h4>Wishlist</h4>
+                  <span>Wishlist</span>
+                </div>
+                <div class="align-self-center">
+                  <i class="icon-heart danger font-large-2"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div></a>
+        
+      </div>
+  
+      <div class=" col-lg-6 col-md-12">
+        <div class="card">
+          <div class="card-content">
+            <div class="card-body cleartfix">
+              <div class="media align-items-stretch">
+                <div class="align-self-center">
+                </div>
+                <div class="media-body">
+                  <h4>Total Savings</h4>
+                  <span>Rewards and Coupon Savings</span>
+                </div>
+                <div class="align-self-center">
+                  <i class="icon-wallet success font-large-2"></i>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      
-      <% }) %>
     </div>
-    <% }else{ %>
-    <div class="alert alert-warning d-flex align-items-center" role="alert">
-      <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Warning:"></svg>
-      <div>You have not added any address yet</div>
+      </div>
     </div>
-    <% }%>
-    <a href="/profile/add-address/">
-      <button type="button" class="w-100 btn btn-lg btn-primary">Add Address</button>
-    </a>
-  </div>
+
+
+
+
+
+
 </section>
 
 <%- include('partials/footer.ejs') %>
