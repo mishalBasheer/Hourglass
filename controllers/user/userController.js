@@ -9,7 +9,6 @@ import Product from '../../models/productModel.js';
 import Cart from '../../models/cartModel.js';
 import Wishlist from '../../models/wishlistModel.js';
 import Banner from '../../models/bannerModel.js';
-import mongoos from '../../config/connection.js';
 import Order from '../../models/orderModel.js';
 import Razorpay from 'razorpay';
 
@@ -20,74 +19,106 @@ const client = twilio(accountSid, authToken);
 
 // get user Home Page
 const getUserHome = async (req, res) => {
-  // show a success message when successfully logged in
-  const msg = req.flash('success');
-  // getting logged in user details to "user" variable
-  // const user = req.session.user;
+  try{
+    // show a success message when successfully logged in
+    const msg = req.flash('success');
+    // getting logged in user details to "user" variable
+    // const user = req.session.user;
+  
+    //////////////////////////////////////////remv
+    const user = {
+      block: false,
+      image: 'user_icon.jpg',
+      _id: mongoose.Types.ObjectId('637bea89b921d410e4c72d99'),
+      fname: 'Joules',
+      lname: 'Kounde',
+      mob: 9947227758,
+      email: 'jkounde@gmail.com',
+      password: '$2b$12$dzTVHZOQ425Hn87RRam3ruX.DaSYfC8SkcXEMQmtlGgXGz230fqsG',
+      cartId: mongoose.Types.ObjectId('637bea89b921d410e4c72d95'),
+      wishlistId: mongoose.Types.ObjectId('637bea89b921d410e4c72d97'),
+      __v: 0,
+    };
+    req.session.user = user;
+    req.session.userLogin = true;
+    /////////////////////////////////////////
+  
+    const banner = await Banner.find();
+    const navCat = await Category.find();
+    console.log(banner);
+    res.render('user/home', { msg, user, banner, navCat, navCat });
+  }catch(err){
+    res.render('user/error-page', { error: err, errorMsg: 'error from getting home page' });
 
-  //////////////////////////////////////////remv
-  const user = {
-    block: false,
-    image: 'user_icon.jpg',
-    _id: mongoose.Types.ObjectId('637bea89b921d410e4c72d99'),
-    fname: 'Joules',
-    lname: 'Kounde',
-    mob: 9947227758,
-    email: 'jkounde@gmail.com',
-    password: '$2b$12$dzTVHZOQ425Hn87RRam3ruX.DaSYfC8SkcXEMQmtlGgXGz230fqsG',
-    cartId: mongoose.Types.ObjectId('637bea89b921d410e4c72d95'),
-    wishlistId: mongoose.Types.ObjectId('637bea89b921d410e4c72d97'),
-    __v: 0,
-  };
-  req.session.user = user;
-  req.session.userLogin = true;
-  /////////////////////////////////////////
+  }
 
-  const banner = await Banner.find();
-  const navCat = await Category.find();
-  console.log(banner);
-  res.render('user/home', { msg, user, banner, navCat, navCat });
 };
 
 // get SignIn Page
 const getSignIn = async (req, res) => {
-  const user = req.session.user;
-  const navCat = await Category.find();
-  const loginCheck = req.flash('errorLoginCheck');
-  console.log(loginCheck);
-  const msg = req.flash('error');
-  // console.log(msg);
-  res.render('user/login', { msg, user, loginCheck, navCat });
+  try{
+    const user = req.session.user;
+    const navCat = await Category.find();
+    const loginCheck = req.flash('errorLoginCheck');
+    console.log(loginCheck);
+    const msg = req.flash('error');
+    res.render('user/login', { msg, user, loginCheck, navCat });
+  }catch(err){
+    res.render('user/error-page', { error: err, errorMsg: 'error from getting signin page' });
+    
+  }
+
 };
 
 // get SignUp Page
 const getSignUp = async (req, res) => {
-  const user = req.session.user;
-  const navCat = await Category.find();
-  const msg = req.flash('error');
-  console.log(msg);
-  res.render('user/signup', { msg, user, navCat });
+  try{
+    const user = req.session.user;
+    const navCat = await Category.find();
+    const msg = req.flash('error');
+    res.render('user/signup', { msg, user, navCat });
+  }catch(err){
+    res.render('user/error-page', { error: err, errorMsg: 'error from getting signup page' });
+  }
+
 };
 
 // get OTP Phone number Page (SignIn)
 const getOtpPhonePage = async (req, res) => {
-  const user = req.session.user;
-  const navCat = await Category.find();
-  res.render('user/otp_phone', { user, navCat });
+  try{
+    const user = req.session.user;
+    const navCat = await Category.find();
+    res.render('user/otp_phone', { user, navCat });
+  }catch(err){
+    res.render('user/error-page', { error: err, errorMsg: 'error from otp phone page' });
+  }
+
 };
 
 // get OTP number from user Page(SignIn)
 const getOtpPage = async (req, res) => {
-  const user = req.session.user;
-  const navCat = await Category.find();
-  res.render('user/otp_page', { user, navCat });
+  try{
+    const user = req.session.user;
+    const navCat = await Category.find();
+    res.render('user/otp_page', { user, navCat });
+  }catch(err){
+    console.log(err);
+    res.render('user/error-page', { error: err, errorMsg: 'error while getting otp page' });
+
+  }
+    
 };
 
 // get OTP number from user Page (SignUp)
 const getOtpSignUp = async (req, res) => {
-  const user = req.session.user;
-  const navCat = await Category.find();
-  res.render('user/otp_page_signup', { user, navCat });
+  try{
+    const user = req.session.user;
+    const navCat = await Category.find();
+    res.render('user/otp_page_signup', { user, navCat });
+  }
+  catch(err){
+    res.render('user/error-page', { error: err, errorMsg: 'error from getting all products' });
+  }
 };
 
 // Shows all products that is listed in shop page
@@ -245,16 +276,28 @@ const getProductDetails = async (req, res) => {
 
 // get ContactUs Page
 const getContactUs = async (req, res) => {
-  const user = req.session.user;
-  const navCat = await Category.find();
-  res.render('user/contact', { user, navCat });
+  try{
+    const user = req.session.user;
+    const navCat = await Category.find();
+    res.render('user/contact', { user, navCat });
+  }catch(err){
+    res.render('user/error-page', { error: err, errorMsg: 'error from getting contact us' });
+
+  }
+
 };
 
 // get ForgetPassword Page
 const getForgetPassword = async (req, res) => {
-  const user = req.session.user;
-  const navCat = await Category.find();
-  res.render('user/forgotpass', { user, navCat });
+  try{
+    const user = req.session.user;
+    const navCat = await Category.find();
+    res.render('user/forgotpass', { user, navCat });
+  }catch(err){
+    res.render('user/error-page', { error: err, errorMsg: 'error from forgot pass' });
+
+  }
+
 };
 
 // get Cart Page
@@ -269,20 +312,27 @@ const getCart = async (req, res) => {
     res.render('user/error-page', { error: err, errorMsg: 'error from getting cart products', navCat });
   }
 };
-
+// Total calulating function
 const TotalCalc = async (id) => {
-  const totalCalc = await Cart.aggregate([
-    { $match: { _id: mongoose.Types.ObjectId(id) } },
-    { $unwind: { path: '$products' } },
-    { $project: { 'products.subtotal': 1, _id: 0 } },
-  ]);
-  let sum = 0;
-  totalCalc.forEach((el) => {
-    sum += el.products.subtotal;
-  });
-  await Cart.updateOne({ _id: id }, { total: sum });
+  try{
+    const totalCalc = await Cart.aggregate([
+      { $match: { _id: mongoose.Types.ObjectId(id) } },
+      { $unwind: { path: '$products' } },
+      { $project: { 'products.subtotal': 1, _id: 0 } },
+    ]);
+    let sum = 0;
+    totalCalc.forEach((el) => {
+      sum += el.products.subtotal;
+    });
+    await Cart.updateOne({ _id: id }, { total: sum });
+  }catch(err){
+    res.render('user/error-page', { error: err, errorMsg: 'error when calculating total' });
+
+  }
+
 };
 
+// subtotal calulating function
 const subTotCalc = async (id, proId) => {
   const productcheck = await Cart.aggregate([
     { $match: { _id: mongoose.Types.ObjectId(id) } },
@@ -323,8 +373,6 @@ const setCart = async (req, res, next) => {
     } else {
       const newObj = { product: productId, quantity: 1, price: product.price, subtotal: product.price };
       await Cart.updateOne({ _id: user.cartId }, { $push: { products: newObj } }, { upsert: true });
-      //  await Cart.findOneAndUpdate({_id:user.cartId},{"$set": {[`items.$[outer].${propertyName}`]: value}})
-      //  await Cart.updateOne( { _id: user.cartId }, { '$set': { "products.$[].product": mongoose.Types.ObjectId(productId) , "products.$[].quantity": 1, } } )
     }
 
     await TotalCalc(user.cartId);
@@ -393,14 +441,6 @@ const incQuantity = async (req, res) => {
   try {
     const user = req.session.user;
     const productId = mongoose.Types.ObjectId(req.body.productId);
-
-    // const quantity =Number(req.body.quantity);
-    // if(quantity>=15){
-    //   res.status(200).json({
-    //     stat:false,
-    //     message:'cannot increase from 10',
-    //   })
-    // }else{
     await Cart.findOneAndUpdate(
       { _id: user.cartId, 'products.product': productId },
       { $inc: { 'products.$.quantity': 1 } }
@@ -424,15 +464,6 @@ const decQuantity = async (req, res) => {
   try {
     const user = req.session.user;
     const productId = mongoose.Types.ObjectId(req.body.productId);
-    // const quantity =Number(req.body.quantity);
-    // console.log(user,quantity);
-    // console.log(typeof productId)
-    // if(quantity<=1){
-    //   res.json({
-    //     stat:false,
-    //     message:'cannot decrease to zero',
-    //   })
-    // }else{
     await Cart.findOneAndUpdate(
       { _id: user.cartId, 'products.product': productId },
       { $inc: { 'products.$.quantity': -1 } }
@@ -514,74 +545,106 @@ const removeFromWishlist = async (req, res) => {
 
 // get Orders
 const getOrders = async (req, res) => {
-  const user = req.session.user;
-  const navCat = await Category.find();
-  const orders = await Order.find({ userId: user._id }).sort({_id:-1})
-    .populate('address')
-    .select({ 'products._id': 0, userId: 0, 'address.userId': 0, 'address._id': 0 });
-  console.log(orders);
-  res.render('user/order', { user, orders, navCat });
+  try{
+    const user = req.session.user;
+    const navCat = await Category.find();
+    const orders = await Order.find({ userId: user._id }).sort({_id:-1})
+      .populate('address')
+      .select({ 'products._id': 0, userId: 0, 'address.userId': 0, 'address._id': 0 });
+    console.log(orders);
+    res.render('user/order', { user, orders, navCat });
+  }catch(err){
+    res.render('user/error-page', { error: err, errorMsg: 'error while removing products from wishlist'});
+
+  }
+
 };
 
 // get Orders
 const getOrderData = async (req, res) => {
-  const order = await Order.findOne({ _id: req.body.orderId })
-    .populate('address')
-    .select({ 'products._id': 0, userId: 0, 'address.userId': 0, 'address._id': 0 });
-    
-  res.json({
-    order
-  })
+  try{
+    const order = await Order.findOne({ _id: req.body.orderId })
+      .populate('address')
+      .select({ 'products._id': 0, userId: 0, 'address.userId': 0, 'address._id': 0 });
+      
+    res.json({
+      order
+    })
+  }catch(err){
+    res.status(400).json({
+      stat:'failed',
+    })
+
+  }
+
 };
 
 // checkoutConfirm
 const checkoutConfirm = async (req, res) => {
-  const user = req.session.user;
-  const cartProducts = await Cart.findById(user.cartId)
-    .populate('products.product')
-    .select({ 'products.product': 1, 'products.subtotal': 1, 'products.quantity': 1, total: 1, _id: 0 });
+  try{
+    const user = req.session.user;
+    const cartProducts = await Cart.findById(user.cartId)
+      .populate('products.product')
+      .select({ 'products.product': 1, 'products.subtotal': 1, 'products.quantity': 1, total: 1, _id: 0 });
+  
+    const newOrder = {
+      userId: user._id,
+      payment: req.body.payment,
+      address: mongoose.Types.ObjectId(req.body.address),
+      message: req.body.message,
+      products: cartProducts.products,
+      total: cartProducts.total,
+    };
+    req.session.newOrder = newOrder;
+    res.redirect('/order-confirmation');
+  }catch(err){
+    res.render('user/error-page', { error: err, errorMsg: 'error while removing products from wishlist' });
+    
+  }
 
-  const newOrder = {
-    userId: user._id,
-    payment: req.body.payment,
-    address: mongoose.Types.ObjectId(req.body.address),
-    message: req.body.message,
-    products: cartProducts.products,
-    total: cartProducts.total,
-  };
-  req.session.newOrder = newOrder;
-  res.redirect('/order-confirmation');
 };
 
 // getPayment Page
 const getPayment = async (req, res) => {
-  const user = req.session.user;
-  const navCat = await Category.find();
+  try{
+    const user = req.session.user;
+    const navCat = await Category.find();
+  
+    const order = req.session.newOrder;
+    const address = await Address.findById(order.address);
+  
+    res.render('user/order_confirmation', { user, navCat, order, address, key: process.env.RAZOR_KEY_ID });
+  }catch(err){
+    res.render('user/error-page', { error: err, errorMsg: 'error while removing products from wishlist'});
+    
+  }
 
-  const order = req.session.newOrder;
-  const address = await Address.findById(order.address);
-
-  res.render('user/order_confirmation', { user, navCat, order, address, key: process.env.RAZOR_KEY_ID });
 };
 
 // razor payment from axios
 const razorOrderGenerate = async(req, res) => {
-  const newOrder = req.session.newOrder;
-  let instance = new Razorpay({
-    key_id: process.env.RAZOR_KEY_ID,
-    key_secret: process.env.RAZOR_KEY_SECRET,
-  });
-  var options = {
-    amount: (newOrder.total + 50)*100, // amount in the smallest currency unit
-    currency: 'INR',
-    receipt: 'order_rcptid_11',
-  };
-  instance.orders.create(options, function (err, order) {
-    console.log(order);
-    Object.assign(order,{payment:"Razorpay"})
-    Object.assign(req.session.newOrder,order);
-    res.send({orderId:order.id})
-  });
+  try{
+    const newOrder = req.session.newOrder;
+    let instance = new Razorpay({
+      key_id: process.env.RAZOR_KEY_ID,
+      key_secret: process.env.RAZOR_KEY_SECRET,
+    });
+    var options = {
+      amount: (newOrder.total + 50)*100, // amount in the smallest currency unit
+      currency: 'INR',
+      receipt: 'order_rcptid_11',
+    };
+    instance.orders.create(options, function (err, order) {
+      console.log(order);
+      Object.assign(order,{payment:"Razorpay"})
+      Object.assign(req.session.newOrder,order);
+      res.send({orderId:order.id})
+    });
+  }catch(err){
+    res.render('user/error-page', { error: err, errorMsg: 'error while removing products from wishlist'});
+    
+  }
+
 };
 
 // setting payment to COD

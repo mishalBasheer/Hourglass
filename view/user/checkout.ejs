@@ -7,7 +7,7 @@
       <form name="checkoutForm" action="/checkout" onsubmit="return validate()" method="post">
         <div class="row">
           <div class="col-lg-8">
-            <h2>Shipping Address</h2>
+            <h2 class="plan-cost">Shipping Address</h2>
             <div class="row mt-4">
               <% for( let i = 0; i < address.length; i++ ) { %>
               <div class="col-lg-6">
@@ -107,7 +107,7 @@
 
   body {
     color: #263238;
-    font-family: 'Noto Sans', sans-serif;
+    font-family: "Poppins", sans-serif;
     margin: 0;
     padding: 2em 6vw;
   }
@@ -220,14 +220,14 @@
 
   .plan-type {
     color: var(--color-green);
-    font-size: 1.5rem;
+    font-size: 1rem;
     font-weight: bold;
     line-height: 1em;
   }
 
   .plan-cost {
-    font-size: 2.5rem;
-    font-weight: bold;
+    font-size: 1.5rem;
+    font-weight: 500;
     padding: 0.5rem 0;
   }
 
