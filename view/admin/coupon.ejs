@@ -1,0 +1,138 @@
+<%- include('partials/header.ejs') %>
+
+<main class="h-full pb-16 overflow-y-auto">
+  <div class="container px-6 mx-auto grid">
+    <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Coupons</h2>
+    <!-- TABLE -->
+
+    <div class="w-full overflow-hidden rounded-lg shadow-xs mt-2">
+      <div class="w-full overflow-x-auto">
+        <button
+          class="px-5 py-3 mt-8 mx-auto font-medium w-64 leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+        >
+          <a href="/admin/coupon/add-coupon"> Add Coupon </a>
+        </button>
+
+        <table class="w-full whitespace-no-wrap mt-4">
+          <thead>
+            <tr
+              class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
+            >
+              <th class="px-4 py-3">#coupon</th>
+              <th class="px-4 py-3">Code</th>
+              <!-- <th class="px-4 py-3">Last Name</th>
+              <th class="px-4 py-3">Email</th> -->
+              <th class="px-4 py-3">Status</th>
+              <th class="px-4 py-3">Action</th>
+            </tr>
+          </thead>
+          <tbody id="coupon_table_body" class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+            <% coupon.forEach((el,index)=> {%>
+
+            <tr class="text-gray-700 dark:text-gray-400">
+              <td class="px-4 py-3 text-sm"></td>
+              <td class="px-4 py-3 text-sm"><%= el.code %></td>
+
+              <td class="px-4 py-3 text-xs">
+                <% if (el.expireAfter.getTime() < Date.now()) { %>
+                <span
+                  class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100"
+                >
+                  Expired
+                </span>
+                <% }else { %>
+                <span
+                  class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100"
+                >
+                  Active
+                </span>
+                <% } %>
+              </td>
+              <td class="px-4 py-3">
+                <a onclick="dltCouponWarning('<%= el._id %>','<%= index %>')" class="ml-1">
+                  <button
+                    class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-lg active:bg-red-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-red"
+                  >
+                    Delete
+                  </button>
+                </a>
+                <a href="/admin/coupon/edit-coupon/<%= el._id %>">
+                  <button
+                    class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                  >
+                    Edit
+                  </button>
+                </a>
+              </td>
+            </tr>
+
+            <% }); %>
+          </tbody>
+        </table>
+
+        <!-- TABLE END  -->
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" defer></script>
+<script>
+  var table = document.getElementsByTagName('table')[0],
+    rows = table.getElementsByTagName('tr'),
+    text = 'textContent' in document ? 'textContent' : 'innerText';
+  console.log(text);
+  for (var i = 0, len = rows.length; i < len; i++) {
+    if (i == 0) {
+      continue;
+    }
+    rows[i].children[0][text] = i + ' ' + rows[i].children[0][text];
+  }
+  function dltCouponWarning(id,index) {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteCoupon(id,index);
+      }
+    });
+  }
+  function deleteCoupon(id,index) {
+    $.ajax({
+      url: '/admin/coupon/delete-coupon',
+      method: 'POST',
+      data: {
+        couponId: id,
+      },
+    }).then((response) => {
+      if (response.delete == 'success') {
+        successAlert('Coupon deleted Successfuly');
+        $(`#coupon_table_body tr:eq(${index})`).remove();
+        // location.href='/admin/coupon'
+      } else {
+        failedAlert('Something went wrong, Please try again later');
+        // location.href='/admin/coupon'
+      }
+    });
+    function successAlert(msg) {
+      Swal.fire({
+        icon: 'success',
+        title: msg,
+      });
+    }
+    function failedAlert(msg) {
+      Swal.fire({
+        icon: 'error',
+        title: msg,
+      });
+    }
+  }
+</script>
+
+<%- include('partials/footer.ejs') %>

@@ -298,8 +298,6 @@
       },
     }).then((response) => {
       let order = response.order;
-
-      console.log(order);
       let table_data = '';
       $.each(order.products, function (index, value) {
         /*console.log(value);*/
@@ -343,6 +341,7 @@
       });
     });
   }
+  
   function updateOrderStatus(id, status) {
     $.ajax({
       url: '/admin/update-order',
@@ -366,6 +365,7 @@
       }
     });
   }
+  
   function successAlert() {
     Swal.fire({
       icon: 'success',
@@ -373,6 +373,7 @@
       text: 'You are good to go',
     });
   }
+  
   function failedAlert() {
     Swal.fire({
       icon: 'error',

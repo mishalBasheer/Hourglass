@@ -4,6 +4,7 @@ import Product from '../../models/productModel.js';
 import User from '../../models/userDetailsModel.js';
 import Category from '../../models/categoryModel.js';
 import Brand from '../../models/brandModel.js';
+import Coupon from '../../models/couponModel.js';
 import Order from '../../models/orderModel.js';
 import moment from 'moment';
 import Banner from '../../models/bannerModel.js';
@@ -17,8 +18,8 @@ const getAdminLogin = (req, res) => {
   }
 };
 
-const getAdminDashboard =async (req, res) => {
-  const orders = await Order.find({}).sort({_id:-1}).populate('userId').populate('address');
+const getAdminDashboard = async (req, res) => {
+  const orders = await Order.find({}).sort({ _id: -1 }).populate('userId').populate('address');
   req.session.pageIn = 'dashboard';
   const msg = req.flash('success');
   res.render('admin/dashboard', {
@@ -32,11 +33,12 @@ const getAdminDashboard =async (req, res) => {
     usersPage: '',
     categoryPage: '',
     brandPage: '',
+    couponPage: '',
   });
 };
 
-const getAdminOrders = async(req, res) => {
-  const orders = await Order.find({}).sort({_id:-1}).populate('userId').populate('address');
+const getAdminOrders = async (req, res) => {
+  const orders = await Order.find({}).sort({ _id: -1 }).populate('userId').populate('address');
   req.session.pageIn = 'orders';
   res.render('admin/orders', {
     orders,
@@ -48,21 +50,22 @@ const getAdminOrders = async(req, res) => {
     usersPage: '',
     categoryPage: '',
     brandPage: '',
+    couponPage: '',
   });
 };
-const orderUpdate = async(req,res)=>{
+const orderUpdate = async (req, res) => {
   console.log(req.body);
-  const order = await Order.findByIdAndUpdate(req.body.orderId,{orderstat:req.body.newOrderStatus});
-  if(order){
+  const order = await Order.findByIdAndUpdate(req.body.orderId, { orderstat: req.body.newOrderStatus });
+  if (order) {
     res.json({
-      orderUpdate:'success',
-    })
-  }else{
+      orderUpdate: 'success',
+    });
+  } else {
     res.json({
-      orderUpdate:'failed',
-    })
+      orderUpdate: 'failed',
+    });
   }
-}
+};
 
 const getEditProductPage = async (req, res) => {
   const brand = await Brand.find({});
@@ -85,6 +88,7 @@ const getEditProductPage = async (req, res) => {
     usersPage: '',
     categoryPage: '',
     brandPage: '',
+    couponPage: '',
   });
 };
 
@@ -104,6 +108,7 @@ const getAdminProducts = async (req, res) => {
       usersPage: '',
       categoryPage: '',
       brandPage: '',
+      couponPage: '',
     });
   } catch (err) {
     res.status(400).json({
@@ -131,6 +136,7 @@ const getAddProductPage = async (req, res) => {
     usersPage: '',
     categoryPage: '',
     brandPage: '',
+    couponPage: '',
   });
 };
 
@@ -268,6 +274,7 @@ const getAdminUsers = async (req, res) => {
       bannerPage: '',
       categoryPage: '',
       brandPage: '',
+      couponPage: '',
     });
   } catch (err) {
     res.status(400).json({
@@ -329,6 +336,7 @@ const getCategory = async (req, res) => {
     usersPage: '',
     categoryPage: 'dark:text-gray-100',
     brandPage: '',
+    couponPage: '',
   });
 };
 
@@ -348,6 +356,7 @@ const getEditCategory = async (req, res) => {
     usersPage: '',
     categoryPage: 'dark:text-gray-100',
     brandPage: '',
+    couponPage: '',
   });
 };
 
@@ -362,6 +371,7 @@ const getAddCategory = (req, res) => {
     usersPage: '',
     categoryPage: 'dark:text-gray-100',
     brandPage: '',
+    couponPage: '',
   });
 };
 
@@ -423,6 +433,7 @@ const getBrand = async (req, res) => {
     usersPage: '',
     categoryPage: '',
     brandPage: 'dark:text-gray-100',
+    couponPage: '',
   });
 };
 
@@ -442,6 +453,7 @@ const getEditBrand = async (req, res) => {
     usersPage: '',
     categoryPage: '',
     brandPage: 'dark:text-gray-100',
+    couponPage: '',
   });
 };
 
@@ -456,12 +468,12 @@ const getAddBrand = (req, res) => {
     usersPage: '',
     categoryPage: 'dark:text-gray-100',
     brandPage: '',
+    couponPage: '',
   });
 };
 
 const addBrand = async (req, res) => {
   try {
-
     const brandInfo = req.body;
     const img = req.file.filename;
     // console.log(img)
@@ -516,6 +528,7 @@ const getBanner = async (req, res) => {
     usersPage: '',
     categoryPage: '',
     brandPage: '',
+    couponPage: '',
   });
 };
 
@@ -535,6 +548,7 @@ const getEditBanner = async (req, res) => {
     usersPage: '',
     categoryPage: '',
     brandPage: '',
+    couponPage: '',
   });
 };
 
@@ -549,6 +563,7 @@ const getAddBanner = (req, res) => {
     usersPage: '',
     categoryPage: '',
     brandPage: '',
+    couponPage: '',
   });
 };
 
@@ -597,8 +612,103 @@ const editBanner = async (req, res) => {
     });
   }
 };
+const getCoupon = async (req, res) => {
+  let coupon = await Coupon.find({});
+  req.session.pageIn = 'coupon';
+  res.render('admin/coupon', {
+    pageIn: req.session.pageIn,
+    coupon,
+    productsPage: '',
+    bannerPage: '',
+    dashboardPage: '',
+    ordersPage: '',
+    usersPage: '',
+    categoryPage: '',
+    brandPage: '',
+    couponPage: 'dark:text-gray-100',
+  });
+};
+const getAddCoupon = (req, res) => {
+  req.session.pageIn = 'coupon';
+  res.render('admin/add_coupon', {
+    pageIn: req.session.pageIn,
+    productsPage: '',
+    bannerPage: '',
+    dashboardPage: '',
+    ordersPage: '',
+    usersPage: '',
+    categoryPage: '',
+    brandPage: '',
+    couponPage: 'dark:text-gray-100',
+  });
+};
 
-const adminLogout = (req, res) => {
+const getEditCoupon = async (req, res) => {
+  const couponId = req.params.id;
+  req.session.pageIn = 'coupon';
+  const coupon = await Coupon.find({ _id: mongoose.Types.ObjectId(couponId) });
+  // console.log(brand);
+  res.render('admin/edit_coupon', {
+    coupon,
+    couponId,
+    pageIn: req.session.pageIn,
+    productsPage: '',
+    bannerPage: '',
+    dashboardPage: '',
+    ordersPage: '',
+    usersPage: '',
+    categoryPage: '',
+    brandPage: '',
+    couponPage: 'dark:text-gray-100',
+  });
+};
+const editCoupon = async (req, res) => {
+  try {
+      const couponInfo = req.body;
+      await Coupon.findByIdAndUpdate(req.params.id,couponInfo);
+      res.redirect('/admin/coupon');
+
+  } catch (err) {
+    res.status(400).json({
+      status: 'error while editing coupon',
+      message: err,
+    });
+  }
+};
+const addCoupon = async (req, res) => {
+  try {
+  console.log(req.body);
+  const { code, isPercent, amount, usageLimit } = req.body;
+  const createdAt = new Date();
+  let expireAfter = createdAt.getTime() + (req.body.expireAfter * 24 * 60 * 60 * 1000);
+  expireAfter = new Date(expireAfter);
+  const coupon = { code, isPercent, amount, usageLimit, expireAfter, createdAt };
+  await Coupon.create(coupon);
+  res.redirect('/admin/coupon');
+  } catch (err) {
+    res.status(400).json({
+      status: 'error while adding coupon',
+      message: err,
+    });
+  }
+};
+
+const deleteCoupon = async(req,res)=>{
+  try{
+    console.log(req.body);
+    await Coupon.findByIdAndDelete(req.body.couponId);
+    res.json({
+      delete:'success'
+    })
+  }catch(err){
+    res.json({
+      delete:'failed'
+    })
+  }
+
+}
+
+const adminLogout = async (req, res) => {
   req.session.adminLogIn = false;
   res.redirect('/admin');
 };
@@ -634,4 +744,10 @@ export {
   orderUpdate,
   getEditBanner,
   editBanner,
+  getCoupon,
+  getAddCoupon,
+  addCoupon,
+  getEditCoupon,
+  editCoupon,
+  deleteCoupon,
 };

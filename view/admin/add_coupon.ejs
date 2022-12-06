@@ -1,0 +1,78 @@
+<%- include('partials/header.ejs') %>
+
+<main class="h-full pb-16 overflow-y-auto">
+  <div class="container px-6 mt-8 mx-auto grid">
+    <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+      <!-- General elements -->
+      <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Add Coupon</h4>
+      <form action="/admin/coupon/add-coupon" method="post">
+        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+          <label class="block text-sm mt-1">
+            <span class="text-gray-700 dark:text-gray-400">Coupon Code</span>
+            <input
+              name="code"
+              value=""
+              type="text"
+              class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+              required
+            />
+          </label>
+          <label class="block mt-4 text-sm">
+            <span class="text-gray-700 dark:text-gray-400"> Discount type </span>
+            <select
+              name="isPercent"
+              class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+              required
+            >
+              <option value="true" selected disabled hidden>Percentage(%)</option>
+
+              <option value="true">Percentage(%)</option>
+              <option value="false">Amount(₹)</option>
+            </select>
+          </label>
+          <label class="block text-sm mt-1">
+            <span class="text-gray-700 dark:text-gray-400"
+              >Amount (if is percent, then number must be ≤ 100, else it’s amount of discount)</span
+            >
+            <input
+              name="amount"
+              value=""
+              type="number"
+              class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+              required
+            />
+          </label>
+          <label class="block text-sm mt-1">
+            <span class="text-gray-700 dark:text-gray-400">Expire After(days)</span>
+            <input
+              name="expireAfter"
+              value=""
+              type="number"
+              class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+              required
+            />
+          </label>
+          <label class="block text-sm mt-1">
+            <span class="text-gray-700 dark:text-gray-400">Usage limit</span>
+            <input
+              name="usageLimit"
+              value=""
+              type="number"
+              class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+              required
+            />
+          </label>
+
+          <button
+            type="submit"
+            class="px-5 py-3 mt-8 w-full font-medium w-64 leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+          >
+            Add Coupon
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+
+<%- include('partials/footer.ejs') %>
