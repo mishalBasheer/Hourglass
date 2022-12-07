@@ -23,8 +23,8 @@ import {
   getProfile,
   getWish,
   setCart,
-  removeFromWishlist,
-  setWish,
+  // removeFromWishlist,
+  // setWish,
   decQuantity,
   incQuantity,
   getAddAddress,
@@ -43,6 +43,7 @@ import {
   getAddress,
   getOrderSuccess,
   razorOrderGenerate,
+  updateWishlist,
   checkCoupon,
 } from '../controllers/user/userController.js';
 import { userLoginCheck, checkBlockedUser } from '../middleware/userLoginCheckMiddleware.js';
@@ -71,8 +72,10 @@ router.route('/cart').get(userLoginCheck, checkBlockedUser, getCart);
 router.route('/cart/dec-quantity').post(userLoginCheck, checkBlockedUser, decQuantity);
 router.route('/cart/inc-quantity').post(userLoginCheck, checkBlockedUser, incQuantity);
 router.route('/wishlist').get(userLoginCheck, checkBlockedUser, getWish);
-router.route('/add-to-wishlist/:id').get(userLoginCheck, checkBlockedUser, setWish);
-router.route('/remove-from-wishlist/:id').get(userLoginCheck, checkBlockedUser, removeFromWishlist);
+// router.route('/add-to-wishlist/:id').get(userLoginCheck, checkBlockedUser, setWish);
+// router.route('/remove-from-wishlist/:id').get(userLoginCheck, checkBlockedUser, removeFromWishlist);
+router.route('/update-wishlist').post(axiosUserLoginCheck, axiosCheckBlockedUser, updateWishlist);
+
 router
   .route('/checkout')
   .get(userLoginCheck, checkBlockedUser, getCheckout)

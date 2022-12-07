@@ -262,7 +262,7 @@ const getProductDetails = async (req, res) => {
       });
       const wishlisted = wishlistProducts.products.some((el) => el.product.equals(product._id));
       const msg = req.flash('cartSuccess');
-      res.render('user/p_details', { user, product, msg, wishlisted, navCat });
+      res.render('user/p_details', { user, product, msg, wishlisted, navCat,index:0 });
     } else {
       res.render('user/p_details', { user, product, navCat });
     }
@@ -497,46 +497,58 @@ const getWish = async (req, res) => {
 };
 
 // putting products to Wishlist
-const setWish = async (req, res) => {
-  try {
-    const user = req.session.user;
-    const productId = req.params.id;
-    // const productcheck =await Wishlist.findOne({ 'products.product': productId  });
-    // console.log('user:',user.wishlistId);
-    // console.log('checked Product:',productcheck);
-    // if(!productcheck){
-    //  await Cart.findOneAndUpdate({_id:user.cartId,'products.product':productId},{$inc:{'products.$.quantity':1}});
-    // }else{
-    const newObj = { product: productId };
-    await Wishlist.updateOne({ _id: user.wishlistId }, { $push: { products: newObj } }, { upsert: true });
-    //  await Cart.findOneAndUpdate({_id:user.cartId},{"$set": {[`items.$[outer].${propertyName}`]: value}})
-    //  await Cart.updateOne( { _id: user.cartId }, { '$set': { "products.$[].product": mongoose.Types.ObjectId(productId) , "products.$[].quantity": 1, } } )
-    req.flash('cartSuccess', 'Successfully added product to wishlist');
-    // }else{
-    //   req.flash('cartSuccess','Product already in the wishlist')
-
-    // }
-    res.redirect('/shop');
-  } catch (err) {
-    console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error while putting products to wishlist', navCat });
-  }
-};
+// const setWish = async (req, res) => {
+//   try {
+//     const user = req.session.user;
+//     const productId = req.params.id;
+//     const newObj = { product: productId };
+//     await Wishlist.updateOne({ _id: user.wishlistId }, { $push: { products: newObj } }, { upsert: true });
+//     req.flash('cartSuccess', 'Successfully added product to wishlist');
+//     res.redirect('/shop');
+//   } catch (err) {
+//     console.log(err);
+//     res.render('user/error-page', { error: err, errorMsg: 'error while putting products to wishlist', navCat });
+//   }
+// };
 
 // removing products from Wishlist
-const removeFromWishlist = async (req, res) => {
-  try {
-    const user = req.session.user;
-    const productId = req.params.id;
-    const removeObj = { product: productId };
-    await Wishlist.updateOne({ _id: user.wishlistId }, { $pull: { products: removeObj } });
-    req.flash('cartSuccess', 'Successfully remove product from wishlist');
-    res.redirect('/shop');
-  } catch (err) {
-    console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error while removing products from wishlist', navCat });
+// const removeFromWishlist = async (req, res) => {
+//   try {
+//     const user = req.session.user;
+//     const productId = req.params.id;
+//     const removeObj = { product: productId };
+//     await Wishlist.updateOne({ _id: user.wishlistId }, { $pull: { products: removeObj } });
+//     req.flash('cartSuccess', 'Successfully remove product from wishlist');
+//     res.redirect('/shop');
+//   } catch (err) {
+//     console.log(err);
+//     res.render('user/error-page', { error: err, errorMsg: 'error while removing products from wishlist', navCat });
+//   }
+// };
+
+const updateWishlist = async(req,res)=>{
+  const user = req.session.user;
+  const productId = req.body.productId;
+  const productCheck = await Wishlist.findOne({_id:user.wishlistId,'products.product':productId})
+  const product = {
+    product:productId,
   }
-};
+  if(productCheck){
+    await Wishlist.updateOne({ _id: user.wishlistId }, { $pull: { products: product } });
+    return res.json({
+      access:true,
+      productStat:'removed',
+      msg:'Successfully remove product from wishlist',
+    })
+  }else{
+    await Wishlist.updateOne({ _id: user.wishlistId }, { $push: { products: product } }, { upsert: true });
+    return res.json({
+      access:true,
+      productStat:'added',
+      msg:'Successfully added product to wishlist',
+    })
+  }
+}
 
 // get Orders
 const getOrders = async (req, res) => {
@@ -769,10 +781,10 @@ const newUser = async (req, res) => {
         // console.log('wishlist: ',wishlist)
         Object.assign(newUser, { cartId: cart._id, wishlistId: wishlist._id });
         // console.log("new User:",newUser);
-        User.create(newUser);
+        const user = await User.create(newUser);
         // console.log(newUser);
-        req.session.user = newUser;
-        req.session.userEmail = newUser.email;
+        req.session.user = user;
+        req.session.userEmail = user.email;
         res.redirect('/');
       } else {
         req.session.userLogin = false;
@@ -989,8 +1001,8 @@ export {
   addAddress,
   getWish,
   setCart,
-  removeFromWishlist,
-  setWish,
+  // removeFromWishlist,
+  // setWish,
   decQuantity,
   logoutUser,
   incQuantity,
@@ -1008,4 +1020,5 @@ export {
   getAddress,
   getOrderData,
   checkCoupon,
+  updateWishlist,
 };
