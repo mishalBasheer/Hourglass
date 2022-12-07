@@ -98,75 +98,31 @@
               </td>
             </tr>
             <% } %>
-            <!-- <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td><h5>Subtotal</h5></td>
-              <td class="sub-total">₹ <span id="total"></span></td>
-            </tr> -->
-
-            <!-- <tr class="shipping_area">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                  <h5>Shipping</h5>
-                </td>
-                <td>
-                  <div class="shipping_box">
-                    <ul class="list">
-                      <li>
-                        <a href="#">Flat Rate: $5.00</a>
-                      </li>
-                      <li>
-                        <a href="#">Free Shipping</a>
-                      </li>
-                      <li>
-                        <a href="#">Flat Rate: $10.00</a>
-                      </li>
-                      <li class="active">
-                        <a href="#">Local Delivery: $2.00</a>
-                      </li>
-                    </ul>
-                    <h6>
-                      Calculate Shipping
-                      <i class="fa fa-caret-down" aria-hidden="true"></i>
-                    </h6>
-                    <select class="shipping_select">
-                      <option value="1">Bangladesh</option>
-                      <option value="2">India</option>
-                      <option value="4">Pakistan</option>
-                    </select>
-                    <select class="shipping_select section_bg">
-                      <option value="1">Select a State</option>
-                      <option value="2">Select a State</option>
-                      <option value="4">Select a State</option>
-                    </select>
-                    <input type="text" placeholder="Postcode/Zipcode" />
-                  </div>
-                </td>
-              </tr> -->
+           
           </tbody>
+          <tbody>
+            <tr>
+           <td ></td>
+           <td></td>
+           <td></td>
+           <td><h5>Subtotal</h5></td>
+           <td class="sub-total">₹ <span id="total"></span></td>
+         </tr>
+         </tbody>
         </table>
-        <!-- Dont try to move this to table row 
-        try that only after correcting index in functions -->
-        <div style="text-align: right;">
-            <h5>Subtotal: ₹ <span id="total"></span></h5>
-          </div>
-        <div class="checkout_btn_inner float-right">
-          <a class="btn_1" href="/shop">Continue Shopping</a>
-          <a class="btn_1 checkout_btn_1" href="/checkout">Proceed to checkout</a>
-        </div>
       </div>
-
-      <% }else{ %>
-      <div class="alert alert-warning d-flex align-items-center" role="alert">
-        <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Warning:"></svg>
-        <div>You have not added anything to Cart</div>
-      </div>
-      <% }%>
     </div>
+    <div class="checkout_btn_inner float-right">
+      <a class="btn_1" href="/shop">Continue Shopping</a>
+      <a class="btn_1 checkout_btn_1" href="/checkout">Proceed to checkout</a>
+    </div>
+
+    <% }else{ %>
+    <div class="alert alert-warning d-flex align-items-center" role="alert">
+      <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Warning:"></svg>
+      <div>You have not added anything to Cart</div>
+    </div>
+    <% }%>
   </div>
 </section>
 <!--================End Cart Area =================-->
@@ -201,107 +157,106 @@
   }
 
   function quantityDec(id, quantity, index) {
-  if (!document.querySelector(`#qnty${index} #quantity`).value) {
-    document.querySelector(`#qnty${index} #quantity`).value = Number(quantity);
+    if (!document.querySelector(`#qnty${index} #quantity`).value) {
+      document.querySelector(`#qnty${index} #quantity`).value = Number(quantity);
+    }
+
+    if (document.querySelector(`#qnty${index} #quantity`).value > 1) {
+      axios
+        .post('/cart/dec-quantity', {
+          productId: id,
+        })
+        .then((result) => {
+          if (result.data.stat) {
+            let count = Number(document.querySelector(`#qnty${index} #quantity`).value);
+            count--;
+            document.querySelector(`#qnty${index} #quantity`).value = count;
+          }
+          cartUpdate();
+        })
+        .catch((err) => {
+          console.log({ error: err });
+        });
+    }
   }
 
-  if (document.querySelector(`#qnty${index} #quantity`).value > 1) {
-    axios
-      .post('/cart/dec-quantity', {
-        productId: id,
-      })
-      .then((result) => {
-        if (result.data.stat) {
-          let count = Number(document.querySelector(`#qnty${index} #quantity`).value);
-          count--;
-          document.querySelector(`#qnty${index} #quantity`).value = count;
-        }
-        cartUpdate();
-      })
-      .catch((err) => {
-        console.log({ error: err });
-      });
+  function quantityInc(id, quantity, index) {
+    if (!document.querySelector(`#qnty${index} #quantity`).value) {
+      document.querySelector(`#qnty${index} #quantity`).value = Number(quantity);
+    }
+    if (document.querySelector(`#qnty${index} #quantity`).value < 10) {
+      axios
+        .post('/cart/inc-quantity', {
+          productId: id,
+        })
+        .then((result) => {
+          if (result.data.stat) {
+            let count = Number(document.querySelector(`#qnty${index} #quantity`).value);
+            count++;
+            document.querySelector(`#qnty${index} #quantity`).value = count;
+          }
+          cartUpdateRmv();
+        })
+        .catch((err) => {
+          console.log({ error: err });
+        });
+    }
   }
-}
 
-function quantityInc(id, quantity, index) {
-  if (!document.querySelector(`#qnty${index} #quantity`).value) {
-    document.querySelector(`#qnty${index} #quantity`).value = Number(quantity);
-  }
-  if (document.querySelector(`#qnty${index} #quantity`).value < 10) {
-    axios
-      .post('/cart/inc-quantity', {
-        productId: id,
-      })
-      .then((result) => {
-        if (result.data.stat) {
-          let count = Number(document.querySelector(`#qnty${index} #quantity`).value);
-          count++;
-          document.querySelector(`#qnty${index} #quantity`).value = count;
-        }
-        cartUpdateRmv();
-      })
-      .catch((err) => {
-        console.log({ error: err });
-      });
-  }
-}
-
-function removeFromCart(id, index, r) {
-  const swalWithBootstrapButtons = Swal.mixin({
-    customClass: {
-      confirmButton: 'btn btn-success',
-      cancelButton: 'btn btn-danger',
-    },
-    buttonsStyling: true,
-  });
-
-  swalWithBootstrapButtons
-    .fire({
-      title: 'Are you sure?',
-      text: 'MOVE TO WISHLIST or Remove from cart',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Remove from cart',
-      cancelButtonText: 'Move to Wishlist',
-      reverseButtons: true,
-    })
-    .then((result) => {
-      if (result.isConfirmed) {
-        axios
-          .post('/remove-from-cart', {
-            productId: id,
-          })
-          .then((result) => {
-            if (result.data.access) {
-              let i = r.parentNode.parentNode.rowIndex;
-              document.getElementById('cartTable').deleteRow(i);
-              // document.getElementById(`cartTable`).deleteRow(`${index}`)
-              cartUpdateRmv();
-            }
-          });
-        swalWithBootstrapButtons.fire('Deleted!', 'Cart product has been removed', 'success');
-      } else if (
-        /* Read more about handling dismissals below */
-        result.dismiss === Swal.DismissReason.cancel
-      ) {
-        axios
-          .post('/set-to-wish', {
-            productId: id,
-          })
-          .then((result) => {
-            if (result.data.access) {
-              let i = r.parentNode.parentNode.rowIndex;
-              document.getElementById('cartTable').deleteRow(i);
-              // document.getElementById(`cartTable`).deleteRow(`${index}`)
-              cartUpdateRmv();
-            }
-          });
-        swalWithBootstrapButtons.fire('Cancelled', 'Product is successfully added to wishlist', 'success');
-      }
+  function removeFromCart(id, index, r) {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger',
+      },
+      buttonsStyling: true,
     });
-}
- 
+
+    swalWithBootstrapButtons
+      .fire({
+        title: 'Are you sure?',
+        text: 'MOVE TO WISHLIST or Remove from cart',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Remove from cart',
+        cancelButtonText: 'Move to Wishlist',
+        reverseButtons: true,
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          axios
+            .post('/remove-from-cart', {
+              productId: id,
+            })
+            .then((result) => {
+              if (result.data.access) {
+                let i = r.parentNode.parentNode.rowIndex;
+                document.getElementById('cartTable').deleteRow(i);
+                // document.getElementById(`cartTable`).deleteRow(`${index}`)
+                cartUpdateRmv();
+              }
+            });
+          swalWithBootstrapButtons.fire('Deleted!', 'Cart product has been removed', 'success');
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          axios
+            .post('/set-to-wish', {
+              productId: id,
+            })
+            .then((result) => {
+              if (result.data.access) {
+                let i = r.parentNode.parentNode.rowIndex;
+                document.getElementById('cartTable').deleteRow(i);
+                // document.getElementById(`cartTable`).deleteRow(`${index}`)
+                cartUpdateRmv();
+              }
+            });
+          swalWithBootstrapButtons.fire('Cancelled', 'Product is successfully added to wishlist', 'success');
+        }
+      });
+  }
 </script>
 
 <%- include('partials/footer.ejs') %>

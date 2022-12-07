@@ -43,7 +43,7 @@ const getUserHome = async (req, res) => {
     req.session.user = user;
     req.session.userLogin = true;
     /////////////////////////////////////////
-    req.session.couponApplied=null;
+    req.session.couponApplied = null;
     const banner = await Banner.find();
     const navCat = await Category.find();
     console.log(banner);
@@ -138,7 +138,7 @@ const getAllShop = async (req, res) => {
 
     const count = product.length;
     const user = req.session.user;
-    req.session.couponApplied=null;
+    req.session.couponApplied = null;
 
     if (user) {
       const wishlistProducts = await Wishlist.findOne({ _id: user.wishlistId }).select({
@@ -182,7 +182,7 @@ const getShopCategory = async (req, res) => {
 
     const count = product.length;
     const user = req.session.user;
-    req.session.couponApplied=null;
+    req.session.couponApplied = null;
 
     if (user) {
       const wishlistProducts = await Wishlist.findOne({ _id: user.wishlistId }).select({
@@ -225,7 +225,7 @@ const getShopBrand = async (req, res) => {
     ]);
 
     const count = product.length;
-    req.session.couponApplied=null;
+    req.session.couponApplied = null;
     const user = req.session.user;
     if (user) {
       const wishlistProducts = await Wishlist.findOne({ _id: user.wishlistId }).select({
@@ -249,7 +249,7 @@ const getProductDetails = async (req, res) => {
   try {
     const product = await Product.findOne({ _id: req.params.id }).populate('category').populate('brand');
     // console.log(product);
-    req.session.couponApplied=null;
+    req.session.couponApplied = null;
     const user = req.session.user;
 
     const navCat = await Category.find();
@@ -344,7 +344,7 @@ const subTotCalc = async (id, proId) => {
 // adding a Product to user's cart
 const setCart = async (req, res, next) => {
   try {
-    req.session.couponApplied=null;
+    req.session.couponApplied = null;
     const user = req.session.user;
     const productId = req.body.productId;
     const product = await Product.findById(productId);
@@ -385,7 +385,7 @@ const setCart = async (req, res, next) => {
 const removeFromCart = async (req, res) => {
   try {
     const user = req.session.user;
-    req.session.couponApplied=null;
+    req.session.couponApplied = null;
     const productId = req.body.productId;
 
     const removeObj = { product: productId };
@@ -483,7 +483,7 @@ const decQuantity = async (req, res) => {
 // get Wishlist Page
 const getWish = async (req, res) => {
   try {
-    req.session.couponApplied=null;
+    req.session.couponApplied = null;
     const user = req.session.user;
     const navCat = await Category.find();
     // console.log(user);
@@ -595,6 +595,7 @@ const checkoutConfirm = async (req, res) => {
         address: mongoose.Types.ObjectId(req.body.address),
         message: req.body.message,
         products: cartProducts.products,
+        discountIsPercent: coupon.isPercent,
         discount: coupon.amount,
         discountCoupon: coupon._id,
         total: cartProducts.total,
@@ -639,8 +640,21 @@ const razorOrderGenerate = async (req, res) => {
       key_id: process.env.RAZOR_KEY_ID,
       key_secret: process.env.RAZOR_KEY_SECRET,
     });
+    var amount;
+    if(newOrder.discount){
+      if(newOrder.discountIsPercent){
+        amount = ((newOrder.total*(1-(newOrder.discount/100)))+50) * 100
+        console.log("1..",amount);
+      }else{
+        amount = (newOrder.total - newOrder.discount + 50) * 100
+        console.log("2..",amount);
+      }
+    }else{
+      amount = (newOrder.total + 50) * 100
+      console.log("3..",amount);
+    }
     var options = {
-      amount: (newOrder.total + 50) * 100, // amount in the smallest currency unit
+      amount, 
       currency: 'INR',
       receipt: 'order_rcptid_11',
     };
@@ -667,20 +681,14 @@ const getOrderSuccess = async (req, res) => {
   console.log(req.session.newOrder);
   const newOrder = req.session.newOrder;
   const navCat = await Category.find();
-  // const orders = await Order.find({ userId: user._id })
-  //   .populate('address')
-  //   .select({ 'products._id': 0, _id: 0, userId: 0, 'address.userId': 0, 'address._id': 0 });
-  // console.log(orders);
   const order = await Order.create(newOrder);
   const order_address = await Address.populate(order, { path: 'address' });
-  if(order.discountCoupon){
-    let coupon=await Coupon.findOne({_id:order.discountCoupon});
-    // if(coupon.isPercent) {
-    //   var discountPercent = coupon.amount;
-    // }
+  if (order.discountCoupon) {
+    let coupon = await Coupon.findOne({ _id: order.discountCoupon });
+    var isPercent = coupon.isPercent;
     var discountAmt = coupon.amount;
   }
-  res.render('user/order_success', { user, order: order_address, navCat,discountAmt });
+  res.render('user/order_success', { user, order: order_address, navCat, discountAmt ,isPercent });
 };
 
 // get Tracking Page
@@ -930,8 +938,9 @@ const checkCoupon = async (req, res) => {
       req.session.couponApplied = coupon._id;
       return res.json({
         checkstatus: 'success',
+        discountIsPercent: coupon.isPercent,
         discount: coupon.amount,
-        discountedAmount: cart.total - coupon.amount,
+        discountedTotal: cart.total,
         message: 'Coupon Successfully added',
       });
     }
