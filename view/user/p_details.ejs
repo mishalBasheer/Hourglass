@@ -1,549 +1,600 @@
-
 <%- include('partials/header.ejs') %>
- 
- <!-- breadcrumb start-->
-  <!-- <section class="breadcrumb breadcrumb_bg">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-lg-8">
-          <div class="breadcrumb_iner">
-            <div class="breadcrumb_iner_item">
-              <h2>Product Details</h2>
-              <p>Home <span>-</span> Product Details</p>
+
+<!--================Single Product Area =================-->
+<div class="product_image_area section_padding">
+  <div class="container">
+    <div class="row s_product_inner justify-content-between">
+      <div class="col-lg-7 col-xl-7">
+        <div class="product_slider_img">
+          <div id="vertical">
+            <div id="sample" data-thumb="/product_img/<%= product.thumbnail %>">
+              <img
+                src="/product_img/<%= product.thumbnail %>"
+              />
             </div>
+            <% product.images.forEach((element,index) => { %>
+            <div data-thumb="/product_img/<%= element %>">
+              <img
+                src="/product_img/<%= element %>"
+              />
+            </div>
+            <% }) %>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-5 col-xl-4">
+        <div class="s_product_text">
+          <h5>previous <span>|</span> next</h5>
+          <h3><%= product.title %></h3>
+          <h2>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-currency-rupee"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M4 3.06h2.726c1.22 0 2.12.575 2.325 1.724H4v1.051h5.051C8.855 7.001 8 7.558 6.788 7.558H4v1.317L8.437 14h2.11L6.095 8.884h.855c2.316-.018 3.465-1.476 3.688-3.049H12V4.784h-1.345c-.08-.778-.357-1.335-.793-1.732H12V2H4v1.06Z"
+              /></svg
+            ><%= product.price %>
+          </h2>
+          <ul class="list">
+            <li>
+              <a class="active" href="#"> <span>Category</span> : <%= product.category.title %></a>
+            </li>
+            <li>
+              <a href="#"> <span>Availibility</span> : In Stock</a>
+            </li>
+          </ul>
+          <p><%= product.description %></p>
+          <div class="card_area d-flex justify-content-between align-items-center">
+            <div class="product_count">
+              <span class="inumber-decrement"> <i class="ti-minus"></i></span>
+              <input class="input-number" type="text" value="1" min="0" max="10" />
+              <span class="number-increment"> <i class="ti-plus"></i></span>
+            </div>
+            <a onclick="cartAdd('<%= product._id %>')" class="btn_3">add to cart</a>
+            <!-- <a href="/wishlist" class="like_us"> <i class="ti-heart"></i> </a> -->
+            <% if (user) { %> <% if (wishlisted) { %>
+            <a href="/remove-from-wishlist/<%= product._id %>"
+              ><i
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-heart-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"
+                  /></svg></i
+            ></a>
+            <% }else{ %>
+            <a href="/add-to-wishlist/<%= product._id %>"
+              ><i
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-heart"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"
+                  /></svg></i
+            ></a>
+            <% } %> <% }else{ %>
+            <a href="/add-to-wishlist/<%= product._id %>"
+              ><i
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-heart"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"
+                  /></svg></i
+            ></a>
+            <% } %>
           </div>
         </div>
       </div>
     </div>
-  </section> -->
-  <!-- breadcrumb start-->
-  <!--================End Home Banner Area =================-->
+  </div>
+</div>
+<!--================End Single Product Area =================-->
 
-  <!--================Single Product Area =================-->
-  <div class="product_image_area section_padding">
-    <div class="container">
-      <div class="row s_product_inner justify-content-between">
-        
-        <div class="col-lg-7 col-xl-7">
-          <div class="product_slider_img">
-            <div id="vertical">
-              <div data-thumb="/product_img/<%= product.thumbnail %>">
-                <img src="/product_img/<%= product.thumbnail %>" />
-              </div>
-              <% product.images.forEach(element => { %>
-                <div data-thumb="/product_img/<%= element %>">
-                  <img src="/product_img/<%= element %>" />
+<!--================Product Description Area =================-->
+<section class="product_description_area">
+  <div class="container">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          id="home-tab"
+          data-toggle="tab"
+          href="#home"
+          role="tab"
+          aria-controls="home"
+          aria-selected="true"
+          >Description</a
+        >
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          id="profile-tab"
+          data-toggle="tab"
+          href="#profile"
+          role="tab"
+          aria-controls="profile"
+          aria-selected="false"
+          >Specification</a
+        >
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          id="contact-tab"
+          data-toggle="tab"
+          href="#contact"
+          role="tab"
+          aria-controls="contact"
+          aria-selected="false"
+          >Comments</a
+        >
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link active"
+          id="review-tab"
+          data-toggle="tab"
+          href="#review"
+          role="tab"
+          aria-controls="review"
+          aria-selected="false"
+          >Reviews</a
+        >
+      </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+      <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
+        <p><%= product.brand.description %></p>
+        <br /><br />
+        <p>
+          It is often frustrating to attempt to plan meals that are designed for one. Despite this fact, we are seeing
+          more and more recipe books and Internet websites that are dedicated to the act of cooking for one. Divorce and
+          the death of spouses or grown children leaving for college are all reasons that someone accustomed to cooking
+          for more than one would suddenly need to learn how to adjust all the cooking practices utilized before into a
+          streamlined plan of cooking that is more efficient for one person creating less
+        </p>
+      </div>
+      <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+        <div class="table-responsive">
+          <table class="table">
+            <tbody>
+              <tr>
+                <td>
+                  <h5>Width</h5>
+                </td>
+                <td>
+                  <h5><%= product.width %> inch</h5>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <h5>Height</h5>
+                </td>
+                <td>
+                  <h5><%= product.height %> inch</h5>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <h5>Depth</h5>
+                </td>
+                <td>
+                  <h5><%= product.breadth %> inch</h5>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <h5>Weight</h5>
+                </td>
+                <td>
+                  <h5><%= product.weight %> kg</h5>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <h5>Quality checking</h5>
+                </td>
+                <td>
+                  <h5>yes</h5>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <h5>Warranty</h5>
+                </td>
+                <td>
+                  <h5><%= product.warranty %> months</h5>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <h5>Material</h5>
+                </td>
+                <td>
+                  <h5><%= product.material %></h5>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="comment_list">
+              <div class="review_item">
+                <div class="media">
+                  <div class="d-flex">
+                    <img src="/user/img/product/single-product/review-1.png" alt="" />
+                  </div>
+                  <div class="media-body">
+                    <h4>Blake Ruiz</h4>
+                    <h5>12th Feb, 2017 at 05:56 pm</h5>
+                    <a class="reply_btn" href="#">Reply</a>
+                  </div>
                 </div>
-              <% }) %>
-                
-
-              <!-- <div data-thumb="/user/img/product/single-product/product_1.png">
-                <img src="/user/img/product/single-product/product_1.png" />
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
+                  et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                  aliquip ex ea commodo
+                </p>
               </div>
-              <div data-thumb="/user/img/product/single-product/product_1.png">
-                <img src="/user/img/product/single-product/product_1.png" />
-              </div> -->
+              <div class="review_item reply">
+                <div class="media">
+                  <div class="d-flex">
+                    <img src="/user/img/product/single-product/review-2.png" alt="" />
+                  </div>
+                  <div class="media-body">
+                    <h4>Blake Ruiz</h4>
+                    <h5>12th Feb, 2017 at 05:56 pm</h5>
+                    <a class="reply_btn" href="#">Reply</a>
+                  </div>
+                </div>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
+                  et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                  aliquip ex ea commodo
+                </p>
+              </div>
+              <div class="review_item">
+                <div class="media">
+                  <div class="d-flex">
+                    <img src="/user/img/product/single-product/review-3.png" alt="" />
+                  </div>
+                  <div class="media-body">
+                    <h4>Blake Ruiz</h4>
+                    <h5>12th Feb, 2017 at 05:56 pm</h5>
+                    <a class="reply_btn" href="#">Reply</a>
+                  </div>
+                </div>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
+                  et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                  aliquip ex ea commodo
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="review_box">
+              <h4>Post a comment</h4>
+              <form
+                class="row contact_form"
+                action="contact_process.php"
+                method="post"
+                id="contactForm"
+                novalidate="novalidate"
+              >
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Your Full name" />
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Email Address" />
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <input type="text" class="form-control" id="number" name="number" placeholder="Phone Number" />
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <textarea
+                      class="form-control"
+                      name="message"
+                      id="message"
+                      rows="1"
+                      placeholder="Message"
+                    ></textarea>
+                  </div>
+                </div>
+                <div class="col-md-12 text-right">
+                  <button type="submit" value="submit" class="btn_3">Submit Now</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
-
-        <div class="col-lg-5 col-xl-4">
-          <div class="s_product_text">
-            <h5>previous <span>|</span> next</h5>
-            <h3><%= product.title %> </h3>
-            <h2><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-currency-rupee" viewBox="0 0 16 16">
-              <path d="M4 3.06h2.726c1.22 0 2.12.575 2.325 1.724H4v1.051h5.051C8.855 7.001 8 7.558 6.788 7.558H4v1.317L8.437 14h2.11L6.095 8.884h.855c2.316-.018 3.465-1.476 3.688-3.049H12V4.784h-1.345c-.08-.778-.357-1.335-.793-1.732H12V2H4v1.06Z"/>
-          </svg><%= product.price %> </h2>
-            <ul class="list">
-              <li>
-                <a class="active" href="#">
-                  <span>Category</span> : <%= product.category.title %></a>
-              </li>
-              <li>
-                <a href="#"> <span>Availibility</span> : In Stock</a>
-              </li>
-            </ul>
-            <p>
-              <%= product.description %>
-            </p>
-            <div class="card_area d-flex justify-content-between align-items-center">
-              <div class="product_count">
-                <span class="inumber-decrement"> <i class="ti-minus"></i></span>
-                <input class="input-number" type="text" value="1" min="0" max="10">
-                <span class="number-increment"> <i class="ti-plus"></i></span>
+      </div>
+      <div class="tab-pane fade show active" id="review" role="tabpanel" aria-labelledby="review-tab">
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="row total_rate">
+              <div class="col-6">
+                <div class="box_total">
+                  <h5>Overall</h5>
+                  <h4>4.0</h4>
+                  <h6>(03 Reviews)</h6>
+                </div>
               </div>
-              <a onclick="cartAdd('<%= product._id %>')" class="btn_3">add to cart</a>
-              <!-- <a href="/wishlist" class="like_us"> <i class="ti-heart"></i> </a> -->
-              <% if (user) { %>
-
-                <% if (wishlisted) {  %>
-                    <a href="/remove-from-wishlist/<%= product._id %>"><i><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
-                    </svg></i></a>
-                <% }else{ %>
-                <a href="/add-to-wishlist/<%= product._id %>"><i><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-                </svg></i></a>
-                <% } %>
-            <% }else{ %>
-                <a href="/add-to-wishlist/<%= product._id %>"><i><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-                  </svg></i></a>
-            <% } %>
+              <div class="col-6">
+                <div class="rating_list">
+                  <h3>Based on 3 Reviews</h3>
+                  <ul class="list">
+                    <li>
+                      <a href="#"
+                        >5 Star
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i> 01</a
+                      >
+                    </li>
+                    <li>
+                      <a href="#"
+                        >4 Star
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i> 01</a
+                      >
+                    </li>
+                    <li>
+                      <a href="#"
+                        >3 Star
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i> 01</a
+                      >
+                    </li>
+                    <li>
+                      <a href="#"
+                        >2 Star
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i> 01</a
+                      >
+                    </li>
+                    <li>
+                      <a href="#"
+                        >1 Star
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i> 01</a
+                      >
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="review_list">
+              <div class="review_item">
+                <div class="media">
+                  <div class="d-flex">
+                    <img src="/user/img/product/single-product/review-1.png" alt="" />
+                  </div>
+                  <div class="media-body">
+                    <h4>Blake Ruiz</h4>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                  </div>
+                </div>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
+                  et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                  aliquip ex ea commodo
+                </p>
+              </div>
+              <div class="review_item">
+                <div class="media">
+                  <div class="d-flex">
+                    <img src="/user/img/product/single-product/review-2.png" alt="" />
+                  </div>
+                  <div class="media-body">
+                    <h4>Blake Ruiz</h4>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                  </div>
+                </div>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
+                  et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                  aliquip ex ea commodo
+                </p>
+              </div>
+              <div class="review_item">
+                <div class="media">
+                  <div class="d-flex">
+                    <img src="/user/img/product/single-product/review-3.png" alt="" />
+                  </div>
+                  <div class="media-body">
+                    <h4>Blake Ruiz</h4>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                  </div>
+                </div>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
+                  et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                  aliquip ex ea commodo
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="review_box">
+              <h4>Add a Review</h4>
+              <p>Your Rating:</p>
+              <ul class="list">
+                <li>
+                  <a href="#">
+                    <i class="fa fa-star"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <i class="fa fa-star"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <i class="fa fa-star"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <i class="fa fa-star"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <i class="fa fa-star"></i>
+                  </a>
+                </li>
+              </ul>
+              <p>Outstanding</p>
+              <form class="row contact_form" action="contact_process.php" method="post" novalidate="novalidate">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <input type="text" class="form-control" name="name" placeholder="Your Full name" />
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <input type="email" class="form-control" name="email" placeholder="Email Address" />
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <input type="text" class="form-control" name="number" placeholder="Phone Number" />
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <textarea class="form-control" name="message" rows="1" placeholder="Review"></textarea>
+                  </div>
+                </div>
+                <div class="col-md-12 text-right">
+                  <button type="submit" value="submit" class="btn_3">Submit Now</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <!--================End Single Product Area =================-->
+</section>
+<!--================End Product Description Area =================-->
 
-  <!--================Product Description Area =================-->
-  <section class="product_description_area">
-    <div class="container">
-      <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item">
-          <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
-            aria-selected="true">Description</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
-            aria-selected="false">Specification</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
-            aria-selected="false">Comments</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review"
-            aria-selected="false">Reviews</a>
-        </li>
-      </ul>
-      <div class="tab-content" id="myTabContent">
-        <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
-          <p>
-            <%= product.brand.description %>
-          </p><br><br>
-          <p>
-            It is often frustrating to attempt to plan meals that are designed
-            for one. Despite this fact, we are seeing more and more recipe
-            books and Internet websites that are dedicated to the act of
-            cooking for one. Divorce and the death of spouses or grown
-            children leaving for college are all reasons that someone
-            accustomed to cooking for more than one would suddenly need to
-            learn how to adjust all the cooking practices utilized before into
-            a streamlined plan of cooking that is more efficient for one
-            person creating less
-          </p>
+<!-- product_list part start-->
+<section class="product_list best_seller">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-12">
+        <div class="section_tittle text-center">
+          <h2>Best Sellers <span>shop</span></h2>
         </div>
-        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-          <div class="table-responsive">
-            <table class="table">
-              <tbody>
-                <tr>
-                  <td>
-                    <h5>Width</h5>
-                  </td>
-                  <td>
-                    <h5><%= product.width %> inch</h5>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <h5>Height</h5>
-                  </td>
-                  <td>
-                    <h5><%= product.height %> inch</h5>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <h5>Depth</h5>
-                  </td>
-                  <td>
-                    <h5><%= product.breadth %> inch</h5>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <h5>Weight</h5>
-                  </td>
-                  <td>
-                    <h5><%= product.weight %> kg</h5>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <h5>Quality checking</h5>
-                  </td>
-                  <td>
-                    <h5>yes</h5>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <h5>Warranty</h5>
-                  </td>
-                  <td>
-                    <h5><%= product.warranty %> months</h5>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <h5>Material</h5>
-                  </td>
-                  <td>
-                    <h5><%= product.material %></h5>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-          <div class="row">
-            <div class="col-lg-6">
-              <div class="comment_list">
-                <div class="review_item">
-                  <div class="media">
-                    <div class="d-flex">
-                      <img src="/user/img/product/single-product/review-1.png" alt="" />
-                    </div>
-                    <div class="media-body">
-                      <h4>Blake Ruiz</h4>
-                      <h5>12th Feb, 2017 at 05:56 pm</h5>
-                      <a class="reply_btn" href="#">Reply</a>
-                    </div>
-                  </div>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo
-                  </p>
-                </div>
-                <div class="review_item reply">
-                  <div class="media">
-                    <div class="d-flex">
-                      <img src="/user/img/product/single-product/review-2.png" alt="" />
-                    </div>
-                    <div class="media-body">
-                      <h4>Blake Ruiz</h4>
-                      <h5>12th Feb, 2017 at 05:56 pm</h5>
-                      <a class="reply_btn" href="#">Reply</a>
-                    </div>
-                  </div>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo
-                  </p>
-                </div>
-                <div class="review_item">
-                  <div class="media">
-                    <div class="d-flex">
-                      <img src="/user/img/product/single-product/review-3.png" alt="" />
-                    </div>
-                    <div class="media-body">
-                      <h4>Blake Ruiz</h4>
-                      <h5>12th Feb, 2017 at 05:56 pm</h5>
-                      <a class="reply_btn" href="#">Reply</a>
-                    </div>
-                  </div>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <div class="review_box">
-                <h4>Post a comment</h4>
-                <form class="row contact_form" action="contact_process.php" method="post" id="contactForm"
-                  novalidate="novalidate">
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <input type="text" class="form-control" id="name" name="name" placeholder="Your Full name" />
-                    </div>
-                  </div>
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <input type="email" class="form-control" id="email" name="email" placeholder="Email Address" />
-                    </div>
-                  </div>
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <input type="text" class="form-control" id="number" name="number" placeholder="Phone Number" />
-                    </div>
-                  </div>
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <textarea class="form-control" name="message" id="message" rows="1"
-                        placeholder="Message"></textarea>
-                    </div>
-                  </div>
-                  <div class="col-md-12 text-right">
-                    <button type="submit" value="submit" class="btn_3">
-                      Submit Now
-                    </button>
-                  </div>
-                </form>
-              </div>
+      </div>
+    </div>
+    <div class="row align-items-center justify-content-between">
+      <div class="col-lg-12">
+        <div class="best_product_slider owl-carousel">
+          <div class="single_product_item">
+            <img src="/user/img/product/product_1.png" alt="" />
+            <div class="single_product_text">
+              <h4>Quartz Belt Watch</h4>
+              <h3>$150.00</h3>
             </div>
           </div>
-        </div>
-        <div class="tab-pane fade show active" id="review" role="tabpanel" aria-labelledby="review-tab">
-          <div class="row">
-            <div class="col-lg-6">
-              <div class="row total_rate">
-                <div class="col-6">
-                  <div class="box_total">
-                    <h5>Overall</h5>
-                    <h4>4.0</h4>
-                    <h6>(03 Reviews)</h6>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="rating_list">
-                    <h3>Based on 3 Reviews</h3>
-                    <ul class="list">
-                      <li>
-                        <a href="#">5 Star
-                          <i class="fa fa-star"></i>
-                          <i class="fa fa-star"></i>
-                          <i class="fa fa-star"></i>
-                          <i class="fa fa-star"></i>
-                          <i class="fa fa-star"></i> 01</a>
-                      </li>
-                      <li>
-                        <a href="#">4 Star
-                          <i class="fa fa-star"></i>
-                          <i class="fa fa-star"></i>
-                          <i class="fa fa-star"></i>
-                          <i class="fa fa-star"></i>
-                          <i class="fa fa-star"></i> 01</a>
-                      </li>
-                      <li>
-                        <a href="#">3 Star
-                          <i class="fa fa-star"></i>
-                          <i class="fa fa-star"></i>
-                          <i class="fa fa-star"></i>
-                          <i class="fa fa-star"></i>
-                          <i class="fa fa-star"></i> 01</a>
-                      </li>
-                      <li>
-                        <a href="#">2 Star
-                          <i class="fa fa-star"></i>
-                          <i class="fa fa-star"></i>
-                          <i class="fa fa-star"></i>
-                          <i class="fa fa-star"></i>
-                          <i class="fa fa-star"></i> 01</a>
-                      </li>
-                      <li>
-                        <a href="#">1 Star
-                          <i class="fa fa-star"></i>
-                          <i class="fa fa-star"></i>
-                          <i class="fa fa-star"></i>
-                          <i class="fa fa-star"></i>
-                          <i class="fa fa-star"></i> 01</a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="review_list">
-                <div class="review_item">
-                  <div class="media">
-                    <div class="d-flex">
-                      <img src="/user/img/product/single-product/review-1.png" alt="" />
-                    </div>
-                    <div class="media-body">
-                      <h4>Blake Ruiz</h4>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                    </div>
-                  </div>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo
-                  </p>
-                </div>
-                <div class="review_item">
-                  <div class="media">
-                    <div class="d-flex">
-                      <img src="/user/img/product/single-product/review-2.png" alt="" />
-                    </div>
-                    <div class="media-body">
-                      <h4>Blake Ruiz</h4>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                    </div>
-                  </div>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo
-                  </p>
-                </div>
-                <div class="review_item">
-                  <div class="media">
-                    <div class="d-flex">
-                      <img src="/user/img/product/single-product/review-3.png" alt="" />
-                    </div>
-                    <div class="media-body">
-                      <h4>Blake Ruiz</h4>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                    </div>
-                  </div>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo
-                  </p>
-                </div>
-              </div>
+          <div class="single_product_item">
+            <img src="/user/img/product/product_2.png" alt="" />
+            <div class="single_product_text">
+              <h4>Quartz Belt Watch</h4>
+              <h3>$150.00</h3>
             </div>
-            <div class="col-lg-6">
-              <div class="review_box">
-                <h4>Add a Review</h4>
-                <p>Your Rating:</p>
-                <ul class="list">
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-star"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-star"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-star"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-star"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-star"></i>
-                    </a>
-                  </li>
-                </ul>
-                <p>Outstanding</p>
-                <form class="row contact_form" action="contact_process.php" method="post" novalidate="novalidate">
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <input type="text" class="form-control" name="name" placeholder="Your Full name" />
-                    </div>
-                  </div>
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <input type="email" class="form-control" name="email" placeholder="Email Address" />
-                    </div>
-                  </div>
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <input type="text" class="form-control" name="number" placeholder="Phone Number" />
-                    </div>
-                  </div>
-                  <div class="col-md-12">
-                    <div class="form-group">
-                      <textarea class="form-control" name="message" rows="1" placeholder="Review"></textarea>
-                    </div>
-                  </div>
-                  <div class="col-md-12 text-right">
-                    <button type="submit" value="submit" class="btn_3">
-                      Submit Now
-                    </button>
-                  </div>
-                </form>
-              </div>
+          </div>
+          <div class="single_product_item">
+            <img src="/user/img/product/product_3.png" alt="" />
+            <div class="single_product_text">
+              <h4>Quartz Belt Watch</h4>
+              <h3>$150.00</h3>
+            </div>
+          </div>
+          <div class="single_product_item">
+            <img src="/user/img/product/product_4.png" alt="" />
+            <div class="single_product_text">
+              <h4>Quartz Belt Watch</h4>
+              <h3>$150.00</h3>
+            </div>
+          </div>
+          <div class="single_product_item">
+            <img src="/user/img/product/product_5.png" alt="" />
+            <div class="single_product_text">
+              <h4>Quartz Belt Watch</h4>
+              <h3>$150.00</h3>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </section>
-  <!--================End Product Description Area =================-->
-
-  <!-- product_list part start-->
-  <section class="product_list best_seller">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-lg-12">
-          <div class="section_tittle text-center">
-            <h2>Best Sellers <span>shop</span></h2>
-          </div>
-        </div>
-      </div>
-      <div class="row align-items-center justify-content-between">
-        <div class="col-lg-12">
-          <div class="best_product_slider owl-carousel">
-            <div class="single_product_item">
-              <img src="/user/img/product/product_1.png" alt="">
-              <div class="single_product_text">
-                <h4>Quartz Belt Watch</h4>
-                <h3>$150.00</h3>
-              </div>
-            </div>
-            <div class="single_product_item">
-              <img src="/user/img/product/product_2.png" alt="">
-              <div class="single_product_text">
-                <h4>Quartz Belt Watch</h4>
-                <h3>$150.00</h3>
-              </div>
-            </div>
-            <div class="single_product_item">
-              <img src="/user/img/product/product_3.png" alt="">
-              <div class="single_product_text">
-                <h4>Quartz Belt Watch</h4>
-                <h3>$150.00</h3>
-              </div>
-            </div>
-            <div class="single_product_item">
-              <img src="/user/img/product/product_4.png" alt="">
-              <div class="single_product_text">
-                <h4>Quartz Belt Watch</h4>
-                <h3>$150.00</h3>
-              </div>
-            </div>
-            <div class="single_product_item">
-              <img src="/user/img/product/product_5.png" alt="">
-              <div class="single_product_text">
-                <h4>Quartz Belt Watch</h4>
-                <h3>$150.00</h3>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- product_list part end-->
+  </div>
+</section>
+<!-- product_list part end-->
 
 
-
-  <%- include('partials/footer.ejs') %>
+<%- include('partials/footer.ejs') %>

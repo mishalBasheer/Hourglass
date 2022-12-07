@@ -24,24 +24,24 @@ const getUserHome = async (req, res) => {
     // show a success message when successfully logged in
     const msg = req.flash('success');
     // getting logged in user details to "user" variable
-    // const user = req.session.user;
+    const user = req.session.user;
 
     //////////////////////////////////////////remv
-    const user = {
-      block: false,
-      image: 'user_icon.jpg',
-      _id: mongoose.Types.ObjectId('637bea89b921d410e4c72d99'),
-      fname: 'Joules',
-      lname: 'Kounde',
-      mob: 9947227758,
-      email: 'jkounde@gmail.com',
-      password: '$2b$12$dzTVHZOQ425Hn87RRam3ruX.DaSYfC8SkcXEMQmtlGgXGz230fqsG',
-      cartId: mongoose.Types.ObjectId('637bea89b921d410e4c72d95'),
-      wishlistId: mongoose.Types.ObjectId('637bea89b921d410e4c72d97'),
-      __v: 0,
-    };
-    req.session.user = user;
-    req.session.userLogin = true;
+    // const user = {
+    //   block: false,
+    //   image: 'user_icon.jpg',
+    //   _id: mongoose.Types.ObjectId('637bea89b921d410e4c72d99'),
+    //   fname: 'Joules',
+    //   lname: 'Kounde',
+    //   mob: 9947227758,
+    //   email: 'jkounde@gmail.com',
+    //   password: '$2b$12$dzTVHZOQ425Hn87RRam3ruX.DaSYfC8SkcXEMQmtlGgXGz230fqsG',
+    //   cartId: mongoose.Types.ObjectId('637bea89b921d410e4c72d95'),
+    //   wishlistId: mongoose.Types.ObjectId('637bea89b921d410e4c72d97'),
+    //   __v: 0,
+    // };
+    // req.session.user = user;
+    // req.session.userLogin = true;
     /////////////////////////////////////////
     req.session.couponApplied = null;
     const banner = await Banner.find();
