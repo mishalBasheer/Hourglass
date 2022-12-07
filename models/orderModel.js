@@ -50,7 +50,11 @@ const orderSchema = new mongoose.Schema({
     type:String,
     enum:['CONFIRMED','SHIPPED','OUT FOR DELIVERY','DELIVERED','CANCELLED'],
     default:'CONFIRMED',
-  }
+  },
+  discountCoupon:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:'Coupon',
+  },
 });
 
 const Order = mongoose.model('Order', orderSchema);

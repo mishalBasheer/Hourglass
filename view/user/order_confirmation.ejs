@@ -68,7 +68,7 @@
                       <th><span>₹<%= el.subtotal %></span></th>
                     </tr>
                     <% }) %>
-                    <tr>
+                    <tr id="confirmation_subtotal">
                       <th colspan="3">Subtotal</th>
                       <th>₹<%= order.total %></th>
                     </tr>
@@ -78,7 +78,7 @@
                     </tr>
                   </tbody>
                   <tfoot>
-                    <tr>
+                    <tr id="confirmation_total">
                       <th scope="col" colspan="3"></th>
                       <th scope="col">₹<%= order.total+50 %></th>
                     </tr>
@@ -111,6 +111,17 @@
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
+  if ('<%= order.discount %>') {
+    $(`<tr id="confirmation_subtotal">
+                      <th colspan="3">Discount</th>
+                      <th>-₹${'<%= order.discount %>'}</th>
+                    </tr>`).insertAfter(`#confirmation_subtotal`);
+    $(`#confirmation_total`).replaceWith(`<tr id="confirmation_total">
+                      <th colspan="3"></th>
+                      <th>₹${'<%= order.total+50-order.discount %>'}</th>
+                    </tr>`);
+  }
+
   var orderId;
   $(document).ready(function () {
     var settings = {
@@ -143,7 +154,7 @@
       image: 'https://example.com/your_logo',
       order_id: orderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
       handler: function (response) {
-        location.href="/order-success";
+        location.href = '/order-success';
       },
       theme: {
         color: '#3399cc',
@@ -164,7 +175,7 @@
     }
   };
 
-  document.getElementById('cod12').onclick = ()=>{
+  document.getElementById('cod12').onclick = () => {
     $.ajax({
       url: '/order-confirmation',
       method: 'POST',
@@ -175,11 +186,9 @@
       // data: JSON.stringify({
       //   amount: '',
       // }),
-    }).then((response)=>{
-      location.href="/order-success"
-    }
-    )
-  }
-
+    }).then((response) => {
+      location.href = '/order-success';
+    });
+  };
 </script>
 <%- include('partials/footer.ejs') %>

@@ -74,7 +74,7 @@ function quantityInc(id, quantity, index) {
   }
 }
 
-function removeFromCart(id, index,r) {
+function removeFromCart(id, index, r) {
   const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
       confirmButton: 'btn btn-success',
@@ -86,7 +86,7 @@ function removeFromCart(id, index,r) {
   swalWithBootstrapButtons
     .fire({
       title: 'Are you sure?',
-      text: "MOVE TO WISHLIST or Remove from cart",
+      text: 'MOVE TO WISHLIST or Remove from cart',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Remove from cart',
@@ -96,38 +96,35 @@ function removeFromCart(id, index,r) {
     .then((result) => {
       if (result.isConfirmed) {
         axios
-        .post('/remove-from-cart', {
-          productId: id,
-        })
-        .then((result) => {
-          if (result.data.access) {
-            let i = r.parentNode.parentNode.rowIndex;
-            document.getElementById("cartTable").deleteRow(i);
-            // document.getElementById(`cartTable`).deleteRow(`${index}`)
-            cartUpdateRmv();
-        }
-    })
-      swalWithBootstrapButtons.fire('Deleted!', 'Cart product has been removed', 'success');
+          .post('/remove-from-cart', {
+            productId: id,
+          })
+          .then((result) => {
+            if (result.data.access) {
+              let i = r.parentNode.parentNode.rowIndex;
+              document.getElementById('cartTable').deleteRow(i);
+              // document.getElementById(`cartTable`).deleteRow(`${index}`)
+              cartUpdateRmv();
+            }
+          });
+        swalWithBootstrapButtons.fire('Deleted!', 'Cart product has been removed', 'success');
       } else if (
         /* Read more about handling dismissals below */
         result.dismiss === Swal.DismissReason.cancel
       ) {
-
         axios
-        .post('/set-to-wish', {
-          productId: id,
-        })
-        .then((result) => {
-          if (result.data.access) {
-            let i = r.parentNode.parentNode.rowIndex;
-            document.getElementById("cartTable").deleteRow(i);
-            // document.getElementById(`cartTable`).deleteRow(`${index}`)
-            cartUpdateRmv();
-        }
-    })
-  swalWithBootstrapButtons.fire('Cancelled', 'Product is successfully added to wishlist', 'success');
-
-          
+          .post('/set-to-wish', {
+            productId: id,
+          })
+          .then((result) => {
+            if (result.data.access) {
+              let i = r.parentNode.parentNode.rowIndex;
+              document.getElementById('cartTable').deleteRow(i);
+              // document.getElementById(`cartTable`).deleteRow(`${index}`)
+              cartUpdateRmv();
+            }
+          });
+        swalWithBootstrapButtons.fire('Cancelled', 'Product is successfully added to wishlist', 'success');
       }
     });
 }

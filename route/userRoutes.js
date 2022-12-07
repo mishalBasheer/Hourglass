@@ -43,6 +43,7 @@ import {
   getAddress,
   getOrderSuccess,
   razorOrderGenerate,
+  checkCoupon,
 } from '../controllers/user/userController.js';
 import { userLoginCheck, checkBlockedUser } from '../middleware/userLoginCheckMiddleware.js';
 import { axiosUserLoginCheck, axiosCheckBlockedUser } from '../middleware/axiosUserLoginCheck.js';
@@ -92,5 +93,6 @@ router
   .route('/profile/add-address')
   .get(userLoginCheck, checkBlockedUser, getAddAddress)
   .post(userLoginCheck, checkBlockedUser, addressValidator, addAddress);
+  router.route('/check-coupon').post(userLoginCheck, checkBlockedUser,checkCoupon)
 
 export default router;

@@ -35,12 +35,17 @@
               <input
                 type="text"
                 name="coupon"
+                id="coupon_code"
                 placeholder="Enter Your Code Here"
                 onfocus="this.placeholder = ''"
                 onblur="this.placeholder = 'Enter Your Code Here'"
-                class="single-input" style="background-color: white;"
+                class="single-input"
+                style="background-color: white"
               />
-              <a class="genric-btn info radius text-center mt-4">Redeem</a>
+              <!-- <div class="ml-4"> <button type="button" class="close mr-4" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button></div> -->
+              <a class="genric-btn info radius text-center mt-4" id="coupon_redeem">Redeem</a>
             </div>
             <div class="order_box mt-3">
               <h2>Your Order</h2>
@@ -58,22 +63,23 @@
                 <% }) %>
               </ul>
               <ul class="list list_2">
-                <li>
+                <li id="sub_total">
                   <a href="#"
                     >Subtotal
                     <span>₹<%= total %>.00</span>
                   </a>
                 </li>
+              
                 <li>
                   <a href="#"
                     >Shipping
-                    <span>Flat rate: ₹50.00</span>
+                    <span>₹50.00</span>
                   </a>
                 </li>
                 <li>
                   <a href="#"
                     >Total
-                    <span>₹<%= total+50 %>.00</span>
+                    <span id="discounted_total">₹<%= total+50 %>.00</span>
                   </a>
                 </li>
               </ul>
@@ -107,7 +113,7 @@
 
   body {
     color: #263238;
-    font-family: "Poppins", sans-serif;
+    font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 2em 6vw;
   }
@@ -262,25 +268,55 @@
       $(this).parent().find('a').trigger('click');
     });
   }
+  $('#coupon_redeem').on('click', () => {
+    const code = $('#coupon_code').val();
+    $.ajax({
+      url: '/check-coupon',
+      method: 'POST',
+      data: {
+        code,
+      },
+    }).then((response) => {
+      if(response.checkstatus=='success'){
+        $(`<div class="ml-4 py-2">${code}<button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>`).insertAfter("#coupon_code");
 
-  // $('#r12').on('click', function(){
-  //   $(this).parent().find('a').trigger('click')
-  // })
+        $(`<li><a href="#">Discount<span>-₹${response.discount}</span></a></li>`).insertAfter("#sub_total");
+        $('#discounted_total').replaceWith(`<span id="discounted_total">₹${response.discountedAmount+50}.00</span>`)
+      }
+      customAlert(response.message, response.checkstatus);
+    });
+  });
+
   function validate() {
     if (document.querySelector('input[name="address"]:checked') == null) {
-      customAlert('Please select a shipping address.');
+      customAlert('Please select a shipping address.', 'warning');
       return false;
     }
 
     if (!document.checkoutForm.tnc.checked) {
-      customAlert('Please accept terms and conditions.');
+      customAlert('Please accept terms and conditions.', 'warning');
       return false;
     }
 
     return true;
   }
-  function customAlert(message) {
-    Swal.fire(message);
+
+  function customAlert(message, status) {
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 1500,
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer);
+        toast.addEventListener('mouseleave', Swal.resumeTimer);
+      },
+    });
+
+    Toast.fire({
+      icon: status,
+      title: message,
+    });
   }
 </script>
 

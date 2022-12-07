@@ -44,10 +44,20 @@
             />
           </label>
           <label class="block text-sm mt-1">
+            <span class="text-gray-700 dark:text-gray-400">Min Cart Amount</span>
+            <input
+              name="minCartAmount"
+              value="<%= coupon[0].minCartAmount %>"
+              type="number"
+              class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+              required
+            />
+          </label>
+          <label class="block text-sm mt-1">
             <span class="text-gray-700 dark:text-gray-400">Expire After(days)</span>
             <input
               name="expireAfter"
-              value="<%= coupon[0].expireAfter %>"
+              value="<%= (coupon[0].expireAfter.getTime()-coupon[0].createdAt.getTime())/(24 * 60 * 60 * 1000) %>"
               type="number"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
               required

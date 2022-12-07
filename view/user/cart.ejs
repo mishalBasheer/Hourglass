@@ -1,8 +1,7 @@
-  
-    <%- include('partials/header.ejs') %>
-  <!--================Home Banner Area =================-->
-  <!-- breadcrumb start-->
-  <!-- <section class="breadcrumb breadcrumb_bg">
+<%- include('partials/header.ejs') %>
+<!--================Home Banner Area =================-->
+<!-- breadcrumb start-->
+<!-- <section class="breadcrumb breadcrumb_bg">
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-lg-8">
@@ -16,75 +15,98 @@
       </div>
     </div>
   </section> -->
-  <!-- breadcrumb start-->
+<!-- breadcrumb start-->
 
-  <!--================Cart Area =================-->
-  <section class="cart_area padding_top">
-    <div class="container">
-      <div class="cart_inner">
-        <% if (cart.length>0) { %>
+<!--================Cart Area =================-->
+<section class="cart_area padding_top">
+  <div class="container">
+    <div class="cart_inner">
+      <% if (cart.length>0) { %>
 
-        <div class="table-responsive">
-          <table class="table" id="cartTable">
-            <thead>
-              <tr>
-                <th scope="col" style="width: 1px;"></th>
-                <th scope="col">Product</th>
-                <th scope="col">Price</th>
-                <th scope="col" style="width: 100px;">Quantity</th>
-                <th scope="col">Total</th>
-              </tr>
-            </thead>
-            <tbody id="cartTableBody">
-              <% for (let i = 0; i < cart.length; i++) {%>
+      <div class="table-responsive">
+        <table class="table" id="cartTable">
+          <thead>
+            <tr>
+              <th scope="col" style="width: 1px"></th>
+              <th scope="col">Product</th>
+              <th scope="col">Price</th>
+              <th scope="col" style="width: 100px">Quantity</th>
+              <th scope="col">Total</th>
+            </tr>
+          </thead>
+          <tbody id="cartTableBody">
+            <% for (let i = 0; i < cart.length; i++) {%>
 
-              <tr id="qnty<%= i %>">
-                <td><button onclick="removeFromCart('<%= cart[i].product._id %>','<%= i %>',this)" type="button" class="close" aria-label="Close">
+            <tr id="qnty<%= i %>">
+              <td>
+                <button
+                  onclick="removeFromCart('<%= cart[i].product._id %>','<%= i %>',this)"
+                  type="button"
+                  class="close"
+                  aria-label="Close"
+                >
                   <span aria-hidden="true">&times;</span>
-                </button></td>
-                <td>
-                  <div class="media">
-                    <div class="d-flex">
-                      <img src="/product_img/<%= cart[i].product.thumbnail %>" width="147px" />
-                    </div>
-                    <div class="media-body">
-                      <p><%= cart[i].product.title %></p>
-                    </div>
+                </button>
+              </td>
+              <td>
+                <div class="media">
+                  <div class="d-flex">
+                    <img src="/product_img/<%= cart[i].product.thumbnail %>" width="147px" />
                   </div>
-                </td>
-                <td>
-                  <h5>₹ <span class="item-price"><%= cart[i].product.price %></span></h5>
-                </td>
-                <td>
-                  <div class="input-group" style="width: 125px;">
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-dark btn-number" onclick="quantityDec('<%= cart[i].product._id %>','<%= cart[i].quantity %>','<%= i %>')" >
-                          <span>-</span>
-                        </button>
-                    </span>
-                    <input type="number" id="quantity" name="quantity" class="form-control quantity" value="<%= cart[i].quantity %>" min="1" max="10" disabled>
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-dark btn-number" onclick="quantityInc('<%= cart[i].product._id %>','<%= cart[i].quantity %>','<%= i %>')">
-                            <span>+</span>
-                        </button>
-                    </span>
+                  <div class="media-body">
+                    <p><%= cart[i].product.title %></p>
+                  </div>
                 </div>
-                </td>
-                <td>
-                  <h5>₹ <span class="sub-total"></span></h5>
-                </td>
-              </tr>
-              <% } %>
-              <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><h5>Subtotal</h5></td>
-                <td class="sub-total">₹ <span id="total"></span></td>
-              </tr>
+              </td>
+              <td>
+                <h5>₹ <span class="item-price"><%= cart[i].product.price %></span></h5>
+              </td>
+              <td>
+                <div class="input-group" style="width: 125px">
+                  <span class="input-group-btn">
+                    <button
+                      type="button"
+                      class="btn btn-dark btn-number"
+                      onclick="quantityDec('<%= cart[i].product._id %>','<%= cart[i].quantity %>','<%= i %>')"
+                    >
+                      <span>-</span>
+                    </button>
+                  </span>
+                  <input
+                    type="number"
+                    id="quantity"
+                    name="quantity"
+                    class="form-control quantity"
+                    value="<%= cart[i].quantity %>"
+                    min="1"
+                    max="10"
+                    disabled
+                  />
+                  <span class="input-group-btn">
+                    <button
+                      type="button"
+                      class="btn btn-dark btn-number"
+                      onclick="quantityInc('<%= cart[i].product._id %>','<%= cart[i].quantity %>','<%= i %>')"
+                    >
+                      <span>+</span>
+                    </button>
+                  </span>
+                </div>
+              </td>
+              <td>
+                <h5>₹ <span class="sub-total"></span></h5>
+              </td>
+            </tr>
+            <% } %>
+            <!-- <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><h5>Subtotal</h5></td>
+              <td class="sub-total">₹ <span id="total"></span></td>
+            </tr> -->
 
-
-              <!-- <tr class="shipping_area">
+            <!-- <tr class="shipping_area">
                 <td></td>
                 <td></td>
                 <td></td>
@@ -125,138 +147,161 @@
                   </div>
                 </td>
               </tr> -->
-            </tbody>
-          </table>
-          <!-- <div style="text-align: right;">
+          </tbody>
+        </table>
+        <!-- Dont try to move this to table row 
+        try that only after correcting index in functions -->
+        <div style="text-align: right;">
             <h5>Subtotal: ₹ <span id="total"></span></h5>
-
-          </div> -->
-          <div class="checkout_btn_inner float-right">
-            <a class="btn_1" href="/shop">Continue Shopping</a>
-            <a class="btn_1 checkout_btn_1" href="/checkout">Proceed to checkout</a>
           </div>
+        <div class="checkout_btn_inner float-right">
+          <a class="btn_1" href="/shop">Continue Shopping</a>
+          <a class="btn_1 checkout_btn_1" href="/checkout">Proceed to checkout</a>
         </div>
- 
-        <% }else{ %>
-          <div class="alert alert-warning d-flex align-items-center" role="alert">
-              <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Warning:"></svg>
-              <div>You have not added anything to Cart</div>
-          </div>
-      <% }%>
       </div>
-  </section>
-  <!--================End Cart Area =================-->
 
+      <% }else{ %>
+      <div class="alert alert-warning d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Warning:"></svg>
+        <div>You have not added anything to Cart</div>
+      </div>
+      <% }%>
+    </div>
+  </div>
+</section>
+<!--================End Cart Area =================-->
 
- 
-  <script defer>
-    cartUpdate();
-    function cartUpdate(){
-      let sum=0;
-      for(let i=0;i<'<%=cart.length%>';i++){
-        let itemPrice = Number(document.querySelector(`#qnty${i} .item-price`).innerHTML);
-        let itemQuantity = Number(document.querySelector(`#qnty${i} #quantity`).value);
-        let subTotal = itemPrice*itemQuantity;
-        document.querySelector(`#qnty${i} .sub-total`).innerHTML=subTotal;
-        sum=sum+subTotal;
-      }
-      document.querySelector(`#total`).innerHTML=sum;
+<script defer>
+  cartUpdate();
+  function cartUpdate() {
+    let sum = Number(0);
+    for (let i = 0; i < '<%=cart.length%>'; i++) {
+      let itemPrice = Number(document.querySelector(`#qnty${i} .item-price`).innerHTML);
+      let itemQuantity = Number(document.querySelector(`#qnty${i} #quantity`).value);
+      let subTotal = itemPrice * itemQuantity;
+      document.querySelector(`#qnty${i} .sub-total`).innerHTML = subTotal;
+      sum = sum + subTotal;
     }
+    document.querySelector(`#total`).innerHTML = Number(sum);
+  }
 
-    function cartUpdateRmv(){
-      let sum = Number(0);
-      $('#cartTableBody tr').each(function(){
-
-
-      let itemPrice =Number($(this).find('.item-price').text());
+  function cartUpdateRmv() {
+    let sum = Number(0);
+    $('#cartTableBody tr').each(function () {
+      let itemPrice = Number($(this).find('.item-price').text());
       let itemQuantity = Number($(this).find('#quantity').val());
-      console.log(itemPrice,itemQuantity)
-      let subTotal = Number(itemPrice*itemQuantity);
-      console.log(subTotal)
+      console.log(itemPrice, itemQuantity);
+      let subTotal = Number(itemPrice * itemQuantity);
+      console.log(subTotal);
       $(this).find('.sub-total').text(subTotal);
-      
-      sum=sum+Number(subTotal);
 
-  })
-  document.querySelector(`#total`).innerHTML=Number(sum);
-    }
-      
+      sum = sum + Number(subTotal);
+    });
+    document.querySelector(`#total`).innerHTML = Number(sum);
+  }
 
-//     function quantityDec(id,quantity,index){
-//       if(!(document.querySelector(`#qnty${index} #quantity`).value)){
-//         document.querySelector(`#qnty${index} #quantity`).value=Number(quantity)
-//       }
-      
-//       if((document.querySelector(`#qnty${index} #quantity`).value)>1){
-//       axios.post('/cart/dec-quantity',{
-//         productId:id,
-//       }).then((result)=>{
-//         if(result.data.stat){
-//           let count = Number(document.querySelector(`#qnty${index} #quantity`).value);
-//           count--;
-//           document.querySelector(`#qnty${index} #quantity`).value = count;
-//         }
-//         cartUpdate()
-//       }).catch((err)=>{
-//         console.log({"error":err});
-//       })
-//     }}
+  function quantityDec(id, quantity, index) {
+  if (!document.querySelector(`#qnty${index} #quantity`).value) {
+    document.querySelector(`#qnty${index} #quantity`).value = Number(quantity);
+  }
 
-//     function quantityInc(id,quantity,index){
-//       if(!(document.querySelector(`#qnty${index} #quantity`).value)){
-//         document.querySelector(`#qnty${index} #quantity`).value=Number(quantity)
-//       }
-//       if((document.querySelector(`#qnty${index} #quantity`).value)<10){
-//         axios.post('/cart/inc-quantity',{
-//           productId:id,
-//         }).then((result)=>{
-//           if(result.data.stat){
-//             let count =Number(document.querySelector(`#qnty${index} #quantity`).value)
-//             count ++;
-//             document.querySelector(`#qnty${index} #quantity`).value=count;
-//           }
-//           cartUpdate();
-//         }).catch((err)=>{
-//           console.log({"error":err});
-//         })
-//       }
-//     }
-//     function removeFromCart(id,index){
-//       const swalWithBootstrapButtons = Swal.mixin({
-//   customClass: {
-//     confirmButton: 'btn btn-success',
-//     cancelButton: 'btn btn-danger'
-//   },
-//   buttonsStyling: false
-// })
+  if (document.querySelector(`#qnty${index} #quantity`).value > 1) {
+    axios
+      .post('/cart/dec-quantity', {
+        productId: id,
+      })
+      .then((result) => {
+        if (result.data.stat) {
+          let count = Number(document.querySelector(`#qnty${index} #quantity`).value);
+          count--;
+          document.querySelector(`#qnty${index} #quantity`).value = count;
+        }
+        cartUpdate();
+      })
+      .catch((err) => {
+        console.log({ error: err });
+      });
+  }
+}
 
-// swalWithBootstrapButtons.fire({
-//   title: 'Are you sure?',
-//   text: "You won't be able to revert this!",
-//   icon: 'warning',
-//   showCancelButton: true,
-//   confirmButtonText: 'Yes, delete it!',
-//   cancelButtonText: 'No, cancel!',
-//   reverseButtons: true
-// }).then((result) => {
-//   if (result.isConfirmed) {
-//     swalWithBootstrapButtons.fire(
-//       'Deleted!',
-//       'Your file has been deleted.',
-//       'success'
-//     )
-//   } else if (
-//     /* Read more about handling dismissals below */
-//     result.dismiss === Swal.DismissReason.cancel
-//   ) {
-//     swalWithBootstrapButtons.fire(
-//       'Cancelled',
-//       'Your imaginary file is safe :)',
-//       'error'
-//     )
-//   }
-// })
-//     }
+function quantityInc(id, quantity, index) {
+  if (!document.querySelector(`#qnty${index} #quantity`).value) {
+    document.querySelector(`#qnty${index} #quantity`).value = Number(quantity);
+  }
+  if (document.querySelector(`#qnty${index} #quantity`).value < 10) {
+    axios
+      .post('/cart/inc-quantity', {
+        productId: id,
+      })
+      .then((result) => {
+        if (result.data.stat) {
+          let count = Number(document.querySelector(`#qnty${index} #quantity`).value);
+          count++;
+          document.querySelector(`#qnty${index} #quantity`).value = count;
+        }
+        cartUpdateRmv();
+      })
+      .catch((err) => {
+        console.log({ error: err });
+      });
+  }
+}
+
+function removeFromCart(id, index, r) {
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: 'btn btn-success',
+      cancelButton: 'btn btn-danger',
+    },
+    buttonsStyling: true,
+  });
+
+  swalWithBootstrapButtons
+    .fire({
+      title: 'Are you sure?',
+      text: 'MOVE TO WISHLIST or Remove from cart',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Remove from cart',
+      cancelButtonText: 'Move to Wishlist',
+      reverseButtons: true,
+    })
+    .then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .post('/remove-from-cart', {
+            productId: id,
+          })
+          .then((result) => {
+            if (result.data.access) {
+              let i = r.parentNode.parentNode.rowIndex;
+              document.getElementById('cartTable').deleteRow(i);
+              // document.getElementById(`cartTable`).deleteRow(`${index}`)
+              cartUpdateRmv();
+            }
+          });
+        swalWithBootstrapButtons.fire('Deleted!', 'Cart product has been removed', 'success');
+      } else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        axios
+          .post('/set-to-wish', {
+            productId: id,
+          })
+          .then((result) => {
+            if (result.data.access) {
+              let i = r.parentNode.parentNode.rowIndex;
+              document.getElementById('cartTable').deleteRow(i);
+              // document.getElementById(`cartTable`).deleteRow(`${index}`)
+              cartUpdateRmv();
+            }
+          });
+        swalWithBootstrapButtons.fire('Cancelled', 'Product is successfully added to wishlist', 'success');
+      }
+    });
+}
+ 
 </script>
 
-  <%- include('partials/footer.ejs') %>
+<%- include('partials/footer.ejs') %>

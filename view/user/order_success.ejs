@@ -78,7 +78,7 @@
                 </tr>
  
                 <% }) %>
-                <tr>
+                <tr id="success_subtotal">
                   <th colspan="3">Subtotal</th>
                   <th> ₹<%= order.total %>.00</th>
                 </tr>
@@ -88,7 +88,7 @@
                 </tr>
               </tbody>
               <tfoot>
-                <tr>
+                <tr id="success_total">
                   <th scope="col" colspan="3"></th>
                   <th scope="col"> ₹<%= order.total+50 %>.00</th>
                 </tr>
@@ -99,5 +99,17 @@
       </div>
     </div>
   </section>
+  <script>
+    if ('<%= discountAmt %>') {
+      $(`<tr>
+                  <th colspan="3">Discount</th>
+                  <th>-₹${'<%= discountAmt %>'}.00</th>
+                </tr>`).insertAfter(`#success_subtotal`);
+    $(`#success_total`).replaceWith(`<tr id="success_total">
+                  <th scope="col" colspan="3"></th>
+                  <th scope="col"> ₹${'<%= order.total+50-discountAmt %>'}.00</th>
+                </tr>`);
+    }
+  </script>
 
 <%- include('partials/footer.ejs') %>

@@ -22,12 +22,15 @@ const couponSchema = new mongoose.Schema({
   usageLimit: {
     type: Number,
   },
-  userUsed:[
-    {
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'User'
-    }
-  ]
+  minCartAmount: {
+    type: Number,
+  },
+  userUsed: [{
+      userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    }],
 });
 
 const Coupon = mongoose.model('Coupon', couponSchema);

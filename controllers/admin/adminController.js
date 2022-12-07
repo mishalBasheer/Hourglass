@@ -646,6 +646,7 @@ const getAddCoupon = (req, res) => {
 const getEditCoupon = async (req, res) => {
   const couponId = req.params.id;
   req.session.pageIn = 'coupon';
+  
   const coupon = await Coupon.find({ _id: mongoose.Types.ObjectId(couponId) });
   // console.log(brand);
   res.render('admin/edit_coupon', {
@@ -664,10 +665,13 @@ const getEditCoupon = async (req, res) => {
 };
 const editCoupon = async (req, res) => {
   try {
-      const couponInfo = req.body;
-      await Coupon.findByIdAndUpdate(req.params.id,couponInfo);
-      res.redirect('/admin/coupon');
-
+    const { code, isPercent, amount, usageLimit, minCartAmount } = req.body;
+    const createdAt = new Date();
+    let expireAfter = createdAt.getTime() + req.body.expireAfter * 24 * 60 * 60 * 1000;
+    expireAfter = new Date(expireAfter);
+    const coupon = { code, isPercent, amount, usageLimit, expireAfter, createdAt, minCartAmount };
+    await Coupon.findByIdAndUpdate(req.params.id, coupon);
+    res.redirect('/admin/coupon');
   } catch (err) {
     res.status(400).json({
       status: 'error while editing coupon',
@@ -675,16 +679,16 @@ const editCoupon = async (req, res) => {
     });
   }
 };
+
 const addCoupon = async (req, res) => {
   try {
-  console.log(req.body);
-  const { code, isPercent, amount, usageLimit } = req.body;
-  const createdAt = new Date();
-  let expireAfter = createdAt.getTime() + (req.body.expireAfter * 24 * 60 * 60 * 1000);
-  expireAfter = new Date(expireAfter);
-  const coupon = { code, isPercent, amount, usageLimit, expireAfter, createdAt };
-  await Coupon.create(coupon);
-  res.redirect('/admin/coupon');
+    const { code, isPercent, amount, usageLimit, minCartAmount } = req.body;
+    const createdAt = new Date();
+    let expireAfter = createdAt.getTime() + req.body.expireAfter * 24 * 60 * 60 * 1000;
+    expireAfter = new Date(expireAfter);
+    const coupon = { code, isPercent, amount, usageLimit, expireAfter, createdAt, minCartAmount };
+    await Coupon.create(coupon);
+    res.redirect('/admin/coupon');
   } catch (err) {
     res.status(400).json({
       status: 'error while adding coupon',
@@ -693,20 +697,19 @@ const addCoupon = async (req, res) => {
   }
 };
 
-const deleteCoupon = async(req,res)=>{
-  try{
+const deleteCoupon = async (req, res) => {
+  try {
     console.log(req.body);
     await Coupon.findByIdAndDelete(req.body.couponId);
     res.json({
-      delete:'success'
-    })
-  }catch(err){
+      delete: 'success',
+    });
+  } catch (err) {
     res.json({
-      delete:'failed'
-    })
+      delete: 'failed',
+    });
   }
-
-}
+};
 
 const adminLogout = async (req, res) => {
   req.session.adminLogIn = false;

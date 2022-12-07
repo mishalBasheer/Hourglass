@@ -9,6 +9,7 @@ import Product from '../../models/productModel.js';
 import Cart from '../../models/cartModel.js';
 import Wishlist from '../../models/wishlistModel.js';
 import Banner from '../../models/bannerModel.js';
+import Coupon from '../../models/couponModel.js';
 import Order from '../../models/orderModel.js';
 import Razorpay from 'razorpay';
 
@@ -19,12 +20,12 @@ const client = twilio(accountSid, authToken);
 
 // get user Home Page
 const getUserHome = async (req, res) => {
-  try{
+  try {
     // show a success message when successfully logged in
     const msg = req.flash('success');
     // getting logged in user details to "user" variable
     // const user = req.session.user;
-  
+
     //////////////////////////////////////////remv
     const user = {
       block: false,
@@ -42,81 +43,72 @@ const getUserHome = async (req, res) => {
     req.session.user = user;
     req.session.userLogin = true;
     /////////////////////////////////////////
-  
+    req.session.couponApplied=null;
     const banner = await Banner.find();
     const navCat = await Category.find();
     console.log(banner);
     res.render('user/home', { msg, user, banner, navCat, navCat });
-  }catch(err){
+  } catch (err) {
     res.render('user/error-page', { error: err, errorMsg: 'error from getting home page' });
-
   }
-
 };
 
 // get SignIn Page
 const getSignIn = async (req, res) => {
-  try{
+  try {
     const user = req.session.user;
     const navCat = await Category.find();
     const loginCheck = req.flash('errorLoginCheck');
     console.log(loginCheck);
     const msg = req.flash('error');
     res.render('user/login', { msg, user, loginCheck, navCat });
-  }catch(err){
+  } catch (err) {
     res.render('user/error-page', { error: err, errorMsg: 'error from getting signin page' });
-    
   }
-
 };
 
 // get SignUp Page
 const getSignUp = async (req, res) => {
-  try{
+  try {
     const user = req.session.user;
     const navCat = await Category.find();
     const msg = req.flash('error');
     res.render('user/signup', { msg, user, navCat });
-  }catch(err){
+  } catch (err) {
     res.render('user/error-page', { error: err, errorMsg: 'error from getting signup page' });
   }
-
 };
 
 // get OTP Phone number Page (SignIn)
 const getOtpPhonePage = async (req, res) => {
-  try{
+  try {
     const user = req.session.user;
     const navCat = await Category.find();
     res.render('user/otp_phone', { user, navCat });
-  }catch(err){
+  } catch (err) {
     res.render('user/error-page', { error: err, errorMsg: 'error from otp phone page' });
   }
-
 };
 
 // get OTP number from user Page(SignIn)
 const getOtpPage = async (req, res) => {
-  try{
+  try {
     const user = req.session.user;
     const navCat = await Category.find();
     res.render('user/otp_page', { user, navCat });
-  }catch(err){
+  } catch (err) {
     console.log(err);
     res.render('user/error-page', { error: err, errorMsg: 'error while getting otp page' });
-
   }
-    
 };
 
 // get OTP number from user Page (SignUp)
 const getOtpSignUp = async (req, res) => {
-  try{
+  try {
     const user = req.session.user;
     const navCat = await Category.find();
     res.render('user/otp_page_signup', { user, navCat });
-  }
-  catch(err){
+  } catch (err) {
     res.render('user/error-page', { error: err, errorMsg: 'error from getting all products' });
   }
 };
@@ -146,6 +138,8 @@ const getAllShop = async (req, res) => {
 
     const count = product.length;
     const user = req.session.user;
+    req.session.couponApplied=null;
+
     if (user) {
       const wishlistProducts = await Wishlist.findOne({ _id: user.wishlistId }).select({
         'products.product': 1,
@@ -188,6 +182,8 @@ const getShopCategory = async (req, res) => {
 
     const count = product.length;
     const user = req.session.user;
+    req.session.couponApplied=null;
+
     if (user) {
       const wishlistProducts = await Wishlist.findOne({ _id: user.wishlistId }).select({
         'products.product': 1,
@@ -229,6 +225,7 @@ const getShopBrand = async (req, res) => {
     ]);
 
     const count = product.length;
+    req.session.couponApplied=null;
     const user = req.session.user;
     if (user) {
       const wishlistProducts = await Wishlist.findOne({ _id: user.wishlistId }).select({
@@ -252,6 +249,7 @@ const getProductDetails = async (req, res) => {
   try {
     const product = await Product.findOne({ _id: req.params.id }).populate('category').populate('brand');
     // console.log(product);
+    req.session.couponApplied=null;
     const user = req.session.user;
 
     const navCat = await Category.find();
@@ -276,28 +274,24 @@ const getProductDetails = async (req, res) => {
 
 // get ContactUs Page
 const getContactUs = async (req, res) => {
-  try{
+  try {
     const user = req.session.user;
     const navCat = await Category.find();
     res.render('user/contact', { user, navCat });
-  }catch(err){
+  } catch (err) {
     res.render('user/error-page', { error: err, errorMsg: 'error from getting contact us' });
-
   }
-
 };
 
 // get ForgetPassword Page
 const getForgetPassword = async (req, res) => {
-  try{
+  try {
     const user = req.session.user;
     const navCat = await Category.find();
     res.render('user/forgotpass', { user, navCat });
-  }catch(err){
+  } catch (err) {
     res.render('user/error-page', { error: err, errorMsg: 'error from forgot pass' });
-
   }
-
 };
 
 // get Cart Page
@@ -314,7 +308,7 @@ const getCart = async (req, res) => {
 };
 // Total calulating function
 const TotalCalc = async (id) => {
-  try{
+  try {
     const totalCalc = await Cart.aggregate([
       { $match: { _id: mongoose.Types.ObjectId(id) } },
       { $unwind: { path: '$products' } },
@@ -325,11 +319,9 @@ const TotalCalc = async (id) => {
       sum += el.products.subtotal;
     });
     await Cart.updateOne({ _id: id }, { total: sum });
-  }catch(err){
+  } catch (err) {
     res.render('user/error-page', { error: err, errorMsg: 'error when calculating total' });
-
   }
-
 };
 
 // subtotal calulating function
@@ -352,6 +344,7 @@ const subTotCalc = async (id, proId) => {
 // adding a Product to user's cart
 const setCart = async (req, res, next) => {
   try {
+    req.session.couponApplied=null;
     const user = req.session.user;
     const productId = req.body.productId;
     const product = await Product.findById(productId);
@@ -392,6 +385,7 @@ const setCart = async (req, res, next) => {
 const removeFromCart = async (req, res) => {
   try {
     const user = req.session.user;
+    req.session.couponApplied=null;
     const productId = req.body.productId;
 
     const removeObj = { product: productId };
@@ -489,6 +483,7 @@ const decQuantity = async (req, res) => {
 // get Wishlist Page
 const getWish = async (req, res) => {
   try {
+    req.session.couponApplied=null;
     const user = req.session.user;
     const navCat = await Category.find();
     // console.log(user);
@@ -545,112 +540,125 @@ const removeFromWishlist = async (req, res) => {
 
 // get Orders
 const getOrders = async (req, res) => {
-  try{
+  try {
     const user = req.session.user;
     const navCat = await Category.find();
-    const orders = await Order.find({ userId: user._id }).sort({_id:-1})
+    const orders = await Order.find({ userId: user._id })
+      .sort({ _id: -1 })
       .populate('address')
       .select({ 'products._id': 0, userId: 0, 'address.userId': 0, 'address._id': 0 });
     console.log(orders);
     res.render('user/order', { user, orders, navCat });
-  }catch(err){
-    res.render('user/error-page', { error: err, errorMsg: 'error while removing products from wishlist'});
-
+  } catch (err) {
+    res.render('user/error-page', { error: err, errorMsg: 'error while removing products from wishlist' });
   }
-
 };
 
 // get Orders
 const getOrderData = async (req, res) => {
-  try{
+  try {
     const order = await Order.findOne({ _id: req.body.orderId })
       .populate('address')
       .select({ 'products._id': 0, userId: 0, 'address.userId': 0, 'address._id': 0 });
-      
+
     res.json({
-      order
-    })
-  }catch(err){
+      order,
+    });
+  } catch (err) {
     res.status(400).json({
-      stat:'failed',
-    })
-
+      stat: 'failed',
+    });
   }
+};
 
+// get Checkout Page
+const getCheckout = async (req, res) => {
+  const user = req.session.user;
+  const navCat = await Category.find();
+  const cartProducts = await Cart.findById(user.cartId).populate('products.product');
+  const address = await Address.find({ userId: user._id });
+  res.render('user/checkout', { user, total: cartProducts.total, products: cartProducts.products, address, navCat });
 };
 
 // checkoutConfirm
 const checkoutConfirm = async (req, res) => {
-  try{
+  try {
     const user = req.session.user;
     const cartProducts = await Cart.findById(user.cartId)
       .populate('products.product')
       .select({ 'products.product': 1, 'products.subtotal': 1, 'products.quantity': 1, total: 1, _id: 0 });
-  
-    const newOrder = {
-      userId: user._id,
-      payment: req.body.payment,
-      address: mongoose.Types.ObjectId(req.body.address),
-      message: req.body.message,
-      products: cartProducts.products,
-      total: cartProducts.total,
-    };
-    req.session.newOrder = newOrder;
+    const coupon = await Coupon.findOne({ _id: req.session.couponApplied });
+    if (coupon) {
+      const newOrder = {
+        userId: user._id,
+        payment: req.body.payment,
+        address: mongoose.Types.ObjectId(req.body.address),
+        message: req.body.message,
+        products: cartProducts.products,
+        discount: coupon.amount,
+        discountCoupon: coupon._id,
+        total: cartProducts.total,
+      };
+      req.session.newOrder = newOrder;
+    } else {
+      const newOrder = {
+        userId: user._id,
+        payment: req.body.payment,
+        address: mongoose.Types.ObjectId(req.body.address),
+        message: req.body.message,
+        products: cartProducts.products,
+        total: cartProducts.total,
+      };
+      req.session.newOrder = newOrder;
+    }
     res.redirect('/order-confirmation');
-  }catch(err){
+  } catch (err) {
     res.render('user/error-page', { error: err, errorMsg: 'error while removing products from wishlist' });
-    
   }
-
 };
 
 // getPayment Page
 const getPayment = async (req, res) => {
-  try{
+  try {
     const user = req.session.user;
     const navCat = await Category.find();
-  
     const order = req.session.newOrder;
     const address = await Address.findById(order.address);
-  
-    res.render('user/order_confirmation', { user, navCat, order, address, key: process.env.RAZOR_KEY_ID });
-  }catch(err){
-    res.render('user/error-page', { error: err, errorMsg: 'error while removing products from wishlist'});
-    
-  }
 
+    res.render('user/order_confirmation', { user, navCat, order, address, key: process.env.RAZOR_KEY_ID });
+  } catch (err) {
+    res.render('user/error-page', { error: err, errorMsg: 'error while removing products from wishlist' });
+  }
 };
 
 // razor payment from axios
-const razorOrderGenerate = async(req, res) => {
-  try{
+const razorOrderGenerate = async (req, res) => {
+  try {
     const newOrder = req.session.newOrder;
     let instance = new Razorpay({
       key_id: process.env.RAZOR_KEY_ID,
       key_secret: process.env.RAZOR_KEY_SECRET,
     });
     var options = {
-      amount: (newOrder.total + 50)*100, // amount in the smallest currency unit
+      amount: (newOrder.total + 50) * 100, // amount in the smallest currency unit
       currency: 'INR',
       receipt: 'order_rcptid_11',
     };
     instance.orders.create(options, function (err, order) {
       console.log(order);
-      Object.assign(order,{payment:"Razorpay"})
-      Object.assign(req.session.newOrder,order);
-      res.send({orderId:order.id})
+      Object.assign(order, { payment: 'Razorpay' });
+      Object.assign(req.session.newOrder, order);
+      res.send({ orderId: order.id });
     });
-  }catch(err){
-    res.render('user/error-page', { error: err, errorMsg: 'error while removing products from wishlist'});
-    
+  } catch (err) {
+    res.render('user/error-page', { error: err, errorMsg: 'error while removing products from wishlist' });
   }
-
 };
 
 // setting payment to COD
 const setCOD = async (req, res) => {
-  Object.assign(req.session.newOrder,{payment:"Cash On Delivery"})
-  res.json({stat:"ok"});
+  Object.assign(req.session.newOrder, { payment: 'Cash On Delivery' });
+  res.json({ stat: 'ok' });
 };
 
 // get OrderSuccess Page
@@ -664,11 +672,16 @@ const getOrderSuccess = async (req, res) => {
   //   .select({ 'products._id': 0, _id: 0, userId: 0, 'address.userId': 0, 'address._id': 0 });
   // console.log(orders);
   const order = await Order.create(newOrder);
-  const order_address = await Address.populate(order,{path:"address"})
-
-  res.render('user/order_success', { user, order:order_address, navCat });
+  const order_address = await Address.populate(order, { path: 'address' });
+  if(order.discountCoupon){
+    let coupon=await Coupon.findOne({_id:order.discountCoupon});
+    // if(coupon.isPercent) {
+    //   var discountPercent = coupon.amount;
+    // }
+    var discountAmt = coupon.amount;
+  }
+  res.render('user/order_success', { user, order: order_address, navCat,discountAmt });
 };
-
 
 // get Tracking Page
 const getTracking = async (req, res) => {
@@ -775,30 +788,17 @@ const userCheck = async (req, res) => {
         user.comparePassword(req.body.password, function (err, isMatch) {
           if (err) throw err;
           if (isMatch) {
-            // res.status(200).json({
-            //   status: 'success',
-            //   data: {
-            //     user,
-            //   },
-            // });
-            console.log(user);
             req.session.user = user;
             req.session.userLogin = true;
             req.flash('success', 'Successfully Logged In');
             res.redirect('/');
           } else {
-            // res.status(400).json({
-            //   status: 'password not match error',
-            // });
             req.session.userLogin = false;
             req.flash('error', 'Password not match');
             res.redirect('/signin');
           }
         });
       } else {
-        // res.status(400).json({
-        //   status: 'user not found error',
-        // });
         req.flash('error', 'User email not found');
         res.redirect('/signin');
       }
@@ -854,15 +854,6 @@ const verifyOtp = async (req, res, next) => {
   }
 };
 
-// get Checkout Page
-const getCheckout = async (req, res) => {
-  const user = req.session.user;
-  const navCat = await Category.find();
-  const cartProducts = await Cart.findById(user.cartId).populate('products.product');
-  const address = await Address.find({ userId: user._id });
-  res.render('user/checkout', { user, total: cartProducts.total, products: cartProducts.products, address, navCat });
-};
-
 // redirecting to OTP sign Up page
 const redirectToOtp = (req, res) => {
   // Object.assign(req.body,{image:req.file.filname})
@@ -913,6 +904,49 @@ const checkNotExisting = async (req, res, next) => {
   }
 };
 
+// checking coupon valid
+const checkCoupon = async (req, res) => {
+  try {
+    const user = req.session.user;
+    const coupon = await Coupon.findOne({ code: req.body.code });
+    const cart = await Cart.findOne({ _id: user.cartId });
+    const userCheck = await Coupon.findOne({ code: req.body.code, 'userUsed.userId': user._id });
+    // console.log(user);
+    // console.log(userCheck);
+    if (coupon && coupon.expireAfter.getTime() > Date.now()) {
+      if (cart.total < coupon.minCartAmount) {
+        return res.json({
+          checkstatus: 'error',
+          message: 'Cart amount is not sufficient',
+        });
+      }
+
+      if (userCheck || req.session.couponApplied == req.body.code) {
+        return res.json({
+          checkstatus: 'error',
+          message: 'This coupon already applied',
+        });
+      }
+      req.session.couponApplied = coupon._id;
+      return res.json({
+        checkstatus: 'success',
+        discount: coupon.amount,
+        discountedAmount: cart.total - coupon.amount,
+        message: 'Coupon Successfully added',
+      });
+    }
+    res.json({
+      checkstatus: 'error',
+      message: 'Cannot apply coupon',
+    });
+  } catch (err) {
+    res.status(400).json({
+      checkstatus: 'error',
+      message: 'Error while checking coupon code',
+    });
+  }
+};
+
 // removing session of the user
 const logoutUser = (req, res) => {
   req.session.user = null;
@@ -953,7 +987,7 @@ export {
   incQuantity,
   removeFromCart,
   getProfile,
-  setToWish,  
+  setToWish,
   checkoutConfirm,
   getOrders,
   getShopCategory,
@@ -964,4 +998,5 @@ export {
   getOrderSuccess,
   getAddress,
   getOrderData,
+  checkCoupon,
 };
