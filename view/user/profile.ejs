@@ -15,17 +15,17 @@
       <div class="text-center card-box mx-auto">
           <div class="member-card pt-2 pb-2">
               <div class="thumb-lg member-thumb mx-auto"><img src="https://bootdey.com/img/Content/avatar/avatar2.png" class="rounded-circle img-thumbnail" alt="profile-image"></div>
-              <div class="">
-                  <h4>Freddie J. Plourde</h4>
-                  <p class="text-muted">Email: mishal2mk2@gmail.com</p>
-                  <p class="text-muted">Phone: 9072441214</p>
+              <div class="mt-4">
+                  <h4><%= user.fname %> <%= user.lname %></h4>
+                  <p class="text-muted">Email: <%= user.email %></p>
+                  <p class="text-muted">Phone: <%= user.mob %></p>
               </div>
               <ul class="social-links list-inline">
                   <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="" data-original-title="Facebook"><i class="fa fa-facebook"></i></a></li>
                   <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="" data-original-title="Twitter"><i class="fa fa-twitter"></i></a></li>
                   <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="" data-original-title="Skype"><i class="fa fa-skype"></i></a></li>
               </ul>
-              <button type="button" class="btn btn-primary mt-3 btn-rounded waves-effect w-md waves-light">Edit Profile</button>
+              <button type="button" class="btn btn-primary btn-rounded waves-effect w-md waves-light">Edit Profile</button>
           </div>
       </div>
 
@@ -34,9 +34,8 @@
     <section id="minimal-statistics">
 
           <h4 class="text-uppercase">Your Profile Page</h4>
-          <p>Your Profile.</p>
 
-      <div class="row">
+      <div class="row mt-4">
         <div class="col-lg-4 col-md-12">
           <a href="/address"><div class="card">
             <div class="card-content">
@@ -103,7 +102,6 @@
                 </div>
                 <div class="media-body">
                   <h4>Wishlist</h4>
-                  <span>Wishlist</span>
                 </div>
                 <div class="align-self-center">
                   <i class="icon-heart danger font-large-2"></i>
