@@ -690,17 +690,30 @@ const setCOD = async (req, res) => {
 // get OrderSuccess Page
 const getOrderSuccess = async (req, res) => {
   const user = req.session.user;
-  console.log(req.session.newOrder);
   const newOrder = req.session.newOrder;
-  const navCat = await Category.find();
-  const order = await Order.create(newOrder);
-  const order_address = await Address.populate(order, { path: 'address' });
-  if (order.discountCoupon) {
-    let coupon = await Coupon.findOne({ _id: order.discountCoupon });
-    var isPercent = coupon.isPercent;
-    var discountAmt = coupon.amount;
+  if(newOrder){
+    const navCat = await Category.find();
+    const order = await Order.create(newOrder);
+    const order_address = await Address.populate(order, { path: 'address' });
+    const userUsed = {userId:user._id}
+    if (order.discountCoupon) {
+      let coupon = await Coupon.findByIdAndUpdate(order.discountCoupon ,{$inc:{usageLimit:-1},$push:{userUsed}},{new: true});
+      var isPercent = coupon.isPercent;
+      var discountAmt = coupon.amount;
+      if(isPercent){
+        const total=Math.round((order.total)*(1-(discountAmt/100)))+50;
+        await Order.findByIdAndUpdate(order._id,{total})
+      }else{
+        const total=((order.total)-discountAmt)+50;
+        await Order.findByIdAndUpdate(order._id,{total})
+      }
+    }
+    req.session.newOrder=null;
+    return res.render('user/order_success', { user, order: order_address, navCat, discountAmt ,isPercent });
+  }else{
+    return res.redirect('/orders');
   }
-  res.render('user/order_success', { user, order: order_address, navCat, discountAmt ,isPercent });
+
 };
 
 // get Tracking Page

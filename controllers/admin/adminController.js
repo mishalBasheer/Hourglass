@@ -19,10 +19,23 @@ const getAdminLogin = (req, res) => {
 };
 
 const getAdminDashboard = async (req, res) => {
-  const orders = await Order.find({}).sort({ _id: -1 }).limit(10).populate('userId').populate('address');
   req.session.pageIn = 'dashboard';
+  const orders = await Order.find({}).sort({ _id: -1 }).limit(10).populate('userId').populate('address');
+  const userCount = await User.find({})
+    const totalSales = await Order.aggregate([
+    {
+      $project:{'month':{$month:'$createdAt'},total:1}
+    },{
+      $match:{month:12}
+    },{
+      $group:{_id:"$month",totalSales:{$sum:"$total"}}
+    }
+  ])
+  console.log(totalSales);
   const msg = req.flash('success');
   res.render('admin/dashboard', {
+    totalSales:totalSales[0],
+    userCount:userCount.length,
     orders,
     msg,
     pageIn: req.session.pageIn,
@@ -39,18 +52,11 @@ const getAdminDashboard = async (req, res) => {
 
 const getAdminOrders = async (req, res) => {
   const orders = await Order.find({}).sort({ _id: -1 }).populate('userId').populate('address');
-  const userCount = await User.find({}).count()
-  // const totalSales = await Order.aggregate([
-  //   {
-  //     $project:{'month':{$month:'$date'}}
-  //   },{
-  //     $match:{month:1}
-  //   }
-  // ])
-  // console.log(totalSales);
+
+
   req.session.pageIn = 'orders';
   res.render('admin/orders', {
-    userCount,
+  
     orders,
     pageIn: req.session.pageIn,
     ordersPage: 'dark:text-gray-100',
