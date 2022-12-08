@@ -19,7 +19,7 @@ const getAdminLogin = (req, res) => {
 };
 
 const getAdminDashboard = async (req, res) => {
-  const orders = await Order.find({}).sort({ _id: -1 }).populate('userId').populate('address');
+  const orders = await Order.find({}).sort({ _id: -1 }).limit(10).populate('userId').populate('address');
   req.session.pageIn = 'dashboard';
   const msg = req.flash('success');
   res.render('admin/dashboard', {
@@ -666,10 +666,10 @@ const getEditCoupon = async (req, res) => {
 const editCoupon = async (req, res) => {
   try {
     const { code, isPercent, amount, usageLimit, minCartAmount } = req.body;
-    const createdAt = new Date();
-    let expireAfter = createdAt.getTime() + req.body.expireAfter * 24 * 60 * 60 * 1000;
-    expireAfter = new Date(expireAfter);
-    const coupon = { code, isPercent, amount, usageLimit, expireAfter, createdAt, minCartAmount };
+    // const createdAt = new Date();
+    // let expireAfter = createdAt.getTime() + req.body.expireAfter * 24 * 60 * 60 * 1000;
+    // expireAfter = new Date(expireAfter);
+    const coupon = { code, isPercent, amount, usageLimit, minCartAmount };
     await Coupon.findByIdAndUpdate(req.params.id, coupon);
     res.redirect('/admin/coupon');
   } catch (err) {

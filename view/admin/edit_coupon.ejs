@@ -5,7 +5,7 @@
     <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
       <!-- General elements -->
       <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Edit Coupon</h4>
-      <form action="/admin/coupon/edit-coupon/<%= couponId %> " method="post" enctype="multipart/form-data">
+      <form action="/admin/coupon/edit-coupon/<%= couponId %> " method="post">
         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
           
           <label class="block text-sm mt-1">
@@ -48,16 +48,6 @@
             <input
               name="minCartAmount"
               value="<%= coupon[0].minCartAmount %>"
-              type="number"
-              class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              required
-            />
-          </label>
-          <label class="block text-sm mt-1">
-            <span class="text-gray-700 dark:text-gray-400">Expire After(days)</span>
-            <input
-              name="expireAfter"
-              value="<%= (coupon[0].expireAfter.getTime()-coupon[0].createdAt.getTime())/(24 * 60 * 60 * 1000) %>"
               type="number"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
               required
