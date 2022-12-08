@@ -39,8 +39,18 @@ const getAdminDashboard = async (req, res) => {
 
 const getAdminOrders = async (req, res) => {
   const orders = await Order.find({}).sort({ _id: -1 }).populate('userId').populate('address');
+  const userCount = await User.find({}).count()
+  // const totalSales = await Order.aggregate([
+  //   {
+  //     $project:{'month':{$month:'$date'}}
+  //   },{
+  //     $match:{month:1}
+  //   }
+  // ])
+  // console.log(totalSales);
   req.session.pageIn = 'orders';
   res.render('admin/orders', {
+    userCount,
     orders,
     pageIn: req.session.pageIn,
     ordersPage: 'dark:text-gray-100',

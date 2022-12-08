@@ -85,9 +85,9 @@ router.route('/create/orderId').post(razorOrderGenerate);
 router.route('/order-success').get(userLoginCheck, checkBlockedUser, getOrderSuccess);
 
 
+
 // router.route('/order-confirmation').get(userLoginCheck, checkBlockedUser, getOrderConfirmation);
 router.route('/orders').get(userLoginCheck, checkBlockedUser, getOrders).post(getOrderData);
-
 router.route('/order-tracking').get(userLoginCheck, checkBlockedUser, getTracking);
 router.route('/profile').get(userLoginCheck, checkBlockedUser, getProfile);
 router.route('/address').get(userLoginCheck, checkBlockedUser, getAddress);

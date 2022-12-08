@@ -55,6 +55,8 @@ const orderSchema = new mongoose.Schema({
     type:mongoose.Schema.Types.ObjectId,
     ref:'Coupon',
   },
+},{
+  timestamps:true,
 });
 
 const Order = mongoose.model('Order', orderSchema);
