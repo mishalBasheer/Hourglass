@@ -21,21 +21,112 @@ const getAdminLogin = (req, res) => {
 const getAdminDashboard = async (req, res) => {
   req.session.pageIn = 'dashboard';
   const orders = await Order.find({}).sort({ _id: -1 }).limit(10).populate('userId').populate('address');
-  const userCount = await User.find({})
-    const totalSales = await Order.aggregate([
+  const userCount = await User.find({});
+  const totalSales = await Order.aggregate([
     {
-      $project:{'month':{$month:'$createdAt'},total:1}
-    },{
-      $match:{month:12}
-    },{
-      $group:{_id:"$month",totalSales:{$sum:"$total"}}
-    }
-  ])
-  console.log(totalSales);
+      $project: { month: { $month: '$createdAt' }, total: 1 },
+    },
+    {
+      $match: { month: 12 },
+    },
+    {
+      $group: { _id: '$month', totalSales: { $sum: '$total' }, count: { $sum: 1 } },
+    },
+  ]);
+  const pendingOrders = await Order.aggregate([
+    {
+      $match: { orderstat: { $ne: 'DELIVERED' } },
+    },
+    {
+      $group: { _id: '$__v', count: { $sum: 1 } },
+    },
+  ]);
+  const categoriseOrderCount = await Order.aggregate([
+    {
+      $unwind: { path: '$products' },
+    },
+    {
+      $lookup: {
+        from: 'products',
+        localField: 'products.product.title',
+        foreignField: 'title',
+        as: 'productDetails',
+      },
+    },
+    {
+      $unwind: { path: '$productDetails' },
+    },
+    {
+      $group: { _id: '$productDetails.category', categorySales: { $sum: '$productDetails.price' }, count: { $sum: 1 } },
+    },
+    {
+      $lookup: {
+        from: 'categories',
+        localField: '_id',
+        foreignField: '_id',
+        as: 'categoryDetails',
+      },
+    },
+    {
+      $project: { 'categoryDetails.title': 1, categorySales: 1, count: 1 },
+    },
+    { $sort: { 'categoryDetails.title': 1 } },
+  ]);
+  const brandCount = await Order.aggregate([
+    {
+      $unwind: { path: '$products' },
+    },
+    {
+      $lookup: {
+        from: 'products',
+        localField: 'products.product.title',
+        foreignField: 'title',
+        as: 'productDetails',
+      },
+    },
+    {
+      $unwind: { path: '$productDetails' },
+    },
+    {
+      $group: { _id: '$productDetails.brand', count: { $sum: 1 } },
+    },
+    {
+      $lookup: {
+        from: 'brands',
+        localField: '_id',
+        foreignField: '_id',
+        as: 'brandDetails',
+      },
+    },
+    {
+      $project: { 'brandDetails.title': 1, count: 1 },
+    },
+    { $sort: { 'brandDetails.title': 1 } },
+  ]);
+
+  const categoryNameArray = [];
+  const categoryCountArray = [];
+  categoriseOrderCount.forEach((el) => {
+    categoryCountArray.push(el.categorySales);
+    categoryNameArray.push(el.categoryDetails[0].title);
+  });
+
+  const brandCountArray = [];
+  const brandNameArray = [];
+  brandCount.forEach((el) => {
+    brandCountArray.push(el.count);
+    brandNameArray.push(el.brandDetails[0].title);
+  });
+  console.log(brandNameArray);
   const msg = req.flash('success');
   res.render('admin/dashboard', {
-    totalSales:totalSales[0],
-    userCount:userCount.length,
+    categoryNameArray,
+    categoryCountArray,
+    brandCountArray,
+    brandNameArray,
+    pendingOrders: pendingOrders[0].count,
+    totalSales: totalSales[0],
+    userCount: userCount.length,
     orders,
     msg,
     pageIn: req.session.pageIn,
@@ -53,10 +144,8 @@ const getAdminDashboard = async (req, res) => {
 const getAdminOrders = async (req, res) => {
   const orders = await Order.find({}).sort({ _id: -1 }).populate('userId').populate('address');
 
-
   req.session.pageIn = 'orders';
   res.render('admin/orders', {
-  
     orders,
     pageIn: req.session.pageIn,
     ordersPage: 'dark:text-gray-100',
@@ -662,7 +751,7 @@ const getAddCoupon = (req, res) => {
 const getEditCoupon = async (req, res) => {
   const couponId = req.params.id;
   req.session.pageIn = 'coupon';
-  
+
   const coupon = await Coupon.find({ _id: mongoose.Types.ObjectId(couponId) });
   // console.log(brand);
   res.render('admin/edit_coupon', {
