@@ -41,37 +41,38 @@ const getAdminDashboard = async (req, res) => {
       $group: { _id: '$__v', count: { $sum: 1 } },
     },
   ]);
-  const categoriseOrderCount = await Order.aggregate([
-    {
-      $unwind: { path: '$products' },
-    },
-    {
-      $lookup: {
-        from: 'products',
-        localField: 'products.product.title',
-        foreignField: 'title',
-        as: 'productDetails',
-      },
-    },
-    {
-      $unwind: { path: '$productDetails' },
-    },
-    {
-      $group: { _id: '$productDetails.category', categorySales: { $sum: '$productDetails.price' }, count: { $sum: 1 } },
-    },
-    {
-      $lookup: {
-        from: 'categories',
-        localField: '_id',
-        foreignField: '_id',
-        as: 'categoryDetails',
-      },
-    },
-    {
-      $project: { 'categoryDetails.title': 1, categorySales: 1, count: 1 },
-    },
-    { $sort: { 'categoryDetails.title': 1 } },
+  const categoriseOrderCount = await Order.aggregate([{$project:{orderstat:1}},{$group:{_id:'$orderstat',count:{$sum:1}}}
+    // {
+    //   $unwind: { path: '$products' },
+    // },
+    // {
+    //   $lookup: {
+    //     from: 'products',
+    //     localField: 'products.product.title',
+    //     foreignField: 'title',
+    //     as: 'productDetails',
+    //   },
+    // },
+    // {
+    //   $unwind: { path: '$productDetails' },
+    // },
+    // {
+    //   $group: { _id: '$productDetails.category', categorySales: { $sum: '$productDetails.price' }, count: { $sum: 1 } },
+    // },
+    // {
+    //   $lookup: {
+    //     from: 'categories',
+    //     localField: '_id',
+    //     foreignField: '_id',
+    //     as: 'categoryDetails',
+    //   },
+    // },
+    // {
+    //   $project: { 'categoryDetails.title': 1, categorySales: 1, count: 1 },
+    // },
+    // { $sort: { 'categoryDetails.title': 1 } },
   ]);
+  console.log(categoriseOrderCount);
   const brandCount = await Order.aggregate([
     {
       $unwind: { path: '$products' },
@@ -106,10 +107,15 @@ const getAdminDashboard = async (req, res) => {
 
   const categoryNameArray = [];
   const categoryCountArray = [];
+  // categoriseOrderCount.forEach((el) => {
+  //   categoryCountArray.push(el.categorySales);
+  //   categoryNameArray.push(el.categoryDetails[0].title);
+  // });
   categoriseOrderCount.forEach((el) => {
-    categoryCountArray.push(el.categorySales);
-    categoryNameArray.push(el.categoryDetails[0].title);
+    categoryCountArray.push(el.count);
+    categoryNameArray.push(el._id);
   });
+
 
   const brandCountArray = [];
   const brandNameArray = [];
