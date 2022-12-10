@@ -1,22 +1,18 @@
 <%- include('partials/header.ejs') %>
 
-
 <section class="login_part padding_top">
   <div class="container">
     <div class="col-lg-8 col-md-8">
       <h3 class="mb-30">Add Address</h3>
       <form action="/profile/add-address" method="post">
-        <% if (typeof alert != 'undefined') { %>
-          <% alert.forEach(error => { %>
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-              <%= error.msg %>
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-          <% }) %>
-         
-        <% } %>
+        <% if (typeof alert != 'undefined') { %> <% alert.forEach(error => { %>
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <%= error.msg %>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <% }) %> <% } %>
         <div class="mt-10">
           <input
             type="text"
@@ -84,29 +80,27 @@
           <div class="icon"><i class="fa fa-globe" aria-hidden="true"></i></div>
           <div class="form-select" id="default-select_1">
             <select name="state">
-                <option value="none" selected disabled hidden>state</option>
-                <option value="Kerala">Kerala</option>
-                <option value="Maharashtra">Maharashtra</option>
-                <option value="Karnataka">Karnataka</option>
-                <option value="Goa">Goa</option>
-                <option value="Tamil Nadu">Tamil Nadu</option>
+              <option value="none" selected disabled hidden>state</option>
+              <option value="Kerala">Kerala</option>
+              <option value="Maharashtra">Maharashtra</option>
+              <option value="Karnataka">Karnataka</option>
+              <option value="Goa">Goa</option>
+              <option value="Tamil Nadu">Tamil Nadu</option>
             </select>
           </div>
         </div>
         <div class="mt-10">
-            <input
-              type="text"
-              name="pincode"
-              placeholder="Pincode"
-              onfocus="this.placeholder = ''"
-              onblur="this.placeholder = 'Pincode'"
-              class="single-input"
-            />
-          </div>
+          <input
+            type="text"
+            name="pincode"
+            placeholder="Pincode"
+            onfocus="this.placeholder = ''"
+            onblur="this.placeholder = 'Pincode'"
+            class="single-input"
+          />
+        </div>
 
-          <button type="submit" class="btn btn-primary mt-4">Submit Address</button>
-
-
+        <button type="submit" class="btn btn-primary mt-4">Submit Address</button>
       </form>
     </div>
   </div>

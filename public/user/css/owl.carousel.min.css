@@ -48,9 +48,9 @@
   -webkit-touch-callout: none;
 }
 .owl-carousel .owl-item img {
-    display: block;
-    margin: auto;
-    width: 80%;
+  display: block;
+  margin: auto;
+  width: 80%;
 }
 .owl-carousel .owl-dots.disabled,
 .owl-carousel .owl-nav.disabled {

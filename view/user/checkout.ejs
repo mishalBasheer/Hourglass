@@ -284,7 +284,9 @@
         if (response.discountIsPercent) {
           $(`<li><a href="#">Discount<span>-%${response.discount}</span></a></li>`).insertAfter('#sub_total');
           $('#discounted_total').replaceWith(
-            `<span id="discounted_total">₹${Math.round((response.discountedTotal * (1-(response.discount/100))) + 50)}</span>`
+            `<span id="discounted_total">₹${Math.round(
+              response.discountedTotal * (1 - response.discount / 100) + 50
+            )}</span>`
           );
         } else {
           $(`<li><a href="#">Discount<span>-₹${response.discount}</span></a></li>`).insertAfter('#sub_total');

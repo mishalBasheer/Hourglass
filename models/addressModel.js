@@ -17,8 +17,8 @@ const addressSchema = new mongoose.Schema({
     type: String,
     //   required: [true, 'A address must have a reciever name'],
   },
-  city:{
-    type:String,
+  city: {
+    type: String,
   },
   district: {
     type: String,
@@ -32,10 +32,10 @@ const addressSchema = new mongoose.Schema({
     type: Number,
     //   required: [true, 'A address must have a reciever name'],
   },
-  userId:{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:'User'
-  }
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
 });
 const Address = mongoose.model('Address', addressSchema);
 

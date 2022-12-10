@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
 
 const wishlistSchema = new mongoose.Schema({
-    created: {
-        type: String,
-        default: true,
-      },
+  created: {
+    type: String,
+    default: true,
+  },
   products: [
     {
       product: {

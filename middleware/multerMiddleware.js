@@ -93,7 +93,10 @@ const bannerImageUpload = multer({
   //   }
 });
 
-const uploadMultiple = imageUpload.fields([{name:'thumbnail',maxCount:1},{name:'images',maxCount:4}]);
+const uploadMultiple = imageUpload.fields([
+  { name: 'thumbnail', maxCount: 1 },
+  { name: 'images', maxCount: 4 },
+]);
 const uploadOne = catImageUpload.single('image');
 const uploadBrandImg = brandImageUpload.single('image');
 const uploadBannerImg = bannerImageUpload.single('image');

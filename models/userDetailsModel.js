@@ -25,24 +25,24 @@ const userDetailsSchema = new mongoose.Schema({
     required: [true, 'password field required'],
     minlength: [6, 'password should be at least 6 characters'],
   },
-  block:{
-    type:Boolean,
-    default:false
+  block: {
+    type: Boolean,
+    default: false,
   },
-  image:{
-    type:String,
-    default:"user_icon.jpg"
+  image: {
+    type: String,
+    default: 'user_icon.jpg',
   },
-  cartId:{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:'Cart',
-    required:[true,'category id not added']
+  cartId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Cart',
+    required: [true, 'category id not added'],
   },
-  wishlistId:{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:'Wishlist',
-    required:[true,'wishlist id not added']
-  }
+  wishlistId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Wishlist',
+    required: [true, 'wishlist id not added'],
+  },
 });
 
 userDetailsSchema.pre('save', async function (next) {

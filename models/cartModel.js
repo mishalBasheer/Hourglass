@@ -11,22 +11,21 @@ const cartSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product',
       },
-      price:{
+      price: {
         type: Number,
       },
       quantity: {
         type: Number,
       },
-      subtotal:{
+      subtotal: {
         type: Number,
       },
     },
   ],
-  total:{
-    type:Number,
+  total: {
+    type: Number,
   },
 });
-
 
 const Cart = mongoose.model('Cart', cartSchema);
 

@@ -104,7 +104,7 @@
 </section>
 <script>
   if ('<%= discountAmt %>') {
-    if ('<%= isPercent %>'=='true') {
+    if ('<%= isPercent %>' == 'true') {
       $(`<tr><th colspan="3">Discount</th><th>-%${'<%= discountAmt %>'}</th></tr>`).insertAfter(`#success_subtotal`);
       $(`#success_total`).replaceWith(
         `<tr id="success_total"><th scope="col" colspan="3"></th><th scope="col"> ₹${'<%= Math.round(order.total*(1-(discountAmt/100)))+50 %>'}.00</th></tr>`

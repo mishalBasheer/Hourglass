@@ -7,15 +7,15 @@
       <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Edit Banner</h4>
       <form action="/admin/banner/edit-banner/<%= bannerId %> " method="post" enctype="multipart/form-data">
         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-          
-            <label class="block text-sm">
+          <label class="block text-sm">
             <span class="text-gray-700 dark:text-gray-400">Banner Name</span>
             <input
-              name="title" value="<%= banner[0].title %>"
+              name="title"
+              value="<%= banner[0].title %>"
               type="text"
-              class="block w-full mt-1 text-sm dark:border-gray-600 
-              dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              required/>
+              class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+              required
+            />
           </label>
 
           <label class="block mt-4 text-sm">
@@ -24,18 +24,19 @@
               name="image"
               type="file"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              />
+            />
           </label>
-          <img src="/banner_img/<%= banner[0].image %>" alt="" width="100px" >
+          <img src="/banner_img/<%= banner[0].image %>" alt="" width="100px" />
 
           <label class="block text-sm">
             <span class="text-gray-700 dark:text-gray-400">URL</span>
             <input
-              name="url" value="<%= banner[0].url %>"
+              name="url"
+              value="<%= banner[0].url %>"
               type="text"
-              class="block w-full mt-1 text-sm dark:border-gray-600 
-              dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-            required/>
+              class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+              required
+            />
           </label>
 
           <label class="block mt-4 text-sm">
@@ -43,10 +44,14 @@
             <textarea
               name="description"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              required/><%= banner[0].description %></textarea>
+              required
+            >
+<%= banner[0].description %></textarea
+            >
           </label>
 
-          <button type="submit"
+          <button
+            type="submit"
             class="px-5 py-3 mt-8 w-full font-medium w-64 leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
           >
             Edit Banner

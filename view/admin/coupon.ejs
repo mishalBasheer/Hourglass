@@ -34,11 +34,8 @@
               <td class="px-4 py-3 text-sm"><%= el.code %></td>
 
               <td class="px-4 py-3 text-xs">
-                <%= console.log(el.expireAfter) %> 
-                <%= console.log(new Date()) %> 
-                <%= console.log(el.expireAfter.getTime() < Date.now()) %> 
-                
-                <% if (el.expireAfter.getTime() < Date.now()) { %>
+                <%= console.log(el.expireAfter) %> <%= console.log(new Date()) %> <%=
+                console.log(el.expireAfter.getTime() < Date.now()) %> <% if (el.expireAfter.getTime() < Date.now()) { %>
                 <span
                   class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100"
                 >
@@ -92,7 +89,7 @@
     }
     rows[i].children[0][text] = i + ' ' + rows[i].children[0][text];
   }
-  function dltCouponWarning(id,index) {
+  function dltCouponWarning(id, index) {
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -103,11 +100,11 @@
       confirmButtonText: 'Yes, delete it!',
     }).then((result) => {
       if (result.isConfirmed) {
-        deleteCoupon(id,index);
+        deleteCoupon(id, index);
       }
     });
   }
-  function deleteCoupon(id,index) {
+  function deleteCoupon(id, index) {
     $.ajax({
       url: '/admin/coupon/delete-coupon',
       method: 'POST',

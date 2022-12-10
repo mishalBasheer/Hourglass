@@ -44,26 +44,20 @@
               name="signupForm"
               onsubmit="return validate() ;"
             >
-            <% if (msg.length>0) { %>
-                <div class="alert alert-danger alert-dismissible fade show w-100" role="alert">
-                    <%= msg %>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-            <% } %>
+              <% if (msg.length>0) { %>
+              <div class="alert alert-danger alert-dismissible fade show w-100" role="alert">
+                <%= msg %>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <% } %>
               <div class="col-md-12 form-group p_star">
                 <input type="email" class="form-control" id="email" name="email" value="" placeholder="Email" />
               </div>
               <div class="col-md-12 form-group p_star">
-                <input
-                  type="password"
-                  class="form-control"
-                  id="password"
-                  name="password"
-                  value="12345678"
-                />
-                <span id = "message" style="color:red"> </span>
+                <input type="password" class="form-control" id="password" name="password" value="12345678" />
+                <span id="message" style="color: red"> </span>
               </div>
               <div class="col-md-12 form-group">
                 <!-- <div class="creat_account d-flex align-items-center">
@@ -115,26 +109,24 @@
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <% if (loginCheck.length>0) { %>
 <script>
-  failedMsg('<%= loginCheck %>')
-  function failedMsg(mssg){
+  failedMsg('<%= loginCheck %>');
+  function failedMsg(mssg) {
     const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 2000,
-        timerProgressBar: false,
-        didOpen: (toast) => {
-          toast.addEventListener('mouseenter', Swal.stopTimer);
-          toast.addEventListener('mouseleave', Swal.resumeTimer);
-        },
-      });
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 2000,
+      timerProgressBar: false,
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer);
+        toast.addEventListener('mouseleave', Swal.resumeTimer);
+      },
+    });
 
-      Toast.fire({
-        icon: 'error',
-        title: mssg,
-      });
-}
+    Toast.fire({
+      icon: 'error',
+      title: mssg,
+    });
+  }
 </script>
-<% } %>
-
-<%- include('partials/footer.ejs') %>
+<% } %> <%- include('partials/footer.ejs') %>

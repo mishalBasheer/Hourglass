@@ -7,15 +7,11 @@
 
     <div class="w-full overflow-hidden rounded-lg shadow-xs mt-2">
       <div class="w-full overflow-x-auto">
-
-
         <button
-        class="px-5 py-3 mt-8 mx-auto font-medium w-64 leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+          class="px-5 py-3 mt-8 mx-auto font-medium w-64 leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
         >
-        <a href="/admin/category/add-category">
-        Add Category
-      </a>
-      </button>     
+          <a href="/admin/category/add-category"> Add Category </a>
+        </button>
 
         <table class="w-full whitespace-no-wrap">
           <thead>
@@ -62,7 +58,6 @@
                   </td> -->
 
               <td class="px-4 py-3">
-
                 <a href="/admin/category/edit-category/<%= el._id %>">
                   <button
                     class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
@@ -70,7 +65,6 @@
                     Edit
                   </button>
                 </a>
-
 
                 <!-- <div class="flex items-center space-x-4 text-sm">
                       <button
@@ -109,19 +103,14 @@
               </td>
             </tr>
 
-            
-
             <% }); %>
           </tbody>
         </table>
 
-    <!-- TABLE END  -->
+        <!-- TABLE END  -->
+      </div>
+    </div>
   </div>
-  <!-- 
-</div>
-
-
-</div> -->
 
   <!-- <script>
 
@@ -136,7 +125,7 @@ rows[i].insertBefore(td, rows[i].firstChild);
 }
 
 </script> -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" defer></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" defer></script>
   <script>
     var table = document.getElementsByTagName('table')[0],
       rows = table.getElementsByTagName('tr'),
@@ -146,9 +135,8 @@ rows[i].insertBefore(td, rows[i].firstChild);
       if (i == 0) {
         continue;
       }
-      rows[i].children[0][text] = i+100 + ' ' + rows[i].children[0][text];
+      rows[i].children[0][text] = i + 100 + ' ' + rows[i].children[0][text];
     }
-
   </script>
 </main>
 

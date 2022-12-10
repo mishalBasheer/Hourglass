@@ -41,7 +41,9 @@ const getAdminDashboard = async (req, res) => {
       $group: { _id: '$__v', count: { $sum: 1 } },
     },
   ]);
-  const categoriseOrderCount = await Order.aggregate([{$project:{orderstat:1}},{$group:{_id:'$orderstat',count:{$sum:1}}}
+  const categoriseOrderCount = await Order.aggregate([
+    { $project: { orderstat: 1 } },
+    { $group: { _id: '$orderstat', count: { $sum: 1 } } },
     // {
     //   $unwind: { path: '$products' },
     // },
@@ -115,7 +117,6 @@ const getAdminDashboard = async (req, res) => {
     categoryCountArray.push(el.count);
     categoryNameArray.push(el._id);
   });
-
 
   const brandCountArray = [];
   const brandNameArray = [];

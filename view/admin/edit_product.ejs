@@ -10,10 +10,10 @@
           <label class="block text-sm">
             <span class="text-gray-700 dark:text-gray-400">Title</span>
             <input
-              name="title" value="<%= product.title %>"
+              name="title"
+              value="<%= product.title %>"
               type="text"
-              class="block w-full mt-1 text-sm dark:border-gray-600 
-              dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+              class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
             />
           </label>
 
@@ -23,11 +23,11 @@
               name="brand"
               class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
             >
-            <option value="<%= product.brand._id %>" selected ><%= product.brand.title %></option>
-            <% brand.forEach(el => { %>
+              <option value="<%= product.brand._id %>" selected><%= product.brand.title %></option>
+              <% brand.forEach(el => { %>
               <option value="<%= el._id %>"><%= el.title %></option>
               <% }) %>
-            <!-- <option value="Furniture">Furniture</option>
+              <!-- <option value="Furniture">Furniture</option>
             <option value="Wall Accent">Wall Accent</option>
             <option value="Lighting">Lighting</option>
             <option value="Garden & Outdoor">Garden & Outdoor</option>
@@ -42,11 +42,11 @@
               name="category"
               class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
             >
-            <option value="<%= product.category._id %>" selected ><%= product.category.title %></option>
-            <% category.forEach(el => { %>
+              <option value="<%= product.category._id %>" selected><%= product.category.title %></option>
+              <% category.forEach(el => { %>
               <option value="<%= el._id %>"><%= el.title %></option>
               <% }) %>
-            <!-- <option value="Furniture">Furniture</option>
+              <!-- <option value="Furniture">Furniture</option>
             <option value="Wall Accent">Wall Accent</option>
             <option value="Lighting">Lighting</option>
             <option value="Garden & Outdoor">Garden & Outdoor</option>
@@ -56,16 +56,16 @@
             </select>
           </label>
 
-          
           <label class="block mt-4 text-sm">
             <span class="text-gray-700 dark:text-gray-400">Thumbnail</span>
             <input
               name="thumbnail"
               type="file"
-              class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"/>
+              class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+            />
           </label>
 
-            <img src="/product_img/<%= product.thumbnail %>" alt="" width="100px" class="edit-image-show">
+          <img src="/product_img/<%= product.thumbnail %>" alt="" width="100px" class="edit-image-show" />
 
           <label class="block mt-4 text-sm">
             <span class="text-gray-700 dark:text-gray-400">Images</span>
@@ -73,77 +73,78 @@
               name="images"
               type="file"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-            multiple/>
+              multiple
+            />
           </label>
 
           <% product.images.forEach(element => { %>
 
-              <img src="/product_img/<%= element %>" alt="" width="100px" class="edit-image-show">
+          <img src="/product_img/<%= element %>" alt="" width="100px" class="edit-image-show" />
 
-            <% }); %>
+          <% }); %>
 
           <label class="block mt-4 text-sm">
             <span class="text-gray-700 dark:text-gray-400">Price</span>
             <input
-              name="price" value="<%= product.price %>"
+              name="price"
+              value="<%= product.price %>"
               type="number"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              
             />
           </label>
 
           <label class="block mt-4 text-sm">
             <span class="text-gray-700 dark:text-gray-400">Width</span>
             <input
-              name="width" value="<%= product.width %>"
+              name="width"
+              value="<%= product.width %>"
               type="number"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              
             />
           </label>
           <label class="block mt-4 text-sm">
             <span class="text-gray-700 dark:text-gray-400">Breadth</span>
             <input
-              name="breadth"  value="<%= product.breadth %>"
+              name="breadth"
+              value="<%= product.breadth %>"
               type="number"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              
             />
           </label>
           <label class="block mt-4 text-sm">
             <span class="text-gray-700 dark:text-gray-400">Height</span>
             <input
-              name="height"  value="<%= product.height %>"
+              name="height"
+              value="<%= product.height %>"
               type="number"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              
             />
           </label>
           <label class="block mt-4 text-sm">
             <span class="text-gray-700 dark:text-gray-400">Warranty</span>
             <input
-              name="warranty"  value="<%= product.warranty %>"
+              name="warranty"
+              value="<%= product.warranty %>"
               type="number"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              
             />
           </label>
           <label class="block mt-4 text-sm">
             <span class="text-gray-700 dark:text-gray-400">Weight</span>
             <input
-              name="weight"  value="<%= product.weight %>"
+              name="weight"
+              value="<%= product.weight %>"
               type="number"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              
             />
           </label>
           <label class="block mt-4 text-sm">
             <span class="text-gray-700 dark:text-gray-400">Material</span>
             <input
-              name="material" value="<%= product.material %>"
+              name="material"
+              value="<%= product.material %>"
               type="text"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              
             />
           </label>
 
@@ -168,10 +169,10 @@
           <label class="block mt-4 text-sm">
             <span class="text-gray-700 dark:text-gray-400">Stock</span>
             <input
-              name="stock" value="<%= product.stock %>"
+              name="stock"
+              value="<%= product.stock %>"
               type="number"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              
             />
           </label>
           <label class="block mt-4 text-sm">
@@ -180,10 +181,13 @@
               name="description"
               class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
               rows="3"
-            ><%= product.description %></textarea>
+            >
+<%= product.description %></textarea
+            >
           </label>
 
-          <button type="submit"
+          <button
+            type="submit"
             class="px-5 py-3 mt-8 w-full font-medium w-64 leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
           >
             Add Product

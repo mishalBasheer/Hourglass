@@ -4,7 +4,8 @@ import app from './app.js';
 mongoos
   .then(() => {
     console.log('DB connection success');
-  }).catch((error) =>{
+  })
+  .catch((error) => {
     console.log(error.message);
   });
 

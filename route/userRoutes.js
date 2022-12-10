@@ -84,8 +84,6 @@ router.route('/order-confirmation').get(userLoginCheck, checkBlockedUser, getPay
 router.route('/create/orderId').post(razorOrderGenerate);
 router.route('/order-success').get(userLoginCheck, checkBlockedUser, getOrderSuccess);
 
-
-
 // router.route('/order-confirmation').get(userLoginCheck, checkBlockedUser, getOrderConfirmation);
 router.route('/orders').get(userLoginCheck, checkBlockedUser, getOrders).post(getOrderData);
 router.route('/order-tracking').get(userLoginCheck, checkBlockedUser, getTracking);
@@ -96,6 +94,6 @@ router
   .route('/profile/add-address')
   .get(userLoginCheck, checkBlockedUser, getAddAddress)
   .post(userLoginCheck, checkBlockedUser, addressValidator, addAddress);
-  router.route('/check-coupon').post(userLoginCheck, checkBlockedUser,checkCoupon)
+router.route('/check-coupon').post(userLoginCheck, checkBlockedUser, checkCoupon);
 
 export default router;

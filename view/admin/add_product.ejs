@@ -12,8 +12,8 @@
               name="title"
               type="text"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              
-              required/>
+              required
+            />
           </label>
 
           <label class="block mt-4 text-sm">
@@ -21,12 +21,13 @@
             <select
               name="brand"
               class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-             required>
-            <option value="none" selected disabled hidden>Select an Option</option>
-            <% brand.forEach(el => { %>
+              required
+            >
+              <option value="none" selected disabled hidden>Select an Option</option>
+              <% brand.forEach(el => { %>
               <option value="<%= el._id %>"><%= el.title %></option>
               <% }) %>
-             
+
               <!-- <option value="Wall Accent">Wall Accent</option>
               <option value="Lighting">Lighting</option>
               <option value="Garden & Outdoor">Garden & Outdoor</option>
@@ -41,9 +42,10 @@
             <select
               name="category"
               class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-              required>
-            <option value="none" selected disabled hidden>Select an Option</option>
-            <% category.forEach(el => { %>
+              required
+            >
+              <option value="none" selected disabled hidden>Select an Option</option>
+              <% category.forEach(el => { %>
               <option value="<%= el._id %>"><%= el.title %></option>
               <% }) %>
               <!-- <option value="Wall Accent">Wall Accent</option>
@@ -58,19 +60,22 @@
           <label class="block mt-4 text-sm">
             <span class="text-gray-700 dark:text-gray-400">Thumbnail</span>
             <input
-            type="file"
+              type="file"
               name="thumbnail"
-              class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" required/>
-          
-            </label>
-          
+              class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+              required
+            />
+          </label>
+
           <label class="block mt-4 text-sm">
             <span class="text-gray-700 dark:text-gray-400">Images</span>
             <input
-            type="file"
+              type="file"
               name="images"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-            multiple required/>
+              multiple
+              required
+            />
           </label>
 
           <label class="block mt-4 text-sm">
@@ -171,11 +176,13 @@
               name="description"
               class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
               rows="3"
-              placeholder="Enter description of the product here....."  required
+              placeholder="Enter description of the product here....."
+              required
             ></textarea>
           </label>
 
-          <button type="submit"
+          <button
+            type="submit"
             class="px-5 py-3 mt-8 w-full font-medium w-64 leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
           >
             Add Product
@@ -186,27 +193,25 @@
   </div>
 </main>
 <% if (msg.length>0) { %>
-  <script>
-    alertMsg('<%= msg %>')
-    function alertMsg(msg) {
-      const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.addEventListener('mouseenter', Swal.stopTimer);
-          toast.addEventListener('mouseleave', Swal.resumeTimer);
-        },
-      });
+<script>
+  alertMsg('<%= msg %>');
+  function alertMsg(msg) {
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer);
+        toast.addEventListener('mouseleave', Swal.resumeTimer);
+      },
+    });
 
-      Toast.fire({
-        icon: 'error',
-        title: msg,
-      });
-    }
-  </script>
-  <% } %>
-
-<%- include('partials/footer.ejs') %>
+    Toast.fire({
+      icon: 'error',
+      title: msg,
+    });
+  }
+</script>
+<% } %> <%- include('partials/footer.ejs') %>

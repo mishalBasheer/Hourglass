@@ -1,239 +1,274 @@
 <%- include('partials/header.ejs') %>
 
-    <!--================Category Product Area =================-->
-    <section class="cat_product_area section_padding">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="left_sidebar_area">
-                        <aside class="left_widgets p_filter_widgets">
-                            <div class="l_w_title">
-                                <h3>Browse Categories</h3>
-                            </div>
-                            <div class="widgets_inner">
-                                <ul class="list">
-                                    <% cat.forEach(element => { %>
-                                        <li>
-                                            <a href="/shop/category/<%= element._id %>"><%= element.cat[0].title %> </a>
-                                            <span>(<%= element.count %>)</span>
-                                        </li>
-                                    <% }) %>
-                                </ul>
-                            </div>
-                        </aside>
-
-                        <aside class="left_widgets p_filter_widgets">
-                            <div class="l_w_title">
-                                <h3>Brand filters</h3>
-                            </div>
-                            <div class="widgets_inner">
-                                <ul class="list">
-                                    <% brand.forEach(element => { %>
-                                        <li>
-                                            <a href="/shop/brand/<%= element._id %>"><%= element.title %> </a>
-                                        </li>
-                                    <% }) %>
-                                </ul>
-
-                            </div>
-                        </aside>
-
-                        <aside class="left_widgets p_filter_widgets">
-                            <div class="l_w_title">
-                                <h3>Color Filter</h3>
-                            </div>
-                            <div class="widgets_inner">
-                                <ul class="list">
-                                    <li>
-                                        <a href="#">Black</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Black Leather</a>
-                                    </li>
-                                    <li class="active">
-                                        <a href="#">Black with red</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Gold</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Spacegrey</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </aside>
-
-                        <aside class="left_widgets p_filter_widgets price_rangs_aside">
-                            <div class="l_w_title">
-                                <h3>Price Filter</h3>
-                            </div>
-                            <div class="widgets_inner">
-                                <div class="range_item">
-                                    <!-- <div id="slider-range"></div> -->
-                                    <input type="text" class="js-range-slider" value="" />
-                                    <div class="d-flex">
-                                        <div class="price_text">
-                                            <p>Price :</p>
-                                        </div>
-                                        <div class="price_value d-flex justify-content-center">
-                                            <input type="text" class="js-input-from" id="amount" readonly />
-                                            <span>to</span>
-                                            <input type="text" class="js-input-to" id="amount" readonly />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </aside>
-                    </div>
-                </div>
-                <div class="col-lg-9">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="product_top_bar d-flex justify-content-between align-items-center">
-                                <div class="single_product_menu">
-                                    <p><span><%= count %>  </span> Products Found</p>
-                                </div>
-                                <div class="single_product_menu d-flex">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="search"
-                                            aria-describedby="inputGroupPrepend">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text" id="inputGroupPrepend"><i
-                                                    class="ti-search"></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row align-items-center latest_product_inner">
-
-                        <% product.forEach((element,index) => { %>
-                            <div class="col-lg-4 col-sm-6">
-                                <div class="single_product_item">
-                                    <a href="/product-details/<%= element._id %> ">
-                                    <img src="/product_img/<%= element.thumbnail %> " alt="">
-                                    <div class="single_product_text">
-                                    </a>
-                                        <h4><%= element.title %></h4>
-                                        <h3><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-currency-rupee" viewBox="0 0 16 16">
-                                            <path d="M4 3.06h2.726c1.22 0 2.12.575 2.325 1.724H4v1.051h5.051C8.855 7.001 8 7.558 6.788 7.558H4v1.317L8.437 14h2.11L6.095 8.884h.855c2.316-.018 3.465-1.476 3.688-3.049H12V4.784h-1.345c-.08-.778-.357-1.335-.793-1.732H12V2H4v1.06Z"/>
-                                        </svg><%= element.price %></h3>
-                                        <a onclick="cartAdd('<%= element._id %>')" class="add_cart">+ add to cart</a> 
-
- 
-                                        <% if (user) { %>
-
-                                            <% if (wishlistProducts.products.some(el => el.product.equals(element._id))) {  %>
-                                                <a id="heart_symbol<%= index %>" onclick="updateWish('<%= element._id %>','<%= index %>')"><i><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-                                                    <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
-                                                </svg></i></a>
-                                            <% }else{ %>
-                                            <a id="heart_symbol<%= index %>" onclick="updateWish('<%= element._id %>','<%= index %>')"><i><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                                                <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-                                            </svg></i></a>
-                                            <% } %>
-                                        <% }else{ %>
-                                            <a href="/signin"><i><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                                                <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-                                              </svg></i></a>
-                                        <% } %>
-                                    </div>
-                                </div>
-                            </div>
-                        <% }) %>
-                            
-                        <div class="col-lg-12">
-                            <div class="pageination">
-                                <nav aria-label="Page navigation example">
-                                    <ul class="pagination justify-content-center">
-                                        <li class="page-item">
-                                            <a class="page-link" href="#" aria-label="Previous">
-                                                <i class="ti-angle-double-left"></i>
-                                            </a>
-                                        </li>
-                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">5</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">6</a></li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="#" aria-label="Next">
-                                                <i class="ti-angle-double-right"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<!--================Category Product Area =================-->
+<section class="cat_product_area section_padding">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="left_sidebar_area">
+          <aside class="left_widgets p_filter_widgets">
+            <div class="l_w_title">
+              <h3>Browse Categories</h3>
             </div>
+            <div class="widgets_inner">
+              <ul class="list">
+                <% cat.forEach(element => { %>
+                <li>
+                  <a href="/shop/category/<%= element._id %>"><%= element.cat[0].title %> </a>
+                  <span>(<%= element.count %>)</span>
+                </li>
+                <% }) %>
+              </ul>
+            </div>
+          </aside>
+
+          <aside class="left_widgets p_filter_widgets">
+            <div class="l_w_title">
+              <h3>Brand filters</h3>
+            </div>
+            <div class="widgets_inner">
+              <ul class="list">
+                <% brand.forEach(element => { %>
+                <li>
+                  <a href="/shop/brand/<%= element._id %>"><%= element.title %> </a>
+                </li>
+                <% }) %>
+              </ul>
+            </div>
+          </aside>
+
+          <aside class="left_widgets p_filter_widgets">
+            <div class="l_w_title">
+              <h3>Color Filter</h3>
+            </div>
+            <div class="widgets_inner">
+              <ul class="list">
+                <li>
+                  <a href="#">Black</a>
+                </li>
+                <li>
+                  <a href="#">Black Leather</a>
+                </li>
+                <li class="active">
+                  <a href="#">Black with red</a>
+                </li>
+                <li>
+                  <a href="#">Gold</a>
+                </li>
+                <li>
+                  <a href="#">Spacegrey</a>
+                </li>
+              </ul>
+            </div>
+          </aside>
+
+          <aside class="left_widgets p_filter_widgets price_rangs_aside">
+            <div class="l_w_title">
+              <h3>Price Filter</h3>
+            </div>
+            <div class="widgets_inner">
+              <div class="range_item">
+                <!-- <div id="slider-range"></div> -->
+                <input type="text" class="js-range-slider" value="" />
+                <div class="d-flex">
+                  <div class="price_text">
+                    <p>Price :</p>
+                  </div>
+                  <div class="price_value d-flex justify-content-center">
+                    <input type="text" class="js-input-from" id="amount" readonly />
+                    <span>to</span>
+                    <input type="text" class="js-input-to" id="amount" readonly />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </aside>
         </div>
-    </section>
-    <!--================End Category Product Area =================-->
-
-    <!-- product_list part start-->
-    <section class="product_list best_seller">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-12">
-                    <div class="section_tittle text-center">
-                        <h2>Best Sellers <span>shop</span></h2>
-                    </div>
+      </div>
+      <div class="col-lg-9">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="product_top_bar d-flex justify-content-between align-items-center">
+              <div class="single_product_menu">
+                <p><span><%= count %> </span> Products Found</p>
+              </div>
+              <div class="single_product_menu d-flex">
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="search" aria-describedby="inputGroupPrepend" />
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroupPrepend"><i class="ti-search"></i></span>
+                  </div>
                 </div>
+              </div>
             </div>
-            <div class="row align-items-center justify-content-between">
-                <div class="col-lg-12">
-                    <div class="best_product_slider owl-carousel">
-                        <div class="single_product_item">
-                            <img src="/user/img/product/product_1.png" alt="">
-                            <div class="single_product_text">
-                                <h4>Quartz Belt Watch</h4>
-                                <h3>$150.00</h3>
-                            </div>
-                        </div>
-                        <div class="single_product_item">
-                            <img src="/user/img/product/product_2.png" alt="">
-                            <div class="single_product_text">
-                                <h4>Quartz Belt Watch</h4>
-                                <h3>$150.00</h3>
-                            </div>
-                        </div>
-                        <div class="single_product_item">
-                            <img src="/user/img/product/product_3.png" alt="">
-                            <div class="single_product_text">
-                                <h4>Quartz Belt Watch</h4>
-                                <h3>$150.00</h3>
-                            </div>
-                        </div>
-                        <div class="single_product_item">
-                            <img src="/user/img/product/product_4.png" alt="">
-                            <div class="single_product_text">
-                                <h4>Quartz Belt Watch</h4>
-                                <h3>$150.00</h3>
-                            </div>
-                        </div>
-                        <div class="single_product_item">
-                            <img src="/user/img/product/product_5.png" alt="">
-                            <div class="single_product_text">
-                                <h4>Quartz Belt Watch</h4>
-                                <h3>$150.00</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
-    </section>
-    <!-- product_list part end-->
 
-    
-<%- include('partials/footer.ejs') %>
-<% if (msg.length>0) { %>
-    <script defer>
-        customAlert('<%= msg %>','success')
-        </script>
-   <% } %>
+        <div class="row align-items-center latest_product_inner">
+          <% product.forEach((element,index) => { %>
+          <div class="col-lg-4 col-sm-6">
+            <div class="single_product_item">
+              <a href="/product-details/<%= element._id %> ">
+                <img src="/product_img/<%= element.thumbnail %> " alt="" />
+              </a>
+              <div class="single_product_text">
+                <h4><%= element.title %></h4>
+                <h3>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-currency-rupee"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      d="M4 3.06h2.726c1.22 0 2.12.575 2.325 1.724H4v1.051h5.051C8.855 7.001 8 7.558 6.788 7.558H4v1.317L8.437 14h2.11L6.095 8.884h.855c2.316-.018 3.465-1.476 3.688-3.049H12V4.784h-1.345c-.08-.778-.357-1.335-.793-1.732H12V2H4v1.06Z"
+                    /></svg
+                  ><%= element.price %>
+                </h3>
+                <a onclick="cartAdd('<%= element._id %>')" class="add_cart">+ add to cart</a>
+
+                <% if (user) { %> <% if (wishlistProducts.products.some(el => el.product.equals(element._id))) { %>
+                <a id="heart_symbol<%= index %>" onclick="updateWish('<%= element._id %>','<%= index %>')"
+                  ><i
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="bi bi-heart-fill"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"
+                      /></svg></i
+                ></a>
+                <% }else{ %>
+                <a id="heart_symbol<%= index %>" onclick="updateWish('<%= element._id %>','<%= index %>')"
+                  ><i
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="bi bi-heart"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"
+                      /></svg></i
+                ></a>
+                <% } %> <% }else{ %>
+                <a href="/signin"
+                  ><i
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="bi bi-heart"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"
+                      /></svg></i
+                ></a>
+                <% } %>
+              </div>
+            </div>
+          </div>
+          <% }) %>
+
+          <div class="col-lg-12">
+            <div class="pageination">
+              <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                  <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Previous">
+                      <i class="ti-angle-double-left"></i>
+                    </a>
+                  </li>
+                  <li class="page-item"><a class="page-link" href="#">1</a></li>
+                  <li class="page-item"><a class="page-link" href="#">2</a></li>
+                  <li class="page-item"><a class="page-link" href="#">3</a></li>
+                  <li class="page-item"><a class="page-link" href="#">4</a></li>
+                  <li class="page-item"><a class="page-link" href="#">5</a></li>
+                  <li class="page-item"><a class="page-link" href="#">6</a></li>
+                  <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                      <i class="ti-angle-double-right"></i>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--================End Category Product Area =================-->
+
+<!-- product_list part start-->
+<section class="product_list best_seller">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-12">
+        <div class="section_tittle text-center">
+          <h2>Best Sellers <span>shop</span></h2>
+        </div>
+      </div>
+    </div>
+    <div class="row align-items-center justify-content-between">
+      <div class="col-lg-12">
+        <div class="best_product_slider owl-carousel">
+          <div class="single_product_item">
+            <img src="/user/img/product/product_1.png" alt="" />
+            <div class="single_product_text">
+              <h4>Quartz Belt Watch</h4>
+              <h3>$150.00</h3>
+            </div>
+          </div>
+          <div class="single_product_item">
+            <img src="/user/img/product/product_2.png" alt="" />
+            <div class="single_product_text">
+              <h4>Quartz Belt Watch</h4>
+              <h3>$150.00</h3>
+            </div>
+          </div>
+          <div class="single_product_item">
+            <img src="/user/img/product/product_3.png" alt="" />
+            <div class="single_product_text">
+              <h4>Quartz Belt Watch</h4>
+              <h3>$150.00</h3>
+            </div>
+          </div>
+          <div class="single_product_item">
+            <img src="/user/img/product/product_4.png" alt="" />
+            <div class="single_product_text">
+              <h4>Quartz Belt Watch</h4>
+              <h3>$150.00</h3>
+            </div>
+          </div>
+          <div class="single_product_item">
+            <img src="/user/img/product/product_5.png" alt="" />
+            <div class="single_product_text">
+              <h4>Quartz Belt Watch</h4>
+              <h3>$150.00</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- product_list part end-->
+
+<%- include('partials/footer.ejs') %> <% if (msg.length>0) { %>
+<script defer>
+  customAlert('<%= msg %>', 'success');
+</script>
+<% } %>

@@ -54,13 +54,11 @@ const getUserHome = async (req, res) => {
         _id: 0,
       });
       const msg = req.flash('cartSuccess');
-      return res.render('user/home', { msg, user, banner, product, navCat , wishlistProducts});
+      return res.render('user/home', { msg, user, banner, product, navCat, wishlistProducts });
     } else {
       const msg = req.flash('cartSuccess');
       return res.render('user/home', { msg, user, banner, product, navCat });
     }
-
-
   } catch (err) {
     res.render('user/error-page', { error: err, errorMsg: 'error from getting home page' });
   }

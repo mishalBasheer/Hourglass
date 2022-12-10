@@ -112,16 +112,23 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
   if ('<%= order.discount %>') {
-    if (('<%= order.discountIsPercent %>')=='true') {
+    if ('<%= order.discountIsPercent %>' == 'true') {
       console.log('<%= order.discountIsPercent %>');
-      $(`<tr id="confirmation_subtotal"><th colspan="3">Discount</th><th>-%${'<%= order.discount %>'}</th></tr>`).insertAfter(`#confirmation_subtotal`);
-      $(`#confirmation_total`).replaceWith(`<tr id="confirmation_total"><th colspan="3"></th><th>₹${'<%= Math.round(order.total*(1-(order.discount/100)))+50 %>'}</th></tr>`);
+      $(
+        `<tr id="confirmation_subtotal"><th colspan="3">Discount</th><th>-%${'<%= order.discount %>'}</th></tr>`
+      ).insertAfter(`#confirmation_subtotal`);
+      $(`#confirmation_total`).replaceWith(
+        `<tr id="confirmation_total"><th colspan="3"></th><th>₹${'<%= Math.round(order.total*(1-(order.discount/100)))+50 %>'}</th></tr>`
+      );
     } else {
-      $(`<tr id="confirmation_subtotal"><th colspan="3">Discount</th><th>-₹${'<%= order.discount %>'}</th></tr>`).insertAfter(`#confirmation_subtotal`);
-      $(`#confirmation_total`).replaceWith(`<tr id="confirmation_total"><th colspan="3"></th><th>₹${'<%= order.total+50-order.discount %>'}</th></tr>`);
+      $(
+        `<tr id="confirmation_subtotal"><th colspan="3">Discount</th><th>-₹${'<%= order.discount %>'}</th></tr>`
+      ).insertAfter(`#confirmation_subtotal`);
+      $(`#confirmation_total`).replaceWith(
+        `<tr id="confirmation_total"><th colspan="3"></th><th>₹${'<%= order.total+50-order.discount %>'}</th></tr>`
+      );
     }
   }
-      
 
   var orderId;
   $(document).ready(function () {

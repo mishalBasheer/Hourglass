@@ -1,22 +1,22 @@
 <%- include('partials/header.ejs') %>
 
-  <!--================Home Banner Area =================-->
-  <!-- breadcrumb start-->
-  <section class="breadcrumb breadcrumb_bg">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-lg-8">
-          <div class="breadcrumb_iner">
-            <div class="breadcrumb_iner_item">
-              <h2>Wishlist</h2>
-              <p>Home <span>-</span>Wishlist</p>
-            </div>
+<!--================Home Banner Area =================-->
+<!-- breadcrumb start-->
+<section class="breadcrumb breadcrumb_bg">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="breadcrumb_iner">
+          <div class="breadcrumb_iner_item">
+            <h2>Wishlist</h2>
+            <p>Home <span>-</span>Wishlist</p>
           </div>
         </div>
       </div>
     </div>
-  </section>
-  <!-- breadcrumb start-->
+  </div>
+</section>
+<!-- breadcrumb start-->
 
 <section class="cat_product_area section_padding">
   <div class="container">
@@ -38,10 +38,10 @@
       <% }) %>
     </div>
     <% }else{ %>
-        <div class="alert alert-warning d-flex align-items-center" role="alert">
-            <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Warning:"></svg>
-            <div>You have not added anything to wishlist</div>
-        </div>
+    <div class="alert alert-warning d-flex align-items-center" role="alert">
+      <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Warning:"></svg>
+      <div>You have not added anything to wishlist</div>
+    </div>
     <% }%>
   </div>
 </section>
