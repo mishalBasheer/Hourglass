@@ -2360,6 +2360,7 @@ ul {
     border-color: transparent;
     position: absolute;
     left: 0;
+    z-index: 10;
   }
   /* line 262, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_menu.scss */
   .menu_icon i {
@@ -2450,8 +2451,17 @@ ul {
   display: table-cell;
   vertical-align: middle;
 }
+@media (max-width: 430px) {
+  .banner_part .single_banner_slider .banner_text {
+    height: 518px;
+  }
+  .thumb-lg img{
+    width: 70%;
+    }
+}
 
-@media (max-width: 991px) {
+
+@media only screen and (min-width: 431px) and (max-width: 992px)  {
   /* line 7, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_banner.scss */
   .banner_part .single_banner_slider .banner_text {
     height: 550px;
@@ -2554,6 +2564,13 @@ ul {
   position: absolute;
   right: 1%;
   top: 30%;
+} 
+@media (max-width: 770px) {
+  .banner_part .single_banner_slider .banner_img {
+
+    top: 18%;
+  } 
+
 }
 
 /* line 72, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_banner.scss */
@@ -2647,7 +2664,14 @@ ul {
   }
 }
 
-@media (max-width: 991px) {
+@media (max-width: 430px) {
+  .banner_part {
+    padding: 0;
+    height: 577px;
+  }
+}
+
+@media only screen and (min-width: 431px) and (max-width: 991px) {
   /* line 2, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_banner.scss */
   .banner_part {
     padding: 0;
