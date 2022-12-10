@@ -262,7 +262,7 @@ const getProductDetails = async (req, res) => {
       });
       const wishlisted = wishlistProducts.products.some((el) => el.product.equals(product._id));
       const msg = req.flash('cartSuccess');
-      res.render('user/p_details', { user, product, msg, wishlisted, navCat,index:0 });
+      res.render('user/p_details', { user, product, msg, wishlisted, navCat, index: 0 });
     } else {
       res.render('user/p_details', { user, product, navCat });
     }
@@ -526,29 +526,29 @@ const getWish = async (req, res) => {
 //   }
 // };
 
-const updateWishlist = async(req,res)=>{
+const updateWishlist = async (req, res) => {
   const user = req.session.user;
   const productId = req.body.productId;
-  const productCheck = await Wishlist.findOne({_id:user.wishlistId,'products.product':productId})
+  const productCheck = await Wishlist.findOne({ _id: user.wishlistId, 'products.product': productId });
   const product = {
-    product:productId,
-  }
-  if(productCheck){
+    product: productId,
+  };
+  if (productCheck) {
     await Wishlist.updateOne({ _id: user.wishlistId }, { $pull: { products: product } });
     return res.json({
-      access:true,
-      productStat:'removed',
-      msg:'Successfully remove product from wishlist',
-    })
-  }else{
+      access: true,
+      productStat: 'removed',
+      msg: 'Successfully remove product from wishlist',
+    });
+  } else {
     await Wishlist.updateOne({ _id: user.wishlistId }, { $push: { products: product } }, { upsert: true });
     return res.json({
-      access:true,
-      productStat:'added',
-      msg:'Successfully added product to wishlist',
-    })
+      access: true,
+      productStat: 'added',
+      msg: 'Successfully added product to wishlist',
+    });
   }
-}
+};
 
 // get Orders
 const getOrders = async (req, res) => {
@@ -588,8 +588,18 @@ const getCheckout = async (req, res) => {
   const user = req.session.user;
   const navCat = await Category.find();
   const cartProducts = await Cart.findById(user.cartId).populate('products.product');
-  const address = await Address.find({ userId: user._id });
-  res.render('user/checkout', { user, total: cartProducts.total, products: cartProducts.products, address, navCat });
+  if (cartProducts.length > 0) {
+    const address = await Address.find({ userId: user._id });
+    return res.render('user/checkout', {
+      user,
+      total: cartProducts.total,
+      products: cartProducts.products,
+      address,
+      navCat,
+    });
+  } else {
+    return res.redirect('/cart');
+  }
 };
 
 // checkoutConfirm
@@ -653,20 +663,20 @@ const razorOrderGenerate = async (req, res) => {
       key_secret: process.env.RAZOR_KEY_SECRET,
     });
     var amount;
-    if(newOrder.discount){
-      if(newOrder.discountIsPercent){
-        amount = ((newOrder.total*(1-(newOrder.discount/100)))+50) * 100
-        console.log("1..",amount);
-      }else{
-        amount = (newOrder.total - newOrder.discount + 50) * 100
-        console.log("2..",amount);
+    if (newOrder.discount) {
+      if (newOrder.discountIsPercent) {
+        amount = (newOrder.total * (1 - newOrder.discount / 100) + 50) * 100;
+        console.log('1..', amount);
+      } else {
+        amount = (newOrder.total - newOrder.discount + 50) * 100;
+        console.log('2..', amount);
       }
-    }else{
-      amount = (newOrder.total + 50) * 100
-      console.log("3..",amount);
+    } else {
+      amount = (newOrder.total + 50) * 100;
+      console.log('3..', amount);
     }
     var options = {
-      amount, 
+      amount,
       currency: 'INR',
       receipt: 'order_rcptid_11',
     };
@@ -691,29 +701,32 @@ const setCOD = async (req, res) => {
 const getOrderSuccess = async (req, res) => {
   const user = req.session.user;
   const newOrder = req.session.newOrder;
-  if(newOrder){
+  if (newOrder) {
     const navCat = await Category.find();
     const order = await Order.create(newOrder);
     const order_address = await Address.populate(order, { path: 'address' });
-    const userUsed = {userId:user._id}
+    const userUsed = { userId: user._id };
     if (order.discountCoupon) {
-      let coupon = await Coupon.findByIdAndUpdate(order.discountCoupon ,{$inc:{usageLimit:-1},$push:{userUsed}},{new: true});
+      let coupon = await Coupon.findByIdAndUpdate(
+        order.discountCoupon,
+        { $inc: { usageLimit: -1 }, $push: { userUsed } },
+        { new: true }
+      );
       var isPercent = coupon.isPercent;
       var discountAmt = coupon.amount;
-      if(isPercent){
-        const total=Math.round((order.total)*(1-(discountAmt/100)))+50;
-        await Order.findByIdAndUpdate(order._id,{total})
-      }else{
-        const total=((order.total)-discountAmt)+50;
-        await Order.findByIdAndUpdate(order._id,{total})
+      if (isPercent) {
+        const total = Math.round(order.total * (1 - discountAmt / 100)) + 50;
+        await Order.findByIdAndUpdate(order._id, { total });
+      } else {
+        const total = order.total - discountAmt + 50;
+        await Order.findByIdAndUpdate(order._id, { total });
       }
     }
-    req.session.newOrder=null;
-    return res.render('user/order_success', { user, order: order_address, navCat, discountAmt ,isPercent });
-  }else{
+    req.session.newOrder = null;
+    return res.render('user/order_success', { user, order: order_address, navCat, discountAmt, isPercent });
+  } else {
     return res.redirect('/orders');
   }
-
 };
 
 // get Tracking Page
