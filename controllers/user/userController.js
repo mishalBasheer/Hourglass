@@ -46,8 +46,21 @@ const getUserHome = async (req, res) => {
     req.session.couponApplied = null;
     const banner = await Banner.find();
     const navCat = await Category.find();
-    console.log(banner);
-    res.render('user/home', { msg, user, banner, navCat, navCat });
+    const product = await Product.find();
+
+    if (user) {
+      const wishlistProducts = await Wishlist.findOne({ _id: user.wishlistId }).select({
+        'products.product': 1,
+        _id: 0,
+      });
+      const msg = req.flash('cartSuccess');
+      return res.render('user/home', { msg, user, banner, product, navCat , wishlistProducts});
+    } else {
+      const msg = req.flash('cartSuccess');
+      return res.render('user/home', { msg, user, banner, product, navCat });
+    }
+
+
   } catch (err) {
     res.render('user/error-page', { error: err, errorMsg: 'error from getting home page' });
   }
