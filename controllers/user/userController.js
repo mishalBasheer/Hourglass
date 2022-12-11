@@ -190,8 +190,8 @@ const getShopCategory = async (req, res) => {
         },
       },
       {
-        $sort:{_id:1}
-      }
+        $sort: { _id: 1 },
+      },
     ]);
     const count = product.length;
     const user = req.session.user;
@@ -236,7 +236,7 @@ const getShopBrand = async (req, res) => {
         },
       },
       {
-        $sort:{_id:1}
+        $sort: { _id: 1 },
       },
     ]);
 
@@ -588,7 +588,7 @@ const getOrderData = async (req, res) => {
     const order = await Order.findOne({ _id: req.body.orderId })
       .populate('address')
       .select({ 'products._id': 0, userId: 0, 'address.userId': 0, 'address._id': 0 });
-
+    console.log(order);
     res.json({
       order,
     });
@@ -637,7 +637,7 @@ const checkoutConfirm = async (req, res) => {
         discountIsPercent: coupon.isPercent,
         discount: coupon.amount,
         discountCoupon: coupon._id,
-        maxDiscountAmt:coupon.maxDiscountAmount,
+        maxDiscountAmt: coupon.maxDiscountAmount,
         total: cartProducts.total,
       };
       req.session.newOrder = newOrder;
@@ -683,7 +683,10 @@ const razorOrderGenerate = async (req, res) => {
     var amount;
     if (newOrder.discount) {
       if (newOrder.discountIsPercent) {
-        amount = (newOrder.total * (1 - newOrder.discount / 100) + 50)<newOrder.maxDiscountAmt?(newOrder.total * (1 - newOrder.discount / 100) + 50):newOrder.total-newOrder.maxDiscountAmt+50;
+        amount =
+          newOrder.total * (1 - newOrder.discount / 100) + 50 < newOrder.maxDiscountAmt
+            ? newOrder.total * (1 - newOrder.discount / 100) + 50
+            : newOrder.total - newOrder.maxDiscountAmt + 50;
         console.log('1..', amount);
       } else {
         amount = (newOrder.total - newOrder.discount + 50) * 100;
@@ -734,7 +737,10 @@ const getOrderSuccess = async (req, res) => {
       var discountAmt = coupon.amount;
       var maxDiscountAmt = coupon.maxDiscountAmount;
       if (isPercent) {
-        const total = (Math.round(order.total * (1 - discountAmt / 100)) + 50)<maxDiscountAmt?(Math.round(order.total * (1 - discountAmt / 100)) + 50): order.total - maxDiscountAmt + 50;
+        const total =
+          Math.round(order.total * (1 - discountAmt / 100)) + 50 < maxDiscountAmt
+            ? Math.round(order.total * (1 - discountAmt / 100)) + 50
+            : order.total - maxDiscountAmt + 50;
         await Order.findByIdAndUpdate(order._id, { total });
       } else {
         const total = order.total - discountAmt + 50;
@@ -742,7 +748,14 @@ const getOrderSuccess = async (req, res) => {
       }
     }
     req.session.newOrder = null;
-    return res.render('user/order_success', { user, order: order_address, navCat, discountAmt, isPercent,maxDiscountAmt });
+    return res.render('user/order_success', {
+      user,
+      order: order_address,
+      navCat,
+      discountAmt,
+      isPercent,
+      maxDiscountAmt,
+    });
   } else {
     return res.redirect('/orders');
   }
@@ -1014,6 +1027,13 @@ const checkCoupon = async (req, res) => {
   }
 };
 
+const cancelOrder = async (req, res) => {
+  await Order.findByIdAndUpdate(req.params.id, { orderstat: 'CANCELLED' });
+  res.json({
+    deleted: 'success',
+  });
+};
+
 // removing session of the user
 const logoutUser = (req, res) => {
   req.session.user = null;
@@ -1063,6 +1083,7 @@ export {
   setCOD,
   razorOrderGenerate,
   getOrderSuccess,
+  cancelOrder,
   getAddress,
   getOrderData,
   checkCoupon,

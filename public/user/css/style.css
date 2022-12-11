@@ -1,8 +1,9 @@
 /*Color Variables*/
 /**************** extend css start ****************/
-@import url("https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800&display=swap");
+@import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800&display=swap');
 /* line 2, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_extends.scss */
-.btn_2, .form-contact .form-group .btn_1 i {
+.btn_2,
+.form-contact .form-group .btn_1 i {
   background-image: linear-gradient(16deg, #ff005a 0%, #ff5d2d 64%, #ffba00 100%);
 }
 
@@ -15,7 +16,7 @@
 /**************** common css start ****************/
 /* line 4, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_common.scss */
 body {
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   padding: 0;
   margin: 0;
   font-size: 14px;
@@ -157,14 +158,14 @@ h4,
 h5,
 h6 {
   color: #000;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   -webkit-transition: 0.5s;
   transition: 0.5s;
 }
 
 /* line 105, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_common.scss */
 p {
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   line-height: 2;
   font-size: 15px;
   margin-bottom: 0px;
@@ -302,7 +303,7 @@ button:focus,
   color: #556172;
   text-transform: capitalize;
   line-height: 30px;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 @media (max-width: 576px) {
@@ -424,7 +425,7 @@ ul {
 
 @media (max-width: 1200px) {
   /* line 294, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_common.scss */
-  [class*="hero-ani-"] {
+  [class*='hero-ani-'] {
     display: none !important;
   }
 }
@@ -539,12 +540,12 @@ ul {
   border-radius: 5px;
   background-color: #ff3368;
   font-size: 15px;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: 500;
   color: #fff;
-  -o-transition: all .4s ease-in-out;
-  -webkit-transition: all .4s ease-in-out;
-  transition: all .4s ease-in-out;
+  -o-transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.4s ease-in-out;
+  transition: all 0.4s ease-in-out;
   text-transform: capitalize;
   background-size: 200% auto;
   text-transform: uppercase;
@@ -672,7 +673,8 @@ ul {
 }
 
 /* line 14, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_blog.scss */
-.blog_area a:hover, .blog_area a :hover {
+.blog_area a:hover,
+.blog_area a :hover {
   color: #ff3368;
 }
 
@@ -801,7 +803,7 @@ ul {
 
 /* line 131, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_blog.scss */
 .single-blog:hover .thumb:after {
-  opacity: .7;
+  opacity: 0.7;
   -webkit-transition: 0.5s;
   transition: 0.5s;
 }
@@ -956,7 +958,7 @@ ul {
 
 /* line 303, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_blog.scss */
 .causes_item .causes_img .c_parcent span:before {
-  content: "75%";
+  content: '75%';
   position: absolute;
   right: -10px;
   bottom: 0px;
@@ -1217,7 +1219,7 @@ ul {
 
 /* line 573, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_blog.scss */
 .blog-info-link li::after {
-  content: "|";
+  content: '|';
   padding-left: 10px;
   padding-right: 10px;
 }
@@ -1229,7 +1231,7 @@ ul {
 
 /* line 584, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_blog.scss */
 .blog-info-link::after {
-  content: "";
+  content: '';
   display: block;
   clear: both;
   display: table;
@@ -1299,7 +1301,7 @@ ul {
 
 /* line 648, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_blog.scss */
 .blog_right_sidebar .widget_title::after {
-  content: "";
+  content: '';
   display: block;
   padding-top: 15px;
   border-bottom: 1px solid #f0e9ff;
@@ -1782,7 +1784,7 @@ ul {
 
 /* line 1257, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_blog.scss */
 .single-post-area .navigation-area .nav-left:hover .thumb img {
-  opacity: .5;
+  opacity: 0.5;
 }
 
 @media (max-width: 767px) {
@@ -1824,7 +1826,7 @@ ul {
 
 /* line 1292, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_blog.scss */
 .single-post-area .navigation-area .nav-right:hover .thumb img {
-  opacity: .5;
+  opacity: 0.5;
 }
 
 @media (max-width: 991px) {
@@ -2125,7 +2127,7 @@ ul {
   color: #000;
   font-size: 15px;
   padding: 36px 23px;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   text-transform: capitalize;
   line-height: 12px;
   font-weight: 400;
@@ -2221,7 +2223,7 @@ ul {
 /* line 107, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_menu.scss */
 .main_menu a {
   color: #000;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   position: relative;
   z-index: 1;
   font-size: 15px;
@@ -2231,9 +2233,9 @@ ul {
 /* line 116, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_menu.scss */
 .main_menu .cart .dropdown-toggle::after {
   display: inline-block;
-  margin-left: .255em;
-  vertical-align: .255em;
-  content: "";
+  margin-left: 0.255em;
+  vertical-align: 0.255em;
+  content: '';
   border: 0px solid transparent;
 }
 
@@ -2254,7 +2256,7 @@ ul {
   height: 14px;
   right: -8px;
   top: -8px;
-  content: "5";
+  content: '5';
   text-align: center;
   line-height: 15px;
   font-size: 10px;
@@ -2352,7 +2354,7 @@ ul {
   /* line 245, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_menu.scss */
   .navbar-brand img {
     max-width: 100px;
-    margin-left:  16px;
+    margin-left: 16px;
     margin-bottom: 2px;
   }
   /* line 255, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_menu.scss */
@@ -2367,12 +2369,14 @@ ul {
     color: #000;
   }
   /* line 267, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_menu.scss */
-  .main_menu a  {
+  .main_menu a {
     margin-left: 25px;
   }
 }
 
-.di-none{display: inline;}
+.di-none {
+  display: inline;
+}
 
 @media (max-width: 576px) {
   /* line 273, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_menu.scss */
@@ -2380,17 +2384,12 @@ ul {
     padding: 20px 0px;
   }
   .main_menu a {
-
     margin-left: 20px;
   }
-  .di-none{
+  .di-none {
     display: none;
   }
 }
-
-
-
-
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
   /* line 279, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_menu.scss */
@@ -2455,13 +2454,12 @@ ul {
   .banner_part .single_banner_slider .banner_text {
     height: 518px;
   }
-  .thumb-lg img{
+  .thumb-lg img {
     width: 70%;
-    }
+  }
 }
 
-
-@media only screen and (min-width: 431px) and (max-width: 992px)  {
+@media only screen and (min-width: 431px) and (max-width: 992px) {
   /* line 7, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_banner.scss */
   .banner_part .single_banner_slider .banner_text {
     height: 550px;
@@ -2494,7 +2492,6 @@ ul {
   .banner_part .single_banner_slider .banner_text .banner_text_iner {
     vertical-align: bottom;
   }
-  
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
@@ -2539,7 +2536,7 @@ ul {
 .banner_part .single_banner_slider .banner_text p {
   font-size: 15px;
   line-height: 1.8;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   margin-bottom: 70px;
   padding-right: 80px;
 }
@@ -2564,13 +2561,11 @@ ul {
   position: absolute;
   right: 1%;
   top: 30%;
-} 
+}
 @media (max-width: 770px) {
   .banner_part .single_banner_slider .banner_img {
-
     top: 18%;
-  } 
-
+  }
 }
 
 /* line 72, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_banner.scss */
@@ -2619,7 +2614,7 @@ ul {
   top: 3px;
   width: 1px;
   height: 16px;
-  content: "";
+  content: '';
   background-color: #000;
 }
 
@@ -2703,7 +2698,6 @@ ul {
   .feature_part .single_feature_post_text {
     padding: 35px 20px;
   }
-
 }
 
 @media only screen and (min-width: 576px) and (max-width: 767px) {
@@ -2883,7 +2877,7 @@ ul {
   top: 3px;
   width: 1px;
   height: 16px;
-  content: "";
+  content: '';
   background-color: #000;
 }
 
@@ -3134,7 +3128,7 @@ ul {
 /*************** subscribe now **********************/
 /* line 2, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_subscribe_area.scss */
 .subscribe_area {
-  background-image: url("../img/subscribe_area.png");
+  background-image: url('../img/subscribe_area.png');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -3195,7 +3189,10 @@ ul {
 
 @media (max-width: 576px) {
   /* line 51, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_subscribe_area.scss */
-  .subscribe_area .input-group > .custom-file, .subscribe_area .input-group > .custom-select, .subscribe_area .input-group > .form-control, .subscribe_area .input-group > .form-control-plaintext {
+  .subscribe_area .input-group > .custom-file,
+  .subscribe_area .input-group > .custom-select,
+  .subscribe_area .input-group > .form-control,
+  .subscribe_area .input-group > .form-control-plaintext {
     position: relative;
     -ms-flex: 1 1 auto;
     flex: 1 1 auto;
@@ -3257,12 +3254,12 @@ ul {
 }
 
 /* line 33, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_client_logo.scss */
-.client_logo .single_client_logo:nth-child(5n+1) {
+.client_logo .single_client_logo:nth-child(5n + 1) {
   border-left: 0px solid transparent;
 }
 
 /* line 36, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_client_logo.scss */
-.client_logo .single_client_logo:nth-child(n+6) {
+.client_logo .single_client_logo:nth-child(n + 6) {
   border-bottom: 0px solid transparent;
 }
 
@@ -3358,7 +3355,7 @@ ul {
 
 /* line 65, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
 .single-product .product-btm span {
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 20px;
   font-weight: 500;
   line-height: 16px;
@@ -3565,14 +3562,15 @@ ul {
 /* line 262, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
 .p_filter_widgets .list li a {
   font-size: 14px;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: normal;
   color: #797979;
   position: relative;
 }
 
 /* line 273, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
-.p_filter_widgets .list li.active a:before, .p_filter_widgets .list li:hover a:before {
+.p_filter_widgets .list li.active a:before,
+.p_filter_widgets .list li:hover a:before {
   background: #ff3368;
   border-color: #ff3368;
 }
@@ -3610,7 +3608,7 @@ ul {
 /* line 314, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
 .product_top_bar .left_dorp .sorting span {
   font-size: 14px;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   color: #555555;
 }
 
@@ -3623,13 +3621,13 @@ ul {
 /* line 324, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
 .product_top_bar .left_dorp .sorting .list li {
   font-size: 14px;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   color: #555555;
 }
 
 /* line 331, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
 .product_top_bar .left_dorp .sorting:after {
-  content: "\f0d7";
+  content: '\f0d7';
   font: normal normal normal 14px/1 FontAwesome;
   transform: rotate(0);
   border: none;
@@ -3654,7 +3652,7 @@ ul {
 /* line 353, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
 .product_top_bar .left_dorp .show span {
   font-size: 14px;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   color: #555555;
 }
 
@@ -3667,13 +3665,13 @@ ul {
 /* line 363, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
 .product_top_bar .left_dorp .show .list li {
   font-size: 14px;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   color: #555555;
 }
 
 /* line 370, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
 .product_top_bar .left_dorp .show:after {
-  content: "\f0d7";
+  content: '\f0d7';
   font: normal normal normal 14px/1 FontAwesome;
   transform: rotate(0);
   border: none;
@@ -3870,7 +3868,7 @@ ul {
 
 /* line 566, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
 .s_product_img .carousel .carousel-indicators li:before {
-  content: "";
+  content: '';
   background: rgba(197, 50, 45, 0.8);
   position: absolute;
   left: 0px;
@@ -3936,7 +3934,7 @@ ul {
 /* line 642, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
 .s_product_text .list li a {
   font-size: 14px;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: normal;
   color: #555555;
 }
@@ -4030,7 +4028,7 @@ ul {
 /* line 727, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
 .cart_area .product_count .input-number-increment:after {
   position: absolute;
-  content: "";
+  content: '';
   left: 0;
   bottom: 7px;
   width: 100%;
@@ -4171,7 +4169,7 @@ ul {
 .product_description_area .tab-content .total_rate .rating_list h3 {
   font-size: 18px;
   color: #2a2a2a;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: 700;
   margin-bottom: 10px;
 }
@@ -4208,7 +4206,7 @@ ul {
 /* line 892, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
 .product_description_area .tab-content .table tbody tr td h5 {
   font-size: 14px;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: normal;
   color: #797979;
   margin-bottom: 0px;
@@ -4256,7 +4254,7 @@ ul {
   margin-bottom: 0px;
   font-size: 14px;
   color: #2a2a2a;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   margin-bottom: 8px;
 }
 
@@ -4280,7 +4278,7 @@ ul {
   line-height: 32px;
   border-radius: 16px;
   font-size: 14px;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   color: #2a2a2a;
   position: absolute;
   right: 0px;
@@ -4374,7 +4372,7 @@ ul {
   border-top: 0px;
   font-size: 14px;
   font-weight: 500;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   color: #797979;
   border-bottom: 0px !important;
 }
@@ -4413,7 +4411,7 @@ ul {
 .cart_inner .table tbody tr td h5 {
   font-size: 14px;
   color: #2a2a2a;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   margin-bottom: 0px;
 }
 
@@ -4438,7 +4436,7 @@ ul {
 
 /* line 1108, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
 .cart_inner .table tbody tr td .product_count .increase:before {
-  content: "";
+  content: '';
   height: 40px;
   width: 1px;
   position: absolute;
@@ -4449,7 +4447,7 @@ ul {
 
 /* line 1118, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
 .cart_inner .table tbody tr td .product_count .increase:after {
-  content: "";
+  content: '';
   height: 1px;
   width: 30px;
   position: absolute;
@@ -4495,7 +4493,7 @@ ul {
   height: 40px;
   font-size: 14px;
   color: #cccccc;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: normal;
   margin-right: -3px;
   outline: none;
@@ -4506,7 +4504,7 @@ ul {
 .cart_inner .table tbody tr.bottom_button td .cupon_text input.placeholder {
   font-size: 14px;
   color: #cccccc;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: normal;
 }
 
@@ -4514,7 +4512,7 @@ ul {
 .cart_inner .table tbody tr.bottom_button td .cupon_text input:-moz-placeholder {
   font-size: 14px;
   color: #cccccc;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: normal;
 }
 
@@ -4522,7 +4520,7 @@ ul {
 .cart_inner .table tbody tr.bottom_button td .cupon_text input::-moz-placeholder {
   font-size: 14px;
   color: #cccccc;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: normal;
 }
 
@@ -4530,7 +4528,7 @@ ul {
 .cart_inner .table tbody tr.bottom_button td .cupon_text input::-webkit-input-placeholder {
   font-size: 14px;
   color: #cccccc;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: normal;
 }
 
@@ -4579,7 +4577,7 @@ ul {
 
 /* line 1218, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
 .cart_inner .table tbody tr.shipping_area .shipping_box .list li a:before {
-  content: "";
+  content: '';
   height: 16px;
   width: 16px;
   border: 1px solid #cdcdcd;
@@ -4593,7 +4591,7 @@ ul {
 
 /* line 1231, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
 .cart_inner .table tbody tr.shipping_area .shipping_box .list li a:after {
-  content: "";
+  content: '';
   height: 10px;
   width: 10px;
   border-radius: 50%;
@@ -4616,7 +4614,7 @@ ul {
   font-size: 14px;
   font-weight: normal;
   color: #2a2a2a;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   margin-top: 20px;
   margin-bottom: 20px;
 }
@@ -4725,7 +4723,7 @@ ul {
 .check_title h2 {
   font-size: 14px;
   font-weight: normal;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   background: #ecfdff;
   line-height: 40px;
   padding-left: 30px;
@@ -4784,7 +4782,7 @@ ul {
   height: 40px;
   border-radius: 3px;
   font-size: 14px;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   color: #797979;
   font-weight: normal;
 }
@@ -4792,7 +4790,7 @@ ul {
 /* line 65, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_mixins.scss */
 .returning_customer .contact_form .form-group input.placeholder {
   font-size: 14px;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   color: #797979;
   font-weight: normal;
 }
@@ -4800,7 +4798,7 @@ ul {
 /* line 68, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_mixins.scss */
 .returning_customer .contact_form .form-group input:-moz-placeholder {
   font-size: 14px;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   color: #797979;
   font-weight: normal;
 }
@@ -4808,7 +4806,7 @@ ul {
 /* line 71, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_mixins.scss */
 .returning_customer .contact_form .form-group input::-moz-placeholder {
   font-size: 14px;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   color: #797979;
   font-weight: normal;
 }
@@ -4816,7 +4814,7 @@ ul {
 /* line 74, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_mixins.scss */
 .returning_customer .contact_form .form-group input::-webkit-input-placeholder {
   font-size: 14px;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   color: #797979;
   font-weight: normal;
 }
@@ -4843,7 +4841,7 @@ ul {
   display: block;
   margin-top: 20px;
   font-size: 14px;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   color: #797979;
   font-weight: normal;
 }
@@ -4881,7 +4879,7 @@ ul {
 
 /* line 1483, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
 .p_star .placeholder::after {
-  content: " *";
+  content: ' *';
   color: tomato;
 }
 
@@ -4920,7 +4918,7 @@ ul {
   padding: 0px 40px;
   color: #2a2a2a;
   text-transform: capitalize;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: 500;
   border-radius: 50px;
 }
@@ -4997,7 +4995,7 @@ ul {
 /* line 1574, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
 .billing_details .contact_form .form-group .country_select .list li {
   font-size: 14px;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: normal;
 }
 
@@ -5056,8 +5054,6 @@ ul {
   color: #2a2a2a;
 }
 
-
-
 /* line 1647, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
 .order_box .list_2 li a {
   text-transform: uppercase;
@@ -5091,7 +5087,7 @@ ul {
 
 /* line 1679, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
 .order_box .payment_item h4:before {
-  content: "";
+  content: '';
   width: 14px;
   height: 14px;
   border-radius: 50%;
@@ -5106,7 +5102,7 @@ ul {
 
 /* line 1693, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
 .order_box .payment_item h4:after {
-  content: "";
+  content: '';
   height: 4px;
   width: 4px;
   background: #fff;
@@ -5204,7 +5200,7 @@ ul {
   border-radius: 0px;
   font-size: 14px;
   color: #797979;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: normal;
 }
 
@@ -5212,7 +5208,7 @@ ul {
 .tracking_box_area .tracking_box_inner .tracking_form .form-group input.placeholder {
   font-size: 14px;
   color: #797979;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: normal;
 }
 
@@ -5220,7 +5216,7 @@ ul {
 .tracking_box_area .tracking_box_inner .tracking_form .form-group input:-moz-placeholder {
   font-size: 14px;
   color: #797979;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: normal;
 }
 
@@ -5228,7 +5224,7 @@ ul {
 .tracking_box_area .tracking_box_inner .tracking_form .form-group input::-moz-placeholder {
   font-size: 14px;
   color: #797979;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: normal;
 }
 
@@ -5236,7 +5232,7 @@ ul {
 .tracking_box_area .tracking_box_inner .tracking_form .form-group input::-webkit-input-placeholder {
   font-size: 14px;
   color: #797979;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: normal;
 }
 
@@ -5253,7 +5249,7 @@ ul {
 /* End Tracking Form Area css
 ============================================================================================ */
 /* line 1807, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
-.radion_btn input[type="radio"] {
+.radion_btn input[type='radio'] {
   position: absolute;
   visibility: hidden;
 }
@@ -5283,7 +5279,7 @@ ul {
   z-index: 9;
   cursor: pointer;
   -webkit-transition: all 0.25s linear;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: 500;
   color: #2a2a2a;
   font-size: 13px;
@@ -5311,7 +5307,7 @@ ul {
 .radion_btn .check::before {
   display: block;
   position: absolute;
-  content: "";
+  content: '';
   border-radius: 100%;
   height: 4px;
   width: 4px;
@@ -5323,23 +5319,24 @@ ul {
 }
 
 /* line 1871, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
-.radion_btn input[type="radio"]:checked ~ .check {
+.radion_btn input[type='radio']:checked ~ .check {
   border: 1px solid #ff3368;
   background: #ff3368;
 }
 
 /* line 1876, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
-.radion_btn input[type="radio"]:checked ~ .check::before {
+.radion_btn input[type='radio']:checked ~ .check::before {
   background: #fff;
 }
 
 /* line 1880, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
-.radion_btn input[type="radio"]:checked ~ label {
+.radion_btn input[type='radio']:checked ~ label {
   color: #000;
 }
 
 /* line 1884, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
-.login_part .login_part_text, .login_part .login_part_form {
+.login_part .login_part_text,
+.login_part .login_part_form {
   padding: 80px 70px;
   height: 600px;
   display: table;
@@ -5347,7 +5344,8 @@ ul {
 
 @media (max-width: 991px) {
   /* line 1884, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
-  .login_part .login_part_text, .login_part .login_part_form {
+  .login_part .login_part_text,
+  .login_part .login_part_form {
     padding: 30px;
     height: 400px;
   }
@@ -5355,14 +5353,18 @@ ul {
 
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
   /* line 1884, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
-  .login_part .login_part_text, .login_part .login_part_form {
+  .login_part .login_part_text,
+  .login_part .login_part_form {
     padding: 20px;
     height: 400px;
   }
 }
 
 /* line 1896, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
-.login_part .login_part_text .login_part_text_iner, .login_part .login_part_text .login_part_form_iner, .login_part .login_part_form .login_part_text_iner, .login_part .login_part_form .login_part_form_iner {
+.login_part .login_part_text .login_part_text_iner,
+.login_part .login_part_text .login_part_form_iner,
+.login_part .login_part_form .login_part_text_iner,
+.login_part .login_part_form .login_part_form_iner {
   display: table-cell;
   vertical-align: middle;
 }
@@ -5757,7 +5759,7 @@ h6 {
   outline: none;
   line-height: 40px;
   padding: 0 30px;
-  font-size: .8em;
+  font-size: 0.8em;
   text-align: center;
   text-decoration: none;
   font-weight: 500;
@@ -6032,7 +6034,7 @@ h6 {
 
 /* line 353, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_elements.scss */
 .progress-table-wrap {
-  overflow: hidden;
+  overflow: auto;
 }
 
 /* line 357, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_elements.scss */
@@ -6178,7 +6180,7 @@ h6 {
 
 /* line 459, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_elements.scss */
 .unordered-list li:before {
-  content: "";
+  content: '';
   position: absolute;
   width: 14px;
   height: 14px;
@@ -6427,7 +6429,7 @@ h6 {
 
 /* line 663, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_elements.scss */
 .primary-switch input + label:before {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   top: 0;
@@ -6446,7 +6448,7 @@ h6 {
 
 /* line 677, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_elements.scss */
 .primary-switch input + label:after {
-  content: "";
+  content: '';
   position: absolute;
   top: 1px;
   left: 1px;
@@ -6507,7 +6509,7 @@ h6 {
 
 /* line 728, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_elements.scss */
 .confirm-switch input + label:before {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   top: 0;
@@ -6526,7 +6528,7 @@ h6 {
 
 /* line 742, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_elements.scss */
 .confirm-switch input + label:after {
-  content: "";
+  content: '';
   position: absolute;
   top: 1px;
   left: 1px;
@@ -7098,7 +7100,7 @@ h6 {
 /* line 79, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_blog_part.scss */
 .blog_part .single-home-blog .card .dot:after {
   position: absolute;
-  content: "";
+  content: '';
   width: 10px;
   height: 10px;
   top: 5px;
@@ -7254,7 +7256,8 @@ h6 {
 }
 
 /* line 9, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_contact.scss */
-.contact-info__icon i, .contact-info__icon span {
+.contact-info__icon i,
+.contact-info__icon span {
   color: #8f9195;
   font-size: 27px;
 }
@@ -7451,7 +7454,7 @@ h6 {
 
 /* line 1, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_breadcrumb.scss */
 .breadcrumb_bg {
-  background-image: url("../img/breadcrumb.png");
+  background-image: url('../img/breadcrumb.png');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -7813,7 +7816,5 @@ h6 {
     justify-content: flex-start !important;
   }
 }
-
-
 
 /*# sourceMappingURL=style.css.map */

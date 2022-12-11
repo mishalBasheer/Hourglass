@@ -44,6 +44,7 @@ import {
   getOrderSuccess,
   razorOrderGenerate,
   updateWishlist,
+  cancelOrder,
   checkCoupon,
 } from '../controllers/user/userController.js';
 import { userLoginCheck, checkBlockedUser } from '../middleware/userLoginCheckMiddleware.js';
@@ -86,6 +87,7 @@ router.route('/order-success').get(userLoginCheck, checkBlockedUser, getOrderSuc
 
 // router.route('/order-confirmation').get(userLoginCheck, checkBlockedUser, getOrderConfirmation);
 router.route('/orders').get(userLoginCheck, checkBlockedUser, getOrders).post(getOrderData);
+router.route('/cancel-order/:id').post(userLoginCheck, checkBlockedUser, cancelOrder);
 router.route('/order-tracking').get(userLoginCheck, checkBlockedUser, getTracking);
 router.route('/profile').get(userLoginCheck, checkBlockedUser, getProfile);
 router.route('/address').get(userLoginCheck, checkBlockedUser, getAddress);

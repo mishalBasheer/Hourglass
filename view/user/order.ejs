@@ -71,56 +71,79 @@
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
 
-      <div class="container px-1 px-md-4 mx-auto">
-        <div class="card">
-          <div class="row d-flex justify-content-between px-3 top">
-            <div class="d-flex">
-              <h5>ORDER <span class="text-primary font-weight-bold">#Y34XDHR</span></h5>
-            </div>
-            <div class="d-flex flex-column text-sm-right">
-              <p class="mb-0">Expected Arrival <span>01/12/19</span></p>
-              <p>USPS <span class="font-weight-bold">234094567242423422898</span></p>
-            </div>
-          </div>
-          <!-- Add class 'active' to progress -->
-          <div class="row d-flex justify-content-center">
-            <div class="col-12">
-              <ul id="progressbar" class="text-center"></ul>
-            </div>
-          </div>
-          <div class="row justify-content-between top">
-            <div class="row d-flex icon-content">
-              <img class="icon" src="https://i.imgur.com/9nnc9Et.png" />
-              <div class="d-flex flex-column">
-                <p class="font-weight-bold">Order<br />Processed</p>
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="container px-1 px-md-4 mx-auto">
+          <div class="card">
+            <div class="row d-flex justify-content-between px-3 top">
+              <div class="d-flex">
+                <h5>ORDER <span class="text-primary font-weight-bold">#Y34XDHR</span></h5>
+              </div>
+              <div class="d-flex flex-column text-sm-right">
+                <p class="mb-0">Expected Arrival <span>01/12/19</span></p>
+                <p>USPS <span class="font-weight-bold">234094567242423422898</span></p>
               </div>
             </div>
-            <div class="row d-flex icon-content">
-              <img class="icon" src="https://i.imgur.com/u1AzR7w.png" />
-              <div class="d-flex flex-column">
-                <p class="font-weight-bold">Order<br />Shipped</p>
+            <!-- Add class 'active' to progress -->
+
+            <div class="row d-flex justify-content-center">
+              <div class="col-12">
+                <ul id="progressbar" class="text-center"></ul>
               </div>
             </div>
-            <div class="row d-flex icon-content">
-              <img class="icon" src="https://i.imgur.com/TkPm63y.png" />
-              <div class="d-flex flex-column">
-                <p class="font-weight-bold">Order<br />En Route</p>
+
+            <div id="tracking_icon" class="row justify-content-around top">
+              <div class="row d-flex icon-content">
+                <img class="icon" src="https://i.imgur.com/9nnc9Et.png" />
+                <div class="d-flex flex-column">
+                  <p class="font-weight-bold">Order<br />Processed</p>
+                </div>
               </div>
-            </div>
-            <div class="row d-flex icon-content">
-              <img class="icon" src="https://i.imgur.com/HdsziHP.png" />
-              <div class="d-flex flex-column">
-                <p class="font-weight-bold">Order<br />Arrived</p>
+              <div class="row d-flex icon-content">
+                <img class="icon" src="https://i.imgur.com/u1AzR7w.png" />
+                <div class="d-flex flex-column">
+                  <p class="font-weight-bold">Order<br />Shipped</p>
+                </div>
+              </div>
+              <div class="row d-flex icon-content">
+                <img class="icon" src="https://i.imgur.com/TkPm63y.png" />
+                <div class="d-flex flex-column">
+                  <p class="font-weight-bold">Order<br />En Route</p>
+                </div>
+              </div>
+              <div class="row d-flex icon-content">
+                <img class="icon" src="https://i.imgur.com/HdsziHP.png" />
+                <div class="d-flex flex-column">
+                  <p class="font-weight-bold">Order<br />Arrived</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-
-      <!-- Modal body -->
-      <div class="modal-body">
+        <div class="container px-1" id="featured-3">
+          <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+            <div class="feature col">
+              <div
+                class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3"
+              >
+                <svg class="bi" width="1em" height="1em"><use xlink:href="#collection" /></svg>
+              </div>
+              <h3 class="fs-2">Order Details</h3>
+              <p id="order_details">Order ID : # Date of Order : Order Current Status : Order Total : Payment Type :</p>
+            </div>
+            <div class="feature col">
+              <div
+                class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3"
+              >
+                <svg class="bi" width="1em" height="1em"><use xlink:href="#toggles2" /></svg>
+              </div>
+              <h3 class="fs-2">Delivery Address</h3>
+              <p id="delivery_address">Name: Mobile: House: City: Pincode:</p>
+            </div>
+          </div>
+        </div>
         <table class="table">
-          <h5>Product Details</h5>
+          <h3>Product Details</h3>
           <thead class="thead-dark">
             <tr>
               <th>#</th>
@@ -135,7 +158,8 @@
 
       <!-- Modal footer -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <a type="button" class="btn btn-danger mr-auto text-white" id="cancel_order">Cancel Order</a>
+        <button class="btn btn-danger" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -153,8 +177,7 @@
     z-index: 0;
     background-color: #eceff1;
     padding-bottom: 20px;
-    margin-top: 90px;
-    margin-bottom: 90px;
+    margin-top: 5px;
     border-radius: 10px;
   }
 
@@ -297,21 +320,73 @@
       if (order.orderstat === 'CONFIRMED') {
         var tracking_stat =
           '<li class="active step0"></li><li class="step0"></li><li class="step0"></li><li class="step0"></li>';
+        var tracking_icon = `            <div class="row d-flex icon-content">
+              <img class="icon" src="https://i.imgur.com/9nnc9Et.png" />
+              <div class="d-flex flex-column">
+                <p class="font-weight-bold">Order<br />Processed</p>
+              </div>
+            </div>`;
       } else if (order.orderstat === 'SHIPPED') {
         var tracking_stat =
           '<li class="active step0"></li><li class="active step0"></li><li class="step0"></li><li class="step0"></li>';
+        var tracking_icon = `            <div class="row d-flex icon-content">
+              <img class="icon" src="https://i.imgur.com/u1AzR7w.png" />
+              <div class="d-flex flex-column">
+                <p class="font-weight-bold">Order<br />Shipped</p>
+              </div>
+            </div>`;
       } else if (order.orderstat === 'OUT FOR DELIVERY') {
         var tracking_stat =
           '<li class="active step0"></li><li class="active step0"></li><li class="active step0"></li><li class="step0"></li>';
+        var tracking_icon = `<div class="row d-flex icon-content">
+              <img class="icon" src="https://i.imgur.com/TkPm63y.png" />
+              <div class="d-flex flex-column">
+                <p class="font-weight-bold">Order<br />En Route</p>
+              </div>
+            </div>`;
       } else if (order.orderstat === 'DELIVERED') {
         var tracking_stat =
           '<li class="active step0"></li><li class="active step0"></li><li class="active step0"></li><li class="active step0"></li>';
+        var tracking_icon = `<div class="row d-flex icon-content">
+              <img class="icon" src="https://i.imgur.com/HdsziHP.png" />
+              <div class="d-flex flex-column">
+                <p class="font-weight-bold">Order<br />Arrived</p>
+              </div>
+            </div>`;
       } else {
         var tracking_stat = '<li> Order Cancelled </li>';
+        var tracking_icon = `<div class="row d-flex icon-content">
+          <i class="fa-solid fa-file-slash"></i>
+              <div class="d-flex flex-column">
+                <p class="font-weight-bold">Order<br />Cancelled</p>
+              </div>
+            </div>`;
       }
       $('#progressbar').empty().append(tracking_stat);
+      $('#tracking_icon').empty().append(tracking_icon);
+
+      let order_details = ` 
+                Order ID : #<span class="font-weight-bold">${order._id}</span><br>
+                Date of Order :<span class="font-weight-bold">${order.date}</span><br>
+                Order Current Status :<span class="font-weight-bold">${order.orderstat}</span><br>
+                Order Total :<span class="font-weight-bold">${order.total}</span><br>
+                Payment Type :<span class="font-weight-bold">${order.payment}</span><br>
+                `;
+      let delivery_address = `
+                Name:<span class="font-weight-bold">${order.address.name}</span><br>
+                Mobile:<span class="font-weight-bold">${order.address.mob}</span><br>
+                House:<span class="font-weight-bold">${order.address.house}</span><br>
+                City:<span class="font-weight-bold">${order.address.city}</span><br>
+                Pincode:<span class="font-weight-bold">${order.address.pincode}</span><br>
+                `;
+      $('#order_details').empty().append(order_details);
+      $('#delivery_address').empty().append(delivery_address);
+      $('#cancel_order').click(()=>{
+        warningAlert(order._id)
+      })
     });
   }
+
 </script>
 
 <%- include('partials/footer.ejs') %>
