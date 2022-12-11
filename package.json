@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon server.js",
-    "start:prod": "NODE_ENV=production nodemon server.js",
+    "dev": "nodemon server.js",
+    "start": "node server.js",
     "format": "npx prettier --write ."
   },
   "author": "Mohammed Mishal",
