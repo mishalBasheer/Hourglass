@@ -24,7 +24,7 @@ const pieConfig = {
           '#0694a2',
           '#1c64f2',
           '#7e3af2',
-          '#7e3ab2'
+          '#7e3ab2',
         ],
         label: 'Dataset 1',
       },

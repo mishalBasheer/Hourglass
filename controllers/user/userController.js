@@ -189,8 +189,10 @@ const getShopCategory = async (req, res) => {
           as: 'cat',
         },
       },
+      {
+        $sort:{_id:1}
+      }
     ]);
-
     const count = product.length;
     const user = req.session.user;
     req.session.couponApplied = null;
@@ -232,6 +234,9 @@ const getShopBrand = async (req, res) => {
           foreignField: '_id',
           as: 'cat',
         },
+      },
+      {
+        $sort:{_id:1}
       },
     ]);
 
