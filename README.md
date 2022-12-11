@@ -85,4 +85,4 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 
 
-Made with love by [RafaelGoulartB](https://github.com/mishalBasheer) 🚀
+Made with love by [Mishal Basheer](https://github.com/mishalBasheer) 🚀
