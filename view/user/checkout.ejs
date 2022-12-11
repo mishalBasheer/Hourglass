@@ -282,16 +282,14 @@
           `<div class="ml-4 py-2">${code}<button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>`
         ).insertAfter('#coupon_code');
         if (response.discountIsPercent) {
-          $(`<li><a href="#">Discount<span>-%${response.discount}</span></a></li>`).insertAfter('#sub_total');
+          $(`<li><a href="#">Discount<span>-%${response.discount}(${(Math.round(response.discountedTotal * (response.discount / 100)))<response.maxDiscountAmt?(Math.round(response.discountedTotal * (response.discount / 100))):response.maxDiscountAmt})</span></a></li>`).insertAfter('#sub_total');
           $('#discounted_total').replaceWith(
-            `<span id="discounted_total">₹${Math.round(
-              response.discountedTotal * (1 - response.discount / 100) + 50
-            )}</span>`
+            `<span id="discounted_total">₹${(Math.round(response.discountedTotal * (1 - response.discount / 100)) + 50)<response.maxDiscountAmt?(Math.round(response.discountedTotal * (1 - response.discount / 100)) + 50):response.discountedTotal-response.maxDiscountAmt+50}</span>`
           );
         } else {
           $(`<li><a href="#">Discount<span>-₹${response.discount}</span></a></li>`).insertAfter('#sub_total');
           $('#discounted_total').replaceWith(
-            `<span id="discounted_total">₹${response.discountedTotal - response.discount + 50}.00</span>`
+            `<span id="discounted_total">₹${(response.discountedTotal - response.discount + 50)}.00</span>`
           );
         }
       }

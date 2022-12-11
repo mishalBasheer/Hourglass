@@ -25,6 +25,9 @@ const couponSchema = new mongoose.Schema({
   minCartAmount: {
     type: Number,
   },
+  maxDiscountAmount: {
+    type: Number,
+  },
   userUsed: [
     {
       userId: {

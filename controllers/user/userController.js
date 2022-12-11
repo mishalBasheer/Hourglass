@@ -604,7 +604,8 @@ const getCheckout = async (req, res) => {
   const user = req.session.user;
   const navCat = await Category.find();
   const cartProducts = await Cart.findById(user.cartId).populate('products.product');
-  if (cartProducts.length > 0) {
+  // console.log(cartProducts);
+  if (cartProducts.products.length > 0) {
     const address = await Address.find({ userId: user._id });
     return res.render('user/checkout', {
       user,
@@ -636,6 +637,7 @@ const checkoutConfirm = async (req, res) => {
         discountIsPercent: coupon.isPercent,
         discount: coupon.amount,
         discountCoupon: coupon._id,
+        maxDiscountAmt:coupon.maxDiscountAmount,
         total: cartProducts.total,
       };
       req.session.newOrder = newOrder;
@@ -681,7 +683,7 @@ const razorOrderGenerate = async (req, res) => {
     var amount;
     if (newOrder.discount) {
       if (newOrder.discountIsPercent) {
-        amount = (newOrder.total * (1 - newOrder.discount / 100) + 50) * 100;
+        amount = (newOrder.total * (1 - newOrder.discount / 100) + 50)<newOrder.maxDiscountAmt?(newOrder.total * (1 - newOrder.discount / 100) + 50):newOrder.total-newOrder.maxDiscountAmt+50;
         console.log('1..', amount);
       } else {
         amount = (newOrder.total - newOrder.discount + 50) * 100;
@@ -730,8 +732,9 @@ const getOrderSuccess = async (req, res) => {
       );
       var isPercent = coupon.isPercent;
       var discountAmt = coupon.amount;
+      var maxDiscountAmt = coupon.maxDiscountAmount;
       if (isPercent) {
-        const total = Math.round(order.total * (1 - discountAmt / 100)) + 50;
+        const total = (Math.round(order.total * (1 - discountAmt / 100)) + 50)<maxDiscountAmt?(Math.round(order.total * (1 - discountAmt / 100)) + 50): order.total - maxDiscountAmt + 50;
         await Order.findByIdAndUpdate(order._id, { total });
       } else {
         const total = order.total - discountAmt + 50;
@@ -739,7 +742,7 @@ const getOrderSuccess = async (req, res) => {
       }
     }
     req.session.newOrder = null;
-    return res.render('user/order_success', { user, order: order_address, navCat, discountAmt, isPercent });
+    return res.render('user/order_success', { user, order: order_address, navCat, discountAmt, isPercent,maxDiscountAmt });
   } else {
     return res.redirect('/orders');
   }
@@ -994,6 +997,7 @@ const checkCoupon = async (req, res) => {
         checkstatus: 'success',
         discountIsPercent: coupon.isPercent,
         discount: coupon.amount,
+        maxDiscountAmt: coupon.maxDiscountAmount,
         discountedTotal: cart.total,
         message: 'Coupon Successfully added',
       });

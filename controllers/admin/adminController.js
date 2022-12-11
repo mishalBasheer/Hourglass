@@ -777,11 +777,11 @@ const getEditCoupon = async (req, res) => {
 };
 const editCoupon = async (req, res) => {
   try {
-    const { code, isPercent, amount, usageLimit, minCartAmount } = req.body;
+    const { code, isPercent, amount, usageLimit, minCartAmount ,maxDiscountAmount} = req.body;
     // const createdAt = new Date();
     // let expireAfter = createdAt.getTime() + req.body.expireAfter * 24 * 60 * 60 * 1000;
     // expireAfter = new Date(expireAfter);
-    const coupon = { code, isPercent, amount, usageLimit, minCartAmount };
+    const coupon = { code, isPercent, amount, usageLimit, minCartAmount, maxDiscountAmount };
     await Coupon.findByIdAndUpdate(req.params.id, coupon);
     res.redirect('/admin/coupon');
   } catch (err) {
@@ -794,11 +794,11 @@ const editCoupon = async (req, res) => {
 
 const addCoupon = async (req, res) => {
   try {
-    const { code, isPercent, amount, usageLimit, minCartAmount } = req.body;
+    const { code, isPercent, amount, usageLimit, minCartAmount, maxDiscountAmount } = req.body;
     const createdAt = new Date();
     let expireAfter = createdAt.getTime() + req.body.expireAfter * 24 * 60 * 60 * 1000;
     expireAfter = new Date(expireAfter);
-    const coupon = { code, isPercent, amount, usageLimit, expireAfter, createdAt, minCartAmount };
+    const coupon = { code, isPercent, amount, usageLimit, expireAfter, createdAt, minCartAmount, maxDiscountAmount };
     await Coupon.create(coupon);
     res.redirect('/admin/coupon');
   } catch (err) {
