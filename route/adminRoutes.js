@@ -33,6 +33,7 @@ import {
   getCoupon,
   getAddCoupon,
   addCoupon,
+  salesReportGenerator,
   getEditCoupon,
   deleteCoupon,
   editCoupon,
@@ -79,5 +80,6 @@ router.route('/coupon').get(adminLoginCheck, getCoupon);
 router.route('/coupon/add-coupon').get(adminLoginCheck, getAddCoupon).post(adminLoginCheck, addCoupon);
 router.route('/coupon/edit-coupon/:id').get(adminLoginCheck, getEditCoupon).post(adminLoginCheck, editCoupon);
 router.route('/coupon/delete-coupon').post(adminLoginCheck, deleteCoupon);
+router.route('/sales-report').post(salesReportGenerator);
 
 export default router;

@@ -625,7 +625,8 @@ const checkoutConfirm = async (req, res) => {
     const user = req.session.user;
     const cartProducts = await Cart.findById(user.cartId)
       .populate('products.product')
-      .select({ 'products.product': 1, 'products.subtotal': 1, 'products.quantity': 1, total: 1, _id: 0 });
+      .select({ 'products.product': 1, 'products.subtotal': 1, 'products.quantity': 1, total: 1});
+      console.log(cartProducts.products[0]);
     const coupon = await Coupon.findOne({ _id: req.session.couponApplied });
     if (coupon) {
       const newOrder = {
@@ -684,17 +685,14 @@ const razorOrderGenerate = async (req, res) => {
     if (newOrder.discount) {
       if (newOrder.discountIsPercent) {
         amount =
-          newOrder.total * (1 - newOrder.discount / 100) + 50 < newOrder.maxDiscountAmt
+          (newOrder.total * (1 - newOrder.discount / 100) + 50) < newOrder.maxDiscountAmt
             ? newOrder.total * (1 - newOrder.discount / 100) + 50
             : newOrder.total - newOrder.maxDiscountAmt + 50;
-        console.log('1..', amount);
       } else {
         amount = (newOrder.total - newOrder.discount + 50) * 100;
-        console.log('2..', amount);
       }
     } else {
       amount = (newOrder.total + 50) * 100;
-      console.log('3..', amount);
     }
     var options = {
       amount,

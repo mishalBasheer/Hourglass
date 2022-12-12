@@ -823,6 +823,41 @@ const deleteCoupon = async (req, res) => {
   }
 };
 
+const salesReportGenerator = async (req,res)=>{
+  try{
+const products_sales= await Order.aggregate([
+  {
+    $match:{orderstat:{$ne:'CANCELLED'}}
+  },
+  {
+    $unwind:{path:'$products'}
+  },
+  {
+    $group:{_id:'$products.product.title',sold:{$sum:'$products.quantity'},sales:{$sum:'$products.subtotal'}}
+  },
+  {
+    $lookup:{
+      from: Product.collection.name,
+       localField: '_id',
+       foreignField: 'title',
+       as:'stock'
+    }
+  },
+  {
+    $project:{_id:1,sold:1,sales:1,'stock.stock':1}
+  }
+]);
+
+res.json({
+  report:products_sales
+})
+  }catch(err){
+    res.json({
+      stat:'failed'
+    })
+  }
+}
+
 const adminLogout = async (req, res) => {
   req.session.adminLogIn = false;
   res.redirect('/admin');
@@ -864,5 +899,6 @@ export {
   addCoupon,
   getEditCoupon,
   editCoupon,
+  salesReportGenerator,
   deleteCoupon,
 };

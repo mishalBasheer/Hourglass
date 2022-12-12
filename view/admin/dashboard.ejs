@@ -73,7 +73,7 @@
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Charts</h2>
     <div class="grid gap-6 mb-8 md:grid-cols-2">
       <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-        <h4 class="mb-4 font-semibold text-gray-800 dark:text-gray-300">Categorywise Sales</h4>
+        <h4 class="mb-4 font-semibold text-gray-800 dark:text-gray-300">Order Status</h4>
         <canvas id="pie"></canvas>
         <div class="flex justify-center mt-4 space-x-3 text-sm text-gray-600 dark:text-gray-400">
           <!-- Chart legend -->
@@ -104,6 +104,13 @@
         </div>
       </div>
     </div>
+    <button
+    onclick="salesDetails()"
+    @click="openModal"
+    class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+  >
+    Sales Report
+  </button>
 
     <main class="h-full pb-16 overflow-y-auto">
       <div class="container px-6 mx-auto grid">
@@ -396,6 +403,18 @@
 <!-- End of modal backdrop -->
 
 <script>
+
+
+function salesDetails() {
+  $.ajax({
+      url: '/sales-report',
+      method: 'POST'
+    }).then((response) => {
+
+    })
+}
+
+
   const nameArray = '<%= categoryNameArray %>';
   const countArray = '<%= categoryCountArray %>';
   const categoryName = nameArray.replace(/&#34;/gi, "'");
@@ -458,6 +477,8 @@
       });
     });
   }
+
+
   function updateOrderStatus(id, status) {
     $.ajax({
       url: '/admin/update-order',
