@@ -70,8 +70,8 @@ router.route('/set-to-wish').post(axiosUserLoginCheck, axiosCheckBlockedUser, se
 router.route('/contact').get(getContactUs);
 router.route('/forgot-password').get(getForgetPassword);
 router.route('/cart').get(userLoginCheck, checkBlockedUser, getCart);
-router.route('/cart/dec-quantity').post(userLoginCheck, checkBlockedUser, decQuantity);
-router.route('/cart/inc-quantity').post(userLoginCheck, checkBlockedUser, incQuantity);
+router.route('/cart/dec-quantity').post(axiosUserLoginCheck, axiosCheckBlockedUser, decQuantity);
+router.route('/cart/inc-quantity').post(axiosUserLoginCheck, axiosCheckBlockedUser, incQuantity);
 router.route('/wishlist').get(userLoginCheck, checkBlockedUser, getWish);
 // router.route('/add-to-wishlist/:id').get(userLoginCheck, checkBlockedUser, setWish);
 // router.route('/remove-from-wishlist/:id').get(userLoginCheck, checkBlockedUser, removeFromWishlist);

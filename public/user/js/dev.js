@@ -80,22 +80,7 @@ function cartAdd(productId) {
     })
     .then((result) => {
       if (result.data.access) {
-        const Toast = Swal.mixin({
-          toast: true,
-          position: 'top-end',
-          showConfirmButton: false,
-          timer: 2000,
-          timerProgressBar: false,
-          didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer);
-            toast.addEventListener('mouseleave', Swal.resumeTimer);
-          },
-        });
-
-        Toast.fire({
-          icon: 'success',
-          title: result.data.msg,
-        });
+        customAlert(result.data.msg,result.data.stat)
       } else {
         location.href = '/signin';
       }
@@ -113,7 +98,10 @@ function quantityDec(id, quantity, index) {
         productId: id,
       })
       .then((result) => {
-        if (result.data.stat) {
+        if (result.data.access) {
+          if(result.data.stat==='error'){
+            return customAlert(result.data.msg,result.data.stat);
+          }
           let count = Number(document.querySelector(`#qnty${index} #quantity`).value);
           count--;
           document.querySelector(`#qnty${index} #quantity`).value = count;
@@ -136,7 +124,11 @@ function quantityInc(id, quantity, index) {
         productId: id,
       })
       .then((result) => {
-        if (result.data.stat) {
+        if (result.data.access) {
+          if(result.data.stat==='error'){
+            return customAlert(result.data.msg,result.data.stat);
+          }
+
           let count = Number(document.querySelector(`#qnty${index} #quantity`).value);
           count++;
           document.querySelector(`#qnty${index} #quantity`).value = count;

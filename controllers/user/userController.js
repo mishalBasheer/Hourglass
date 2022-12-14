@@ -372,6 +372,15 @@ const setCart = async (req, res, next) => {
     ]);
 
     if (productcheck.length > 0) {
+      // Checks whether in stock or not
+      if (product.stock < productcheck[0].products.quantity + 1) {
+        return res.json({
+          access: true,
+          stat: 'error',
+          msg: 'product not in stock',
+        });
+      }
+
       await Cart.findOneAndUpdate(
         { _id: user.cartId, 'products.product': productId },
         { $inc: { 'products.$.quantity': 1 } },
@@ -380,14 +389,24 @@ const setCart = async (req, res, next) => {
 
       await subTotCalc(user.cartId, productId);
     } else {
+      // Checks whether in stock or not
+      if (product.stock < 1) {
+        return res.json({
+          access: true,
+          stat: 'error',
+          msg: 'product out of stock',
+        });
+      }
+
       const newObj = { product: productId, quantity: 1, price: product.price, subtotal: product.price };
       await Cart.updateOne({ _id: user.cartId }, { $push: { products: newObj } }, { upsert: true });
     }
 
     await TotalCalc(user.cartId);
 
-    res.json({
+    return res.json({
       access: true,
+      stat: 'success',
       msg: 'successfully added to cart',
     });
     // next();
@@ -451,6 +470,23 @@ const incQuantity = async (req, res) => {
   try {
     const user = req.session.user;
     const productId = mongoose.Types.ObjectId(req.body.productId);
+    const product = await Product.findById(productId);
+    const quantityCheck = await Cart.aggregate([
+      { $match: { _id: mongoose.Types.ObjectId(user.cartId) } },
+      { $unwind: { path: '$products' } },
+      { $match: { 'products.product': productId } },
+    ]);
+    // console.log(quantityCheck);
+
+    // Checks whether in stock or not
+    if (product.stock < quantityCheck[0].products.quantity + 1) {
+      return res.json({
+        access: true,
+        stat: 'error',
+        msg: 'product not in stock',
+      });
+    }
+
     await Cart.findOneAndUpdate(
       { _id: user.cartId, 'products.product': productId },
       { $inc: { 'products.$.quantity': 1 } }
@@ -460,7 +496,9 @@ const incQuantity = async (req, res) => {
     await TotalCalc(user.cartId);
 
     res.status(200).json({
-      stat: true,
+      access: true,
+      stat: 'success',
+      msg: 'added to cart successfully',
     });
     // }
   } catch (err) {
@@ -474,6 +512,21 @@ const decQuantity = async (req, res) => {
   try {
     const user = req.session.user;
     const productId = mongoose.Types.ObjectId(req.body.productId);
+    const quantityCheck = await Cart.aggregate([
+      { $match: { _id: mongoose.Types.ObjectId(user.cartId) } },
+      { $unwind: { path: '$products' } },
+      { $match: { 'products.product': productId } },
+    ]);
+
+     // Checks whether in stock or not
+     if (quantityCheck[0].products.quantity <= 1) {
+      return res.json({
+        access: true,
+        stat: 'error',
+        msg: 'product quantity lessthan 1',
+      });
+    }
+
     await Cart.findOneAndUpdate(
       { _id: user.cartId, 'products.product': productId },
       { $inc: { 'products.$.quantity': -1 } }
@@ -483,14 +536,11 @@ const decQuantity = async (req, res) => {
     await TotalCalc(user.cartId);
 
     res.json({
-      stat: true,
+      access: true,
+      stat: 'success',
+      msg: 'removed from cart successfully',
     });
-    // }
   } catch (err) {
-    // res.json({
-    //   status: 'error while decreasing from cart error',
-    //   message: err,
-    // });
     console.log(err);
     res.render('user/error-page', { error: err, errorMsg: 'error from decreasing quantity from the cart', navCat });
   }
@@ -625,8 +675,8 @@ const checkoutConfirm = async (req, res) => {
     const user = req.session.user;
     const cartProducts = await Cart.findById(user.cartId)
       .populate('products.product')
-      .select({ 'products.product': 1, 'products.subtotal': 1, 'products.quantity': 1, total: 1});
-      console.log(cartProducts.products[0]);
+      .select({ 'products.product': 1, 'products.subtotal': 1, 'products.quantity': 1, total: 1 });
+    console.log(cartProducts.products[0]);
     const coupon = await Coupon.findOne({ _id: req.session.couponApplied });
     if (coupon) {
       const newOrder = {
@@ -685,9 +735,9 @@ const razorOrderGenerate = async (req, res) => {
     if (newOrder.discount) {
       if (newOrder.discountIsPercent) {
         amount =
-          (newOrder.total * (1 - newOrder.discount / 100) + 50) < newOrder.maxDiscountAmt
-            ? (newOrder.total * (1 - newOrder.discount / 100) + 50)*100
-            : (newOrder.total - newOrder.maxDiscountAmt + 50)*100;
+          newOrder.total * (1 - newOrder.discount / 100) + 50 < newOrder.maxDiscountAmt
+            ? (newOrder.total * (1 - newOrder.discount / 100) + 50) * 100
+            : (newOrder.total - newOrder.maxDiscountAmt + 50) * 100;
       } else {
         amount = (newOrder.total - newOrder.discount + 50) * 100;
       }
@@ -725,6 +775,15 @@ const getOrderSuccess = async (req, res) => {
     const order = await Order.create(newOrder);
     const order_address = await Address.populate(order, { path: 'address' });
     const userUsed = { userId: user._id };
+    const cartProducts = await Cart.aggregate([
+      { $match: { _id: mongoose.Types.ObjectId(user.cartId) } },
+      { $unwind: { path: '$products' } },
+      {$project:{'products.product':1,'products.quantity':1}},
+    ]);
+    cartProducts.forEach(async (el)=>{
+      await Product.findByIdAndUpdate(el.products.product,{$inc:{stock:-(el.products.quantity)}})
+    })
+    const emptyCart = await Cart.findByIdAndUpdate(user.cartId,{products:[]});
     if (order.discountCoupon) {
       let coupon = await Coupon.findByIdAndUpdate(
         order.discountCoupon,
