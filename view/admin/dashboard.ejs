@@ -64,7 +64,9 @@
         </div>
         <div>
           <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">Pending Orders</p>
-          <p class="text-lg font-semibold text-gray-700 dark:text-gray-200"><%= pendingOrders.length>0?pendingOrders[0].count:0; %></p>
+          <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+            <%= pendingOrders.length>0?pendingOrders[0].count:0; %>
+          </p>
         </div>
       </div>
     </div>
@@ -105,12 +107,12 @@
       </div>
     </div>
     <button
-    onclick="salesDetails()"
-    @click="openModal"
-    class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-  >
-    Sales Report
-  </button>
+      onclick="salesDetails()"
+      @click="openModal"
+      class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+    >
+      Sales Report
+    </button>
 
     <main class="h-full pb-16 overflow-y-auto">
       <div class="container px-6 mx-auto grid">
@@ -392,7 +394,8 @@
       class="flex flex-col items-center justify-end px-6 py-3 -mx-6 -mb-4 space-y-4 sm:space-y-0 sm:space-x-6 sm:flex-row bg-gray-50 dark:bg-gray-800"
     >
       <button
-        @click="closeModal" onclick="reloadPage()"
+        @click="closeModal"
+        id="close_modal"
         class="w-full px-5 py-3 text-sm font-medium leading-5 text-white text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 sm:px-4 sm:py-2 sm:w-auto active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray"
       >
         Cancel
@@ -401,22 +404,82 @@
   </div>
 </div>
 <!-- End of modal backdrop -->
-
 <script>
+  function tableToCSV() {
 
-function reloadPage() {
-  location.reload()
-}
-function salesDetails() {
-  $.ajax({
+      // Variable to store the final csv data
+      var csv_data = [];
+
+      // Get each row data
+      var rows = document.querySelectorAll('#sales_table tr');
+      for (var i = 0; i < rows.length; i++) {
+
+          // Get each column data
+          var cols = rows[i].querySelectorAll('td,th');
+
+          // Stores each csv row data
+          var csvrow = [];
+          for (var j = 0; j < cols.length; j++) {
+
+              // Get the text data of each cell
+              // of a row and push it to csvrow
+              csvrow.push(cols[j].innerHTML);
+          }
+
+          // Combine each column value with comma
+          csv_data.push(csvrow.join(","));
+      }
+
+      // Combine each row data with new line character
+      csv_data = csv_data.join('\n');
+
+      // Call this function to download csv file 
+      downloadCSVFile(csv_data);
+
+  }
+
+  function downloadCSVFile(csv_data) {
+
+      // Create CSV file object and feed
+      // our csv_data into it
+      CSVFile = new Blob([csv_data], {
+          type: "text/csv"
+      });
+
+      // Create to temporary link to initiate
+      // download process
+      var temp_link = document.createElement('a');
+
+      // Download csv file
+      temp_link.download = "sales_data.csv";
+      var url = window.URL.createObjectURL(CSVFile);
+      temp_link.href = url;
+
+      // This link should not be displayed
+      temp_link.style.display = "none";
+      document.body.appendChild(temp_link);
+
+      // Automatically click the link to
+      // trigger download
+      temp_link.click();
+      document.body.removeChild(temp_link);
+  }
+</script>
+<script>
+  function reloadPage() {
+    location.reload();
+  }
+  function salesDetails() {
+    $.ajax({
       url: '/admin/sales-report',
-      method: 'POST'
-    }).then((response) => {
-      if(response.stat==='success'){
-        const report = response.report;
-        let sales_report = `<div class="w-full overflow-x-auto mt-4">
+      method: 'POST',
+    })
+      .then((response) => {
+        if (response.stat === 'success') {
+          const report = response.report;
+          let sales_report = `<div class="w-full overflow-x-auto mt-4">
         <h4 class="mb-4 font-semibold text-gray-600 dark:text-gray-300">Sales Report</h4>
-        <table class="w-full whitespace-no-wrap">
+        <table class="w-full whitespace-no-wrap" id="sales_table">
           <thead>
             <tr
               class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
@@ -428,33 +491,40 @@ function salesDetails() {
               <th class="px-4 py-3">Sales</th>
             </tr>
           </thead>
-          <tbody id="table_body13" class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">`
-        $.each(report, function (index, value) {
-        /*console.log(value);*/
-        sales_report += '<tr class="text-gray-700 dark:text-gray-400">';
-        sales_report += '<td class="px-4 py-3 text-sm">' + (index + 1) + '</td>';
-        sales_report += '<td class="px-4 py-3 text-sm">' + value.stock[0].title + '</td>';
-        sales_report += '<td class="px-4 py-3 text-sm">' + value.sold + '</td>';
-        sales_report += '<td class="px-4 py-3 text-sm">' + value.stock[0].stock + '</td>';
-        sales_report += '<td class="px-4 py-3 text-sm">' + value.sales + '</td>';
-        sales_report += '</tr>';
-      });
-      sales_report+=`</tbody>
+          <tbody id="table_body13" class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">`;
+          $.each(report, function (index, value) {
+            /*console.log(value);*/
+            sales_report += '<tr class="text-gray-700 dark:text-gray-400">';
+            sales_report += '<td class="px-4 py-3 text-sm">' + (index + 1) + '</td>';
+            sales_report += '<td class="px-4 py-3 text-sm">' + value.stock[0].title + '</td>';
+            sales_report += '<td class="px-4 py-3 text-sm">' + value.sold + '</td>';
+            sales_report += '<td class="px-4 py-3 text-sm">' + value.stock[0].stock + '</td>';
+            sales_report += '<td class="px-4 py-3 text-sm">' + value.sales + '</td>';
+            sales_report += '</tr>';
+          });
+          sales_report += `</tbody>
         </table>
-      </div>`
-      $('#modal_body').empty().append(sales_report);
-        
-      }else{
-        let sales_report = `OOOps some problem with handling sales report`
-        $('#modal_body').empty().append(sales_report);
-      }
+      </div>`;
+          $('#modal_body').empty().append(sales_report);
+          $('#close_modal').before(`<button
+          onclick="tableToCSV()"
+        class="w-full px-5 py-3 text-sm font-medium leading-5 text-white text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 sm:px-4 sm:py-2 sm:w-auto active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray"
+      >
+        Excel sheet
+      </button>`);
+        } else {
+          let sales_report = `OOOps some problem with handling sales report`;
+          $('#modal_body').empty().append(sales_report);
+        }
 
-
-    }).catch((err)=>{
-      console.log(err);
-    })
-}
-
+        $('#close_modal').click(() => {
+          reloadPage();
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   const nameArray = '<%= categoryNameArray %>';
   const countArray = '<%= categoryCountArray %>';
@@ -518,7 +588,6 @@ function salesDetails() {
       });
     });
   }
-
 
   function updateOrderStatus(id, status) {
     $.ajax({
