@@ -686,8 +686,8 @@ const razorOrderGenerate = async (req, res) => {
       if (newOrder.discountIsPercent) {
         amount =
           (newOrder.total * (1 - newOrder.discount / 100) + 50) < newOrder.maxDiscountAmt
-            ? newOrder.total * (1 - newOrder.discount / 100) + 50
-            : newOrder.total - newOrder.maxDiscountAmt + 50;
+            ? (newOrder.total * (1 - newOrder.discount / 100) + 50)*100
+            : (newOrder.total - newOrder.maxDiscountAmt + 50)*100;
       } else {
         amount = (newOrder.total - newOrder.discount + 50) * 100;
       }

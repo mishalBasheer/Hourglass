@@ -40,7 +40,9 @@ const getAdminDashboard = async (req, res) => {
     {
       $group: { _id: '$__v', count: { $sum: 1 } },
     },
+
   ]);
+  console.log(pendingOrders);
   const categoriseOrderCount = await Order.aggregate([
     { $project: { orderstat: 1 } },
     { $group: { _id: '$orderstat', count: { $sum: 1 } } },
@@ -131,7 +133,7 @@ const getAdminDashboard = async (req, res) => {
     categoryCountArray,
     brandCountArray,
     brandNameArray,
-    pendingOrders: pendingOrders[0].count,
+    pendingOrders,
     totalSales: totalSales[0],
     userCount: userCount.length,
     orders,
@@ -833,22 +835,23 @@ const products_sales= await Order.aggregate([
     $unwind:{path:'$products'}
   },
   {
-    $group:{_id:'$products.product.title',sold:{$sum:'$products.quantity'},sales:{$sum:'$products.subtotal'}}
+    $group:{_id:'$products.product._id',sold:{$sum:'$products.quantity'},sales:{$sum:'$products.subtotal'}}
   },
   {
     $lookup:{
       from: Product.collection.name,
        localField: '_id',
-       foreignField: 'title',
+       foreignField: '_id',
        as:'stock'
     }
   },
   {
-    $project:{_id:1,sold:1,sales:1,'stock.stock':1}
+    $project:{_id:1,sold:1,sales:1,'stock.stock':1,'stock.title':1}
   }
 ]);
 
 res.json({
+  stat:'success',
   report:products_sales
 })
   }catch(err){

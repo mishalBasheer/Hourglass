@@ -64,7 +64,7 @@
         </div>
         <div>
           <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">Pending Orders</p>
-          <p class="text-lg font-semibold text-gray-700 dark:text-gray-200"><%= pendingOrders %></p>
+          <p class="text-lg font-semibold text-gray-700 dark:text-gray-200"><%= pendingOrders.length>0?pendingOrders[0].count:0; %></p>
         </div>
       </div>
     </div>
@@ -322,7 +322,7 @@
     </header>
 
     <!-- Modal body -->
-    <div class="mt-4 mb-6">
+    <div id="modal_body" class="mt-4 mb-6">
       <!-- Order status change dropdown -->
       <label class="block mt-4 text-sm">
         <span class="text-gray-700 dark:text-gray-400"> Order status </span>
@@ -392,7 +392,7 @@
       class="flex flex-col items-center justify-end px-6 py-3 -mx-6 -mb-4 space-y-4 sm:space-y-0 sm:space-x-6 sm:flex-row bg-gray-50 dark:bg-gray-800"
     >
       <button
-        @click="closeModal"
+        @click="closeModal" onclick="reloadPage()"
         class="w-full px-5 py-3 text-sm font-medium leading-5 text-white text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 sm:px-4 sm:py-2 sm:w-auto active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray"
       >
         Cancel
@@ -404,13 +404,54 @@
 
 <script>
 
-
+function reloadPage() {
+  location.reload()
+}
 function salesDetails() {
   $.ajax({
-      url: '/sales-report',
+      url: '/admin/sales-report',
       method: 'POST'
     }).then((response) => {
+      if(response.stat==='success'){
+        const report = response.report;
+        let sales_report = `<div class="w-full overflow-x-auto mt-4">
+        <h4 class="mb-4 font-semibold text-gray-600 dark:text-gray-300">Sales Report</h4>
+        <table class="w-full whitespace-no-wrap">
+          <thead>
+            <tr
+              class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
+            >
+              <th class="px-4 py-3">#</th>
+              <th class="px-4 py-3">Title</th>
+              <th class="px-4 py-3">Sold Qnty</th>
+              <th class="px-4 py-3">Stock</th>
+              <th class="px-4 py-3">Sales</th>
+            </tr>
+          </thead>
+          <tbody id="table_body13" class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">`
+        $.each(report, function (index, value) {
+        /*console.log(value);*/
+        sales_report += '<tr class="text-gray-700 dark:text-gray-400">';
+        sales_report += '<td class="px-4 py-3 text-sm">' + (index + 1) + '</td>';
+        sales_report += '<td class="px-4 py-3 text-sm">' + value.stock[0].title + '</td>';
+        sales_report += '<td class="px-4 py-3 text-sm">' + value.sold + '</td>';
+        sales_report += '<td class="px-4 py-3 text-sm">' + value.stock[0].stock + '</td>';
+        sales_report += '<td class="px-4 py-3 text-sm">' + value.sales + '</td>';
+        sales_report += '</tr>';
+      });
+      sales_report+=`</tbody>
+        </table>
+      </div>`
+      $('#modal_body').empty().append(sales_report);
+        
+      }else{
+        let sales_report = `OOOps some problem with handling sales report`
+        $('#modal_body').empty().append(sales_report);
+      }
 
+
+    }).catch((err)=>{
+      console.log(err);
     })
 }
 
@@ -432,7 +473,7 @@ function salesDetails() {
       },
     }).then((response) => {
       let order = response.order;
-
+      $('#order_status_select12').empty().append(order_option);
       console.log(order);
       let table_data = '';
       $.each(order.products, function (index, value) {
