@@ -50,6 +50,11 @@ userDetailsSchema.pre('save', async function (next) {
   this.password = await bcrypt.hash(this.password, 12);
 });
 
+// userDetailsSchema.pre('update', async function (next) {
+//   if (!this.isModified('password')) return next();
+//   this.password = await bcrypt.hash(this.password, 12);
+// });
+
 userDetailsSchema.methods.comparePassword = function (candidatePassword, cb) {
   bcrypt.compare(candidatePassword, this.password, function (err, isMatch) {
     if (err) return cb(err);

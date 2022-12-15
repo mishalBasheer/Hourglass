@@ -518,8 +518,8 @@ const decQuantity = async (req, res) => {
       { $match: { 'products.product': productId } },
     ]);
 
-     // Checks whether in stock or not
-     if (quantityCheck[0].products.quantity <= 1) {
+    // Checks whether in stock or not
+    if (quantityCheck[0].products.quantity <= 1) {
       return res.json({
         access: true,
         stat: 'error',
@@ -778,12 +778,12 @@ const getOrderSuccess = async (req, res) => {
     const cartProducts = await Cart.aggregate([
       { $match: { _id: mongoose.Types.ObjectId(user.cartId) } },
       { $unwind: { path: '$products' } },
-      {$project:{'products.product':1,'products.quantity':1}},
+      { $project: { 'products.product': 1, 'products.quantity': 1 } },
     ]);
-    cartProducts.forEach(async (el)=>{
-      await Product.findByIdAndUpdate(el.products.product,{$inc:{stock:-(el.products.quantity)}})
-    })
-    const emptyCart = await Cart.findByIdAndUpdate(user.cartId,{products:[]});
+    cartProducts.forEach(async (el) => {
+      await Product.findByIdAndUpdate(el.products.product, { $inc: { stock: -el.products.quantity } });
+    });
+    const emptyCart = await Cart.findByIdAndUpdate(user.cartId, { products: [] });
     if (order.discountCoupon) {
       let coupon = await Coupon.findByIdAndUpdate(
         order.discountCoupon,
@@ -1091,6 +1091,52 @@ const cancelOrder = async (req, res) => {
   });
 };
 
+const ajaxCheckExisting = async(req,res,next)=>{
+  try{
+    const user = await User.find({email:req.body.email})
+    if(user.length>0){
+      res.locals.userId = user[0]._id;
+      next();
+    }else{
+      res.json({
+        stat:'error',
+        msg:'Your Email Not found!!',
+      })
+    }
+  }catch(err){
+    console.log(err);
+    res.json({
+      stat:'error',
+      msg:'Oops something went wrong'
+    })
+  }
+    
+
+}
+const changePass = async(req,res)=>{
+  try{
+    const userId = res.locals.userId;
+    const user = await User.findById({_id:userId},(err,doc)=>{
+      if (err) return false;
+      doc.password = req.body.password;
+      doc.save();
+    });
+    console.log(user);
+
+      res.json({
+        stat:'success',
+        msg:'Your Password has successfully changed',
+      })
+  }catch(err){
+    console.log(err);
+    res.json({
+      stat:'error',
+      msg:'Oops something went wrong'
+    })
+  }
+    
+}
+
 // removing session of the user
 const logoutUser = (req, res) => {
   req.session.user = null;
@@ -1145,4 +1191,6 @@ export {
   getOrderData,
   checkCoupon,
   updateWishlist,
+  ajaxCheckExisting,
+  changePass,
 };

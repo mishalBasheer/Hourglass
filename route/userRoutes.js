@@ -46,6 +46,8 @@ import {
   updateWishlist,
   cancelOrder,
   checkCoupon,
+  ajaxCheckExisting,
+  changePass,
 } from '../controllers/user/userController.js';
 import { userLoginCheck, checkBlockedUser } from '../middleware/userLoginCheckMiddleware.js';
 import { axiosUserLoginCheck, axiosCheckBlockedUser } from '../middleware/axiosUserLoginCheck.js';
@@ -68,13 +70,11 @@ router.route('/add-to-cart').post(axiosUserLoginCheck, axiosCheckBlockedUser, se
 router.route('/remove-from-cart').post(axiosUserLoginCheck, axiosCheckBlockedUser, removeFromCart);
 router.route('/set-to-wish').post(axiosUserLoginCheck, axiosCheckBlockedUser, setToWish);
 router.route('/contact').get(getContactUs);
-router.route('/forgot-password').get(getForgetPassword);
+router.route('/forgot-password').get(getForgetPassword).post(ajaxCheckExisting, changePass);
 router.route('/cart').get(userLoginCheck, checkBlockedUser, getCart);
 router.route('/cart/dec-quantity').post(axiosUserLoginCheck, axiosCheckBlockedUser, decQuantity);
 router.route('/cart/inc-quantity').post(axiosUserLoginCheck, axiosCheckBlockedUser, incQuantity);
 router.route('/wishlist').get(userLoginCheck, checkBlockedUser, getWish);
-// router.route('/add-to-wishlist/:id').get(userLoginCheck, checkBlockedUser, setWish);
-// router.route('/remove-from-wishlist/:id').get(userLoginCheck, checkBlockedUser, removeFromWishlist);
 router.route('/update-wishlist').post(axiosUserLoginCheck, axiosCheckBlockedUser, updateWishlist);
 
 router
