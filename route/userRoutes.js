@@ -47,6 +47,7 @@ import {
   cancelOrder,
   checkCoupon,
   ajaxCheckExisting,
+  searchProduct,
   changePass,
 } from '../controllers/user/userController.js';
 import { userLoginCheck, checkBlockedUser } from '../middleware/userLoginCheckMiddleware.js';
@@ -97,5 +98,6 @@ router
   .get(userLoginCheck, checkBlockedUser, getAddAddress)
   .post(userLoginCheck, checkBlockedUser, addressValidator, addAddress);
 router.route('/check-coupon').post(userLoginCheck, checkBlockedUser, checkCoupon);
+router.route('/search/:key').get(searchProduct);
 
 export default router;

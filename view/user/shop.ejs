@@ -243,17 +243,18 @@
 </section>
 <!-- product_list part end-->
 <script>
-$('#seach_input').keypress(function (e) {
- var key = e.which;
- if(key == 13)  // the enter key code
+$('#seach_input').keydown(function(e){
+  var key = e.keyCode;
+  if(key == 13)  // the enter key code
   {
-    $('input[name = search]').click();
-    return false;  
+    const searchKey = $('#seach_input').val();
+    location.href=`/search/${searchKey}`;
   }
-});
+})
 </script>
 
-<%- include('partials/footer.ejs') %> <% if (msg.length>0) { %>
+<%- include('partials/footer.ejs') %> 
+<% if (msg.length>0) { %>
 <script defer>
   customAlert('<%= msg %>', 'success');
 </script>

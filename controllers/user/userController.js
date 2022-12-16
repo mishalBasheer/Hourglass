@@ -1137,6 +1137,53 @@ const changePass = async(req,res)=>{
     
 }
 
+// Searching Products 
+const searchProduct = async (req,res)=>{
+  try {
+    const brand = await Brand.find();
+    const category = await Category.find();
+    const product = await Product.find({
+          // title:{$regex:req.params.key},
+          title:{ $regex: new RegExp(req.params.key, "i") } 
+    });
+    const cat = await Product.aggregate([
+      {
+        $group: {
+          _id: '$category',
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $lookup: {
+          from: Category.collection.name,
+          localField: '_id',
+          foreignField: '_id',
+          as: 'cat',
+        },
+      },
+    ]);
+
+    const count = product.length;
+    const user = req.session.user;
+    req.session.couponApplied = null;
+
+    if (user) {
+      const wishlistProducts = await Wishlist.findOne({ _id: user.wishlistId }).select({
+        'products.product': 1,
+        _id: 0,
+      });
+      const msg = req.flash('cartSuccess');
+      res.render('user/shop', { user, product, brand, msg, wishlistProducts, count, navCat: category, cat });
+    } else {
+      const msg = req.flash('cartSuccess');
+      res.render('user/shop', { user, product, brand, msg, count, navCat: category, cat });
+    }
+  } catch (err) {
+    console.log(err);
+    res.render('user/error-page', { error: err, errorMsg: 'error from getting all products' });
+  }
+}
+
 // removing session of the user
 const logoutUser = (req, res) => {
   req.session.user = null;
@@ -1189,6 +1236,7 @@ export {
   cancelOrder,
   getAddress,
   getOrderData,
+  searchProduct,
   checkCoupon,
   updateWishlist,
   ajaxCheckExisting,
