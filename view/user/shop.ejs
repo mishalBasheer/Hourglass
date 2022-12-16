@@ -37,30 +37,6 @@
             </div>
           </aside>
 
-          <aside class="left_widgets p_filter_widgets">
-            <div class="l_w_title">
-              <h3>Color Filter</h3>
-            </div>
-            <div class="widgets_inner">
-              <ul class="list">
-                <li>
-                  <a href="#">Black</a>
-                </li>
-                <li>
-                  <a href="#">Black Leather</a>
-                </li>
-                <li class="active">
-                  <a href="#">Black with red</a>
-                </li>
-                <li>
-                  <a href="#">Gold</a>
-                </li>
-                <li>
-                  <a href="#">Spacegrey</a>
-                </li>
-              </ul>
-            </div>
-          </aside>
 
           <aside class="left_widgets p_filter_widgets price_rangs_aside">
             <div class="l_w_title">
@@ -94,7 +70,7 @@
               </div>
               <div class="single_product_menu d-flex">
                 <div class="input-group">
-                  <input type="text" class="form-control" placeholder="search" aria-describedby="inputGroupPrepend" />
+                  <input type="text" id="seach_input" name="search" class="form-control" placeholder="search"/>
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="inputGroupPrepend"><i class="ti-search"></i></span>
                   </div>
@@ -266,6 +242,16 @@
   </div>
 </section>
 <!-- product_list part end-->
+<script>
+$('#seach_input').keypress(function (e) {
+ var key = e.which;
+ if(key == 13)  // the enter key code
+  {
+    $('input[name = search]').click();
+    return false;  
+  }
+});
+</script>
 
 <%- include('partials/footer.ejs') %> <% if (msg.length>0) { %>
 <script defer>
