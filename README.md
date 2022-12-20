@@ -7,7 +7,18 @@
 
 </p>
 
-> Ecommerce made with Node.js - MVC
+> Ecommerce made with Node.js - MVC 
+<div>
+<a href="https://hourglassindia.store">Hourglass Website</a>
+</div>
+
+## User Interface
+![screencapture-hourglassindia-store-2022-12-17-05_58_06](https://user-images.githubusercontent.com/109522744/208213212-9ea787c8-8a62-4940-99c9-5ef5acd9f283.png)
+
+![screencapture-hourglassindia-store-shop-2022-12-17-06_00_59](https://user-images.githubusercontent.com/109522744/208213201-0308149a-0ac1-4d2b-98f6-392f98601d30.png)
+## Admin Panel
+![screencapture-localhost-3000-admin-dashboard-2022-12-17-05_59_18](https://user-images.githubusercontent.com/109522744/208213218-ef26e6c4-3e16-49d8-bd9a-5bba9eeddf85.png)
+
 
 
 <div align="center">
@@ -25,7 +36,6 @@
 
 * [Technologies](#computer-technologies)
 * [Features](#rocket-features)
-* [How to run](#construction_worker-how-to-run)
 
 <h2 align="left"> 📥 Layout available at: </h2>
 <p align="center">
@@ -63,25 +73,7 @@ This project was made using the follow technologies:
   - Chart Analysis
   - Sales Report
 
-  
-# :construction_worker: How to run
-## Install
 
-```sh
-npm install
-```
-## Usage
-
-```sh
-npm start
-```
-## Dev Mode
-
-```sh
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 
 
