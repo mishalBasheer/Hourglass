@@ -46,7 +46,7 @@ const getUserHome = async (req, res) => {
     req.session.couponApplied = null;
     const banner = await Banner.find();
     const navCat = await Category.find();
-    const product = await Product.find();
+    const product = await Product.find().limit(8);
 
     if (user) {
       const wishlistProducts = await Wishlist.findOne({ _id: user.wishlistId }).select({
