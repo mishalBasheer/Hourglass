@@ -76,7 +76,7 @@ const getAdminDashboard = async (req, res) => {
       $unwind: { path: '$productDetails' },
     },
     {
-      $group: { _id: '$productDetails.brand', count: { $sum: 1 } },
+      $group: { _id: '$productDetails.brand', count: { $sum: '$products.quantity' } },
     },
     {
       $lookup: {
@@ -94,10 +94,6 @@ const getAdminDashboard = async (req, res) => {
 
   const categoryNameArray = [];
   const categoryCountArray = [];
-  // categoriseOrderCount.forEach((el) => {
-  //   categoryCountArray.push(el.categorySales);
-  //   categoryNameArray.push(el.categoryDetails[0].title);
-  // });
   categoriseOrderCount.forEach((el) => {
     categoryCountArray.push(el.count);
     categoryNameArray.push(el._id);
