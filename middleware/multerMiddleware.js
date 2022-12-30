@@ -5,7 +5,7 @@ const imageStorage = multer.diskStorage({
   // Destination to store image
   destination: 'public/product_img',
   filename: (req, file, cb) => {
-    cb(null, 'img-' + Date.now() + path.extname(file.originalname));
+    cb(null, `img-${Date.now()}${path.extname(file.originalname)}`);
     // file.fieldname is name of the field (image)
     // path.extname get the uploaded file extension
   },
@@ -28,7 +28,7 @@ const catImageStorage = multer.diskStorage({
   // Destination to store image
   destination: 'public/category_img',
   filename: (req, file, cb) => {
-    cb(null, 'cat-img-' + Date.now() + path.extname(file.originalname));
+    cb(null, `cat-img-${Date.now()}${path.extname(file.originalname)}`);
     // file.fieldname is name of the field (image)
     // path.extname get the uploaded file extension
   },
@@ -51,7 +51,7 @@ const brandImageStorage = multer.diskStorage({
   // Destination to store image
   destination: 'public/brand_img',
   filename: (req, file, cb) => {
-    cb(null, 'brand-logo-' + Date.now() + path.extname(file.originalname));
+    cb(null, `brand-logo-${Date.now()}${path.extname(file.originalname)}`);
     // file.fieldname is name of the field (image)
     // path.extname get the uploaded file extension
   },
@@ -74,7 +74,7 @@ const bannerImageStorage = multer.diskStorage({
   // Destination to store image
   destination: 'public/banner_img',
   filename: (req, file, cb) => {
-    cb(null, 'banner-img-' + Date.now() + path.extname(file.originalname));
+    cb(null, `banner-img-${Date.now()}${path.extname(file.originalname)}`);
     // file.fieldname is name of the field (image)
     // path.extname get the uploaded file extension
   },

@@ -11,7 +11,6 @@ const userLoginCheck = (req, res, next) => {
 const checkBlockedUser = async (req, res, next) => {
   const userId = req.session.user._id;
   const user = await User.findById(userId);
-  console.log('User bloked or not:', user);
   if (user.block) {
     res.render('user/blocked_user');
   } else {

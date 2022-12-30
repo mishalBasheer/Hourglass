@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { validationResult } from 'express-validator';
 import twilio from 'twilio';
+import Razorpay from 'razorpay';
 import User from '../../models/userDetailsModel.js';
 import Address from '../../models/addressModel.js';
 import Brand from '../../models/brandModel.js';
@@ -11,7 +12,6 @@ import Wishlist from '../../models/wishlistModel.js';
 import Banner from '../../models/bannerModel.js';
 import Coupon from '../../models/couponModel.js';
 import Order from '../../models/orderModel.js';
-import Razorpay from 'razorpay';
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -22,9 +22,9 @@ const client = twilio(accountSid, authToken);
 const getUserHome = async (req, res) => {
   try {
     // show a success message when successfully logged in
-    const msg = req.flash('success');
+    let msg = req.flash('success');
     // getting logged in user details to "user" variable
-    const user = req.session.user;
+    const { user } = req.session;
 
     //////////////////////////////////////////remv
     // const user = {
@@ -53,12 +53,11 @@ const getUserHome = async (req, res) => {
         'products.product': 1,
         _id: 0,
       });
-      const msg = req.flash('cartSuccess');
+      msg = req.flash('cartSuccess');
       return res.render('user/home', { msg, user, banner, product, navCat, wishlistProducts });
-    } else {
-      const msg = req.flash('cartSuccess');
-      return res.render('user/home', { msg, user, banner, product, navCat });
     }
+    msg = req.flash('cartSuccess');
+    return res.render('user/home', { msg, user, banner, product, navCat });
   } catch (err) {
     res.render('user/error-page', { error: err, errorMsg: 'error from getting home page' });
   }
@@ -67,10 +66,9 @@ const getUserHome = async (req, res) => {
 // get SignIn Page
 const getSignIn = async (req, res) => {
   try {
-    const user = req.session.user;
+    const { user } = req.session;
     const navCat = await Category.find();
     const loginCheck = req.flash('errorLoginCheck');
-    console.log(loginCheck);
     const msg = req.flash('error');
     res.render('user/login', { msg, user, loginCheck, navCat });
   } catch (err) {
@@ -81,7 +79,7 @@ const getSignIn = async (req, res) => {
 // get SignUp Page
 const getSignUp = async (req, res) => {
   try {
-    const user = req.session.user;
+    const { user } = req.session;
     const navCat = await Category.find();
     const msg = req.flash('error');
     res.render('user/signup', { msg, user, navCat });
@@ -93,7 +91,7 @@ const getSignUp = async (req, res) => {
 // get OTP Phone number Page (SignIn)
 const getOtpPhonePage = async (req, res) => {
   try {
-    const user = req.session.user;
+    const { user } = req.session;
     const navCat = await Category.find();
     res.render('user/otp_phone', { user, navCat });
   } catch (err) {
@@ -104,11 +102,10 @@ const getOtpPhonePage = async (req, res) => {
 // get OTP number from user Page(SignIn)
 const getOtpPage = async (req, res) => {
   try {
-    const user = req.session.user;
+    const { user } = req.session;
     const navCat = await Category.find();
     res.render('user/otp_page', { user, navCat });
   } catch (err) {
-    console.log(err);
     res.render('user/error-page', { error: err, errorMsg: 'error while getting otp page' });
   }
 };
@@ -116,7 +113,7 @@ const getOtpPage = async (req, res) => {
 // get OTP number from user Page (SignUp)
 const getOtpSignUp = async (req, res) => {
   try {
-    const user = req.session.user;
+    const { user } = req.session;
     const navCat = await Category.find();
     res.render('user/otp_page_signup', { user, navCat });
   } catch (err) {
@@ -148,7 +145,7 @@ const getAllShop = async (req, res) => {
     ]);
 
     const count = product.length;
-    const user = req.session.user;
+    const { user } = req.session;
     req.session.couponApplied = null;
 
     if (user) {
@@ -163,7 +160,6 @@ const getAllShop = async (req, res) => {
       res.render('user/shop', { user, product, brand, msg, count, navCat: category, cat });
     }
   } catch (err) {
-    console.log(err);
     res.render('user/error-page', { error: err, errorMsg: 'error from getting all products' });
   }
 };
@@ -194,7 +190,7 @@ const getShopCategory = async (req, res) => {
       },
     ]);
     const count = product.length;
-    const user = req.session.user;
+    const { user } = req.session;
     req.session.couponApplied = null;
 
     if (user) {
@@ -209,7 +205,6 @@ const getShopCategory = async (req, res) => {
       res.render('user/shop', { user, product, brand, msg, count, navCat: category, cat });
     }
   } catch (err) {
-    console.log(err);
     res.render('user/error-page', { error: err, errorMsg: 'error from getting all products' });
   }
 };
@@ -242,7 +237,7 @@ const getShopBrand = async (req, res) => {
 
     const count = product.length;
     req.session.couponApplied = null;
-    const user = req.session.user;
+    const { user } = req.session;
     if (user) {
       const wishlistProducts = await Wishlist.findOne({ _id: user.wishlistId }).select({
         'products.product': 1,
@@ -255,7 +250,6 @@ const getShopBrand = async (req, res) => {
       res.render('user/shop', { user, product, brand, msg, count, navCat: category, cat });
     }
   } catch (err) {
-    console.log(err);
     res.render('user/error-page', { error: err, errorMsg: 'error from getting all products' });
   }
 };
@@ -266,7 +260,7 @@ const getProductDetails = async (req, res) => {
     const product = await Product.findOne({ _id: req.params.id }).populate('category').populate('brand');
     // console.log(product);
     req.session.couponApplied = null;
-    const user = req.session.user;
+    const { user } = req.session;
 
     const navCat = await Category.find();
     // console.log(wishlisted)
@@ -283,7 +277,6 @@ const getProductDetails = async (req, res) => {
       res.render('user/p_details', { user, product, navCat });
     }
   } catch (err) {
-    console.log(err);
     res.status(404).render('user/error-page', { error: err, errorMsg: 'error from getting product detail' });
   }
 };
@@ -291,7 +284,7 @@ const getProductDetails = async (req, res) => {
 // get ContactUs Page
 const getContactUs = async (req, res) => {
   try {
-    const user = req.session.user;
+    const { user } = req.session;
     const navCat = await Category.find();
     res.render('user/contact', { user, navCat });
   } catch (err) {
@@ -302,7 +295,7 @@ const getContactUs = async (req, res) => {
 // get ForgetPassword Page
 const getForgetPassword = async (req, res) => {
   try {
-    const user = req.session.user;
+    const { user } = req.session;
     const navCat = await Category.find();
     res.render('user/forgotpass', { user, navCat });
   } catch (err) {
@@ -313,13 +306,12 @@ const getForgetPassword = async (req, res) => {
 // get Cart Page
 const getCart = async (req, res) => {
   try {
-    const user = req.session.user;
+    const { user } = req.session;
     const navCat = await Category.find();
     const cart = await Cart.findOne({ _id: user.cartId }).populate('products.product');
     res.render('user/cart', { user, cart: cart.products, navCat });
   } catch (err) {
-    console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error from getting cart products', navCat });
+    res.render('user/error-page', { error: err, errorMsg: 'error from getting cart products' });
   }
 };
 // Total calulating function
@@ -336,7 +328,7 @@ const TotalCalc = async (id) => {
     });
     await Cart.updateOne({ _id: id }, { total: sum });
   } catch (err) {
-    res.render('user/error-page', { error: err, errorMsg: 'error when calculating total' });
+    throw Error('Error while Calculating total: ', err);
   }
 };
 
@@ -361,8 +353,8 @@ const subTotCalc = async (id, proId) => {
 const setCart = async (req, res, next) => {
   try {
     req.session.couponApplied = null;
-    const user = req.session.user;
-    const productId = req.body.productId;
+    const { user } = req.session;
+    const { productId } = req.body;
     const product = await Product.findById(productId);
 
     const productcheck = await Cart.aggregate([
@@ -411,17 +403,16 @@ const setCart = async (req, res, next) => {
     });
     // next();
   } catch (err) {
-    console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error from putting a product to cart', navCat });
+    res.render('user/error-page', { error: err, errorMsg: 'error from putting a product to cart' });
   }
 };
 
 // Remove from cart
 const removeFromCart = async (req, res) => {
   try {
-    const user = req.session.user;
+    const { user } = req.session;
     req.session.couponApplied = null;
-    const productId = req.body.productId;
+    const { productId } = req.body;
 
     const removeObj = { product: productId };
     await Cart.updateOne({ _id: user.cartId }, { $pull: { products: removeObj } });
@@ -442,8 +433,8 @@ const removeFromCart = async (req, res) => {
 
 const setToWish = async (req, res) => {
   try {
-    const user = req.session.user;
-    const productId = req.body.productId;
+    const { user } = req.session;
+    const { productId } = req.body;
     const newObj = { product: productId };
     const productcheck = await Wishlist.findOne({ 'products.product': productId });
 
@@ -468,7 +459,7 @@ const setToWish = async (req, res) => {
 // ajax increase Quantity of the cart product
 const incQuantity = async (req, res) => {
   try {
-    const user = req.session.user;
+    const { user } = req.session;
     const productId = mongoose.Types.ObjectId(req.body.productId);
     const product = await Product.findById(productId);
     const quantityCheck = await Cart.aggregate([
@@ -502,15 +493,14 @@ const incQuantity = async (req, res) => {
     });
     // }
   } catch (err) {
-    console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error when increasing quantity from the cart', navCat });
+    res.render('user/error-page', { error: err, errorMsg: 'error when increasing quantity from the cart' });
   }
 };
 
 // ajax decrease Quantity of the cart product
 const decQuantity = async (req, res) => {
   try {
-    const user = req.session.user;
+    const { user } = req.session;
     const productId = mongoose.Types.ObjectId(req.body.productId);
     const quantityCheck = await Cart.aggregate([
       { $match: { _id: mongoose.Types.ObjectId(user.cartId) } },
@@ -541,8 +531,7 @@ const decQuantity = async (req, res) => {
       msg: 'removed from cart successfully',
     });
   } catch (err) {
-    console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error from decreasing quantity from the cart', navCat });
+    res.render('user/error-page', { error: err, errorMsg: 'error from decreasing quantity from the cart' });
   }
 };
 
@@ -550,22 +539,21 @@ const decQuantity = async (req, res) => {
 const getWish = async (req, res) => {
   try {
     req.session.couponApplied = null;
-    const user = req.session.user;
+    const { user } = req.session;
     const navCat = await Category.find();
     // console.log(user);
     const wishlist = await Wishlist.findOne({ _id: user.wishlistId }).populate('products.product');
     // console.log(wishlist);
     res.render('user/wishlist', { user, wishlist: wishlist.products, navCat });
   } catch (err) {
-    console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error while getting wishlist products', navCat });
+    res.render('user/error-page', { error: err, errorMsg: 'error while getting wishlist products' });
   }
 };
 
 // putting products to Wishlist
 // const setWish = async (req, res) => {
 //   try {
-//     const user = req.session.user;
+//     const {user} = req.session;
 //     const productId = req.params.id;
 //     const newObj = { product: productId };
 //     await Wishlist.updateOne({ _id: user.wishlistId }, { $push: { products: newObj } }, { upsert: true });
@@ -580,7 +568,7 @@ const getWish = async (req, res) => {
 // removing products from Wishlist
 // const removeFromWishlist = async (req, res) => {
 //   try {
-//     const user = req.session.user;
+//     const {user} = req.session;
 //     const productId = req.params.id;
 //     const removeObj = { product: productId };
 //     await Wishlist.updateOne({ _id: user.wishlistId }, { $pull: { products: removeObj } });
@@ -593,8 +581,8 @@ const getWish = async (req, res) => {
 // };
 
 const updateWishlist = async (req, res) => {
-  const user = req.session.user;
-  const productId = req.body.productId;
+  const { user } = req.session;
+  const { productId } = req.body;
   const productCheck = await Wishlist.findOne({ _id: user.wishlistId, 'products.product': productId });
   const product = {
     product: productId,
@@ -606,26 +594,24 @@ const updateWishlist = async (req, res) => {
       productStat: 'removed',
       msg: 'Successfully remove product from wishlist',
     });
-  } else {
-    await Wishlist.updateOne({ _id: user.wishlistId }, { $push: { products: product } }, { upsert: true });
-    return res.json({
-      access: true,
-      productStat: 'added',
-      msg: 'Successfully added product to wishlist',
-    });
   }
+  await Wishlist.updateOne({ _id: user.wishlistId }, { $push: { products: product } }, { upsert: true });
+  return res.json({
+    access: true,
+    productStat: 'added',
+    msg: 'Successfully added product to wishlist',
+  });
 };
 
 // get Orders
 const getOrders = async (req, res) => {
   try {
-    const user = req.session.user;
+    const { user } = req.session;
     const navCat = await Category.find();
     const orders = await Order.find({ userId: user._id })
       .sort({ _id: -1 })
       .populate('address')
       .select({ 'products._id': 0, userId: 0, 'address.userId': 0, 'address._id': 0 });
-    console.log(orders);
     res.render('user/order', { user, orders, navCat });
   } catch (err) {
     res.render('user/error-page', { error: err, errorMsg: 'error while removing products from wishlist' });
@@ -638,7 +624,6 @@ const getOrderData = async (req, res) => {
     const order = await Order.findOne({ _id: req.body.orderId })
       .populate('address')
       .select({ 'products._id': 0, userId: 0, 'address.userId': 0, 'address._id': 0 });
-    console.log(order);
     res.json({
       order,
     });
@@ -651,7 +636,7 @@ const getOrderData = async (req, res) => {
 
 // get Checkout Page
 const getCheckout = async (req, res) => {
-  const user = req.session.user;
+  const { user } = req.session;
   const navCat = await Category.find();
   const cartProducts = await Cart.findById(user.cartId).populate('products.product');
   // console.log(cartProducts);
@@ -664,19 +649,17 @@ const getCheckout = async (req, res) => {
       address,
       navCat,
     });
-  } else {
-    return res.redirect('/cart');
   }
+  return res.redirect('/cart');
 };
 
 // checkoutConfirm
 const checkoutConfirm = async (req, res) => {
   try {
-    const user = req.session.user;
+    const { user } = req.session;
     const cartProducts = await Cart.findById(user.cartId)
       .populate('products.product')
       .select({ 'products.product': 1, 'products.subtotal': 1, 'products.quantity': 1, total: 1 });
-    console.log(cartProducts.products[0]);
     const coupon = await Coupon.findOne({ _id: req.session.couponApplied });
     if (coupon) {
       const newOrder = {
@@ -712,7 +695,7 @@ const checkoutConfirm = async (req, res) => {
 // getPayment Page
 const getPayment = async (req, res) => {
   try {
-    const user = req.session.user;
+    const { user } = req.session;
     const navCat = await Category.find();
     const order = req.session.newOrder;
     const address = await Address.findById(order.address);
@@ -725,13 +708,14 @@ const getPayment = async (req, res) => {
 
 // razor payment from axios
 const razorOrderGenerate = async (req, res) => {
+  var amount;
+  var options;
   try {
-    const newOrder = req.session.newOrder;
-    let instance = new Razorpay({
+    const { newOrder } = req.session;
+    const instance = new Razorpay({
       key_id: process.env.RAZOR_KEY_ID,
       key_secret: process.env.RAZOR_KEY_SECRET,
     });
-    var amount;
     if (newOrder.discount) {
       if (newOrder.discountIsPercent) {
         amount =
@@ -744,13 +728,12 @@ const razorOrderGenerate = async (req, res) => {
     } else {
       amount = (newOrder.total + 50) * 100;
     }
-    var options = {
+    options = {
       amount,
       currency: 'INR',
       receipt: 'order_rcptid_11',
     };
-    instance.orders.create(options, function (err, order) {
-      console.log(order);
+    instance.orders.create(options, (err, order) => {
       Object.assign(order, { payment: 'Razorpay' });
       Object.assign(req.session.newOrder, order);
       res.send({ orderId: order.id });
@@ -768,12 +751,15 @@ const setCOD = async (req, res) => {
 
 // get OrderSuccess Page
 const getOrderSuccess = async (req, res) => {
-  const user = req.session.user;
-  const newOrder = req.session.newOrder;
+  var isPercent;
+  var discountAmt;
+  var maxDiscountAmt;
+  const { user } = req.session;
+  const { newOrder } = req.session;
   if (newOrder) {
     const navCat = await Category.find();
     const order = await Order.create(newOrder);
-    const order_address = await Address.populate(order, { path: 'address' });
+    const orderAddress = await Address.populate(order, { path: 'address' });
     const userUsed = { userId: user._id };
     const cartProducts = await Cart.aggregate([
       { $match: { _id: mongoose.Types.ObjectId(user.cartId) } },
@@ -783,16 +769,16 @@ const getOrderSuccess = async (req, res) => {
     cartProducts.forEach(async (el) => {
       await Product.findByIdAndUpdate(el.products.product, { $inc: { stock: -el.products.quantity } });
     });
-    const emptyCart = await Cart.findByIdAndUpdate(user.cartId, { products: [] });
+    await Cart.findByIdAndUpdate(user.cartId, { products: [] });
     if (order.discountCoupon) {
-      let coupon = await Coupon.findByIdAndUpdate(
+      const coupon = await Coupon.findByIdAndUpdate(
         order.discountCoupon,
         { $inc: { usageLimit: -1 }, $push: { userUsed } },
         { new: true }
       );
-      var isPercent = coupon.isPercent;
-      var discountAmt = coupon.amount;
-      var maxDiscountAmt = coupon.maxDiscountAmount;
+      ({ isPercent } = coupon);
+      discountAmt = coupon.amount;
+      maxDiscountAmt = coupon.maxDiscountAmount;
       if (isPercent) {
         const total =
           Math.round(order.total * (1 - discountAmt / 100)) + 50 < maxDiscountAmt
@@ -807,34 +793,33 @@ const getOrderSuccess = async (req, res) => {
     req.session.newOrder = null;
     return res.render('user/order_success', {
       user,
-      order: order_address,
+      order: orderAddress,
       navCat,
       discountAmt,
       isPercent,
       maxDiscountAmt,
     });
-  } else {
-    return res.redirect('/orders');
   }
+  return res.redirect('/orders');
 };
 
 // get Tracking Page
 const getTracking = async (req, res) => {
-  const user = req.session.user;
+  const { user } = req.session;
   const navCat = await Category.find();
   res.render('user/tracking', { user, navCat });
 };
 
 // get Profile Page
 const getProfile = async (req, res) => {
-  const user = req.session.user;
+  const { user } = req.session;
   const navCat = await Category.find();
   res.render('user/profile', { user, navCat });
 };
 
 // get Address profile Page
 const getAddress = async (req, res) => {
-  const user = req.session.user;
+  const { user } = req.session;
   const navCat = await Category.find();
   const address = await Address.find({ userId: user._id });
   res.render('user/address', { user, navCat, address });
@@ -843,7 +828,7 @@ const getAddress = async (req, res) => {
 // get add Address Page
 const getAddAddress = async (req, res) => {
   const alert = req.flash('alert');
-  const user = req.session.user;
+  const { user } = req.session;
   const navCat = await Category.find();
   res.render('user/add_address', { user, alert, navCat });
 };
@@ -857,23 +842,22 @@ const addAddress = async (req, res) => {
       req.flash('alert', alert);
       return res.redirect('/profile/add-address');
     }
-    let newAdd = req.body;
-    const user = req.session.user;
+    const newAdd = req.body;
+    const { user } = req.session;
     Object.assign(newAdd, { userId: user._id });
     await Address.create(newAdd);
 
     res.redirect('/profile');
   } catch (err) {
-    console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error while adding address to profile', navCat });
+    res.render('user/error-page', { error: err, errorMsg: 'error while adding address to profile' });
   }
 };
 
 // Helper - email checking when adding new user
-const emailCheck = (userData) => {
-  return new Promise(async (resolve, reject) => {
+const emailCheck = (userData) =>
+  new Promise((resolve, reject) => {
     let emailMatchFound;
-    let user = await User.findOne({ email: userData.email });
+    const user = User.findOne({ email: userData.email });
     if (user) {
       emailMatchFound = true;
       resolve(emailMatchFound);
@@ -882,22 +866,17 @@ const emailCheck = (userData) => {
       resolve(emailMatchFound);
     }
   });
-};
 
 // Verifiying new user,adding user details to DB, setting user data to session.user
 const newUser = async (req, res) => {
   try {
-    const newUser = req.session.newuser;
-    emailCheck(newUser).then(async (matchFound) => {
+    const { newuser } = req.session;
+    emailCheck(newuser).then(async (matchFound) => {
       if (!matchFound) {
         const cart = await Cart.create({ created: true });
         const wishlist = await Wishlist.create({ created: true });
-        // console.log('cart: ',cart)
-        // console.log('wishlist: ',wishlist)
-        Object.assign(newUser, { cartId: cart._id, wishlistId: wishlist._id });
-        // console.log("new User:",newUser);
-        const user = await User.create(newUser);
-        // console.log(newUser);
+        Object.assign(newuser, { cartId: cart._id, wishlistId: wishlist._id });
+        const user = await User.create(newuser);
         req.session.user = user;
         req.session.userEmail = user.email;
         res.redirect('/');
@@ -908,20 +887,19 @@ const newUser = async (req, res) => {
       }
     });
   } catch (err) {
-    console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error while inserting new user', navCat });
+    res.render('user/error-page', { error: err, errorMsg: 'error while inserting new user' });
   }
 };
 
 // checking user details by matching details with the DB (Authentication while signIn)
 const userCheck = async (req, res) => {
   try {
-    await User.findOne({ email: req.body.email }, function (err, user) {
+    await User.findOne({ email: req.body.email }, (err, user) => {
       if (err) throw err;
       // test a matching password
       if (user != null) {
-        user.comparePassword(req.body.password, function (err, isMatch) {
-          if (err) throw err;
+        user.comparePassword(req.body.password, (passErr, isMatch) => {
+          if (passErr) throw passErr;
           if (isMatch) {
             req.session.user = user;
             req.session.userLogin = true;
@@ -939,8 +917,7 @@ const userCheck = async (req, res) => {
       }
     });
   } catch (err) {
-    console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error while checking user from the database', navCat });
+    res.render('user/error-page', { error: err, errorMsg: 'error while checking user from the database' });
   }
 };
 
@@ -948,12 +925,11 @@ const userCheck = async (req, res) => {
 const sendOtp = (req, res, next) => {
   // next();
   req.session.userMobile = req.body.mob;
-  let mobile = req.session.userMobile;
+  const mobile = req.session.userMobile;
   client.verify.v2
     .services(serviceId)
     .verifications.create({ to: `+91${mobile}`, channel: 'sms' })
-    .then((verification) => {
-      console.log(verification.status);
+    .then(() => {
       next();
     });
 };
@@ -964,15 +940,14 @@ const verifyOtp = async (req, res, next) => {
   // next();
   try {
     const verificationCode = req.body.otp;
-    let mobile = req.session.userMobile;
+    const mobile = req.session.userMobile;
     client.verify.v2
       .services(serviceId)
       .verificationChecks.create({ to: `+91${mobile}`, code: verificationCode })
-      .then(async (verification_check) => {
-        console.log(verification_check.status);
-        if (verification_check.status === 'approved') {
+      .then(async (verificationCheck) => {
+        if (verificationCheck.status === 'approved') {
           req.flash('success', 'successfully signed in');
-          await User.findOne({ mob: mobile }, function (err, user) {
+          await User.findOne({ mob: mobile }, (err, user) => {
             if (err) throw err;
             req.session.user = user;
           });
@@ -984,8 +959,7 @@ const verifyOtp = async (req, res, next) => {
         }
       });
   } catch (err) {
-    console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error while verifying otp!!', navCat });
+    res.render('user/error-page', { error: err, errorMsg: 'error while verifying otp!!' });
   }
 };
 
@@ -1007,7 +981,6 @@ const redirectToOtpSignin = (req, res) => {
 const checkExisting = async (req, res, next) => {
   try {
     const user = await User.find({ mob: req.body.mob });
-    console.log('user: ', user);
     if (user.length > 0) {
       next();
     } else {
@@ -1016,8 +989,7 @@ const checkExisting = async (req, res, next) => {
       res.redirect('/signin');
     }
   } catch (err) {
-    console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error while checking "existing" user', navCat });
+    res.render('user/error-page', { error: err, errorMsg: 'error while checking "existing" user' });
   }
 };
 
@@ -1025,7 +997,6 @@ const checkExisting = async (req, res, next) => {
 const checkNotExisting = async (req, res, next) => {
   try {
     const user = await User.find({ mob: req.body.mob });
-    console.log('user: ', user);
     if (!(user.length > 0)) {
       next();
     } else {
@@ -1034,20 +1005,19 @@ const checkNotExisting = async (req, res, next) => {
       res.redirect('/signup');
     }
   } catch (err) {
-    console.log(err);
-    res.render('user/error-page', { error: err, errorMsg: 'error while checking "not an existing" user', navCat });
+    res.render('user/error-page', { error: err, errorMsg: 'error while checking "not an existing" user' });
   }
 };
 
 // checking coupon valid
 const checkCoupon = async (req, res) => {
   try {
-    const user = req.session.user;
+    const { user } = req.session;
     const coupon = await Coupon.findOne({ code: req.body.code });
     const cart = await Cart.findOne({ _id: user.cartId });
-    const userCheck = await Coupon.findOne({ code: req.body.code, 'userUsed.userId': user._id });
+    const checkUser = await Coupon.findOne({ code: req.body.code, 'userUsed.userId': user._id });
     // console.log(user);
-    // console.log(userCheck);
+    // console.log(checkUser);
     if (coupon && coupon.expireAfter.getTime() > Date.now()) {
       if (cart.total < coupon.minCartAmount) {
         return res.json({
@@ -1056,7 +1026,7 @@ const checkCoupon = async (req, res) => {
         });
       }
 
-      if (userCheck || req.session.couponApplied == req.body.code) {
+      if (checkUser || req.session.couponApplied === req.body.code) {
         return res.json({
           checkstatus: 'error',
           message: 'This coupon already applied',
@@ -1091,60 +1061,54 @@ const cancelOrder = async (req, res) => {
   });
 };
 
-const ajaxCheckExisting = async(req,res,next)=>{
-  try{
-    const user = await User.find({email:req.body.email})
-    if(user.length>0){
+const ajaxCheckExisting = async (req, res, next) => {
+  try {
+    const user = await User.find({ email: req.body.email });
+    if (user.length > 0) {
       res.locals.userId = user[0]._id;
       next();
-    }else{
+    } else {
       res.json({
-        stat:'error',
-        msg:'Your Email Not found!!',
-      })
+        stat: 'error',
+        msg: 'Your Email Not found!!',
+      });
     }
-  }catch(err){
-    console.log(err);
+  } catch (err) {
     res.json({
-      stat:'error',
-      msg:'Oops something went wrong'
-    })
+      stat: 'error',
+      msg: 'Oops something went wrong',
+    });
   }
-    
-
-}
-const changePass = async(req,res)=>{
-  try{
-    const userId = res.locals.userId;
-    const user = await User.findById({_id:userId},(err,doc)=>{
+};
+const changePass = async (req, res) => {
+  try {
+    const { userId } = res.locals;
+    await User.findById({ _id: userId }, (err, doc) => {
       if (err) return false;
       doc.password = req.body.password;
       doc.save();
     });
-    console.log(user);
 
-      res.json({
-        stat:'success',
-        msg:'Your Password has successfully changed',
-      })
-  }catch(err){
-    console.log(err);
     res.json({
-      stat:'error',
-      msg:'Oops something went wrong'
-    })
+      stat: 'success',
+      msg: 'Your Password has successfully changed',
+    });
+  } catch (err) {
+    res.json({
+      stat: 'error',
+      msg: 'Oops something went wrong',
+    });
   }
-    
-}
+};
 
-// Searching Products 
-const searchProduct = async (req,res)=>{
+// Searching Products
+const searchProduct = async (req, res) => {
   try {
     const brand = await Brand.find();
     const category = await Category.find();
     const product = await Product.find({
-          // title:{$regex:req.params.key},
-          title:{ $regex: new RegExp(req.params.key, "i") } 
+      // title:{$regex:req.params.key},
+      title: { $regex: new RegExp(req.params.key, 'i') },
     });
     const cat = await Product.aggregate([
       {
@@ -1164,7 +1128,7 @@ const searchProduct = async (req,res)=>{
     ]);
 
     const count = product.length;
-    const user = req.session.user;
+    const { user } = req.session;
     req.session.couponApplied = null;
 
     if (user) {
@@ -1179,10 +1143,9 @@ const searchProduct = async (req,res)=>{
       res.render('user/shop', { user, product, brand, msg, count, navCat: category, cat });
     }
   } catch (err) {
-    console.log(err);
     res.render('user/error-page', { error: err, errorMsg: 'error from getting all products' });
   }
-}
+};
 
 // removing session of the user
 const logoutUser = (req, res) => {
@@ -1217,8 +1180,6 @@ export {
   addAddress,
   getWish,
   setCart,
-  // removeFromWishlist,
-  // setWish,
   decQuantity,
   logoutUser,
   incQuantity,

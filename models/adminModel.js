@@ -13,7 +13,7 @@ const adminDetailsSchema = new mongoose.Schema({
 });
 
 adminDetailsSchema.methods.comparePassword = function (adminPassword, cb) {
-  bcrypt.compare(adminPassword, this.password, function (err, isMatch) {
+  bcrypt.compare(adminPassword, this.password, (err, isMatch) => {
     if (err) return cb(err);
     cb(null, isMatch);
   });

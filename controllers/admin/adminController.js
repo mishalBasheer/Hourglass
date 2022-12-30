@@ -6,8 +6,23 @@ import Category from '../../models/categoryModel.js';
 import Brand from '../../models/brandModel.js';
 import Coupon from '../../models/couponModel.js';
 import Order from '../../models/orderModel.js';
-import moment from 'moment';
 import Banner from '../../models/bannerModel.js';
+
+const getAllProduct = () =>
+  new Promise((resolve, reject) => {
+    const products = Product.find({ available: true }).populate('brand').populate('category').exec();
+    resolve(products);
+  });
+
+const getAllClients = () =>
+  new Promise((resolve, reject) => {
+    const users = User.find();
+    if (users != null) {
+      resolve(users);
+    } else {
+      reject(new Error('error when getting all clients from the server'));
+    }
+  });
 
 const getAdminLogin = (req, res) => {
   if (req.session.adminLogIn) {
@@ -40,43 +55,11 @@ const getAdminDashboard = async (req, res) => {
     {
       $group: { _id: '$__v', count: { $sum: 1 } },
     },
-
   ]);
-  console.log(pendingOrders);
   const categoriseOrderCount = await Order.aggregate([
     { $project: { orderstat: 1 } },
     { $group: { _id: '$orderstat', count: { $sum: 1 } } },
-    // {
-    //   $unwind: { path: '$products' },
-    // },
-    // {
-    //   $lookup: {
-    //     from: 'products',
-    //     localField: 'products.product.title',
-    //     foreignField: 'title',
-    //     as: 'productDetails',
-    //   },
-    // },
-    // {
-    //   $unwind: { path: '$productDetails' },
-    // },
-    // {
-    //   $group: { _id: '$productDetails.category', categorySales: { $sum: '$productDetails.price' }, count: { $sum: 1 } },
-    // },
-    // {
-    //   $lookup: {
-    //     from: 'categories',
-    //     localField: '_id',
-    //     foreignField: '_id',
-    //     as: 'categoryDetails',
-    //   },
-    // },
-    // {
-    //   $project: { 'categoryDetails.title': 1, categorySales: 1, count: 1 },
-    // },
-    // { $sort: { 'categoryDetails.title': 1 } },
   ]);
-  console.log(categoriseOrderCount);
   const brandCount = await Order.aggregate([
     {
       $unwind: { path: '$products' },
@@ -126,7 +109,6 @@ const getAdminDashboard = async (req, res) => {
     brandCountArray.push(el.count);
     brandNameArray.push(el.brandDetails[0].title);
   });
-  console.log(brandNameArray);
   const msg = req.flash('success');
   res.render('admin/dashboard', {
     categoryNameArray,
@@ -168,7 +150,6 @@ const getAdminOrders = async (req, res) => {
   });
 };
 const orderUpdate = async (req, res) => {
-  console.log(req.body);
   const order = await Order.findByIdAndUpdate(req.body.orderId, { orderstat: req.body.newOrderStatus });
   if (order) {
     res.json({
@@ -184,10 +165,10 @@ const orderUpdate = async (req, res) => {
 const getEditProductPage = async (req, res) => {
   const brand = await Brand.find({});
   const category = await Category.find({});
-  let product = await Product.find({ _id: mongoose.Types.ObjectId(req.params.id) })
+  const product = await Product.find({ _id: mongoose.Types.ObjectId(req.params.id) })
     .populate('brand')
     .populate('category');
-  let userId = req.params.id;
+  const userId = req.params.id;
   req.session.pageIn = 'products';
   res.render('admin/edit_product', {
     brand,
@@ -209,8 +190,7 @@ const getEditProductPage = async (req, res) => {
 const getAdminProducts = async (req, res) => {
   try {
     // console.log(await getAllProduct());
-    let products = await getAllProduct();
-    console.log(products);
+    const products = await getAllProduct();
     req.session.pageIn = 'products';
     res.render('admin/product_management', {
       products,
@@ -255,8 +235,7 @@ const getAddProductPage = async (req, res) => {
 };
 
 const editProduct = async (req, res) => {
-  console.log(req.files);
-  if (Object.keys(req.files).length == 0) {
+  if (Object.keys(req.files).length === 0) {
     // console.log(req.body)
     await Product.findByIdAndUpdate(req.params.id, req.body, {
       upsert: true,
@@ -264,7 +243,7 @@ const editProduct = async (req, res) => {
       runValidators: true,
     });
     res.redirect('/admin/products');
-  } else if (req.files.images == undefined && req.files.thumbnail.length !== 0) {
+  } else if (req.files.images === undefined && req.files.thumbnail.length !== 0) {
     const thumbnail = req.files.thumbnail[0].filename;
     Object.assign(req.body, { thumbnail });
     await Product.findByIdAndUpdate(req.params.id, req.body, {
@@ -273,7 +252,7 @@ const editProduct = async (req, res) => {
       runValidators: true,
     });
     res.redirect('/admin/products');
-  } else if (req.files.thumbnail == undefined && req.files.images.length !== 0) {
+  } else if (req.files.thumbnail === undefined && req.files.images.length !== 0) {
     const img = [];
     req.files.forEach((el) => {
       img.push(el.filename);
@@ -305,12 +284,12 @@ const editProduct = async (req, res) => {
 
 const adminCheck = async (req, res) => {
   try {
-    await Admin.findOne({ email: req.body.email }, function (err, user) {
+    await Admin.findOne({ email: req.body.email }, (err, user) => {
       if (err) throw err;
       // test a matching password
       if (user != null) {
-        user.comparePassword(req.body.password, function (err, isMatch) {
-          if (err) throw err;
+        user.comparePassword(req.body.password, (passErr, isMatch) => {
+          if (passErr) throw passErr;
           if (isMatch) {
             // console.log('admin')
             req.session.adminLogIn = true;
@@ -332,7 +311,6 @@ const adminCheck = async (req, res) => {
       }
     });
   } catch (err) {
-    console.log(err);
     res.render('admin/error-page');
   }
 };
@@ -349,34 +327,19 @@ const uploadProduct = async (req, res) => {
     });
 
     Object.assign(req.body, { images: img, thumbnail });
-    const product = await Product.create(req.body);
-
-    console.log('product details: ', product);
     // res.status(200).json({
     //   data:req.body,
     // })
     res.redirect('/admin/products/add-product');
   } catch (err) {
-    console.log(err);
     req.flash('error', 'An Error occured while adding product to database');
     res.redirect('/admin/products/add-product');
   }
 };
 
-const getAllProduct = () => {
-  return new Promise(async (resolve, reject) => {
-    let products = await Product.find({ available: true }).populate('brand').populate('category').exec();
-    // if(products!=null){
-    resolve(products);
-    // }else{
-    //   reject({status:"failed",message:"no products found"})
-    // }
-  });
-};
-
 const getAdminUsers = async (req, res) => {
   try {
-    let users = await getAllClients();
+    const users = await getAllClients();
     req.session.pageIn = 'users';
     res.render('admin/client', {
       users,
@@ -421,16 +384,6 @@ const unblockUser = async (req, res) => {
     });
   }
 };
-const getAllClients = () => {
-  return new Promise(async (resolve, reject) => {
-    let users = await User.find();
-    if (users != null) {
-      resolve(users);
-    } else {
-      reject({ status: 'failed', message: 'no users found' });
-    }
-  });
-};
 
 const deleteProduct = async (req, res) => {
   await Product.findByIdAndUpdate(req.params.id, { available: false });
@@ -438,7 +391,7 @@ const deleteProduct = async (req, res) => {
 };
 
 const getCategory = async (req, res) => {
-  let category = await Category.find({});
+  const category = await Category.find({});
   req.session.pageIn = 'category';
   res.render('admin/category', {
     pageIn: req.session.pageIn,
@@ -510,7 +463,7 @@ const addCategory = async (req, res) => {
 };
 const editCategory = async (req, res) => {
   try {
-    if (req.file == undefined) {
+    if (req.file === undefined) {
       // console.log(req.body)
       await Category.findByIdAndUpdate(req.params.id, req.body, {
         upsert: true,
@@ -535,7 +488,7 @@ const editCategory = async (req, res) => {
 };
 
 const getBrand = async (req, res) => {
-  let brand = await Brand.find({});
+  const brand = await Brand.find({});
   req.session.pageIn = 'brand';
   res.render('admin/brand', {
     pageIn: req.session.pageIn,
@@ -605,7 +558,7 @@ const addBrand = async (req, res) => {
 
 const editBrand = async (req, res) => {
   try {
-    if (req.file == undefined) {
+    if (req.file === undefined) {
       // console.log(req.body)
       await Brand.findByIdAndUpdate(req.params.id, req.body, {
         upsert: true,
@@ -630,7 +583,7 @@ const editBrand = async (req, res) => {
 };
 
 const getBanner = async (req, res) => {
-  let banner = await Banner.find({});
+  const banner = await Banner.find({});
   req.session.pageIn = 'banner';
   res.render('admin/banner', {
     pageIn: req.session.pageIn,
@@ -703,7 +656,7 @@ const addBanner = async (req, res) => {
 
 const editBanner = async (req, res) => {
   try {
-    if (req.file == undefined) {
+    if (req.file === undefined) {
       // console.log(req.body)
       await Banner.findByIdAndUpdate(req.params.id, req.body, {
         upsert: true,
@@ -727,7 +680,7 @@ const editBanner = async (req, res) => {
   }
 };
 const getCoupon = async (req, res) => {
-  let coupon = await Coupon.find({});
+  const coupon = await Coupon.find({});
   req.session.pageIn = 'coupon';
   res.render('admin/coupon', {
     pageIn: req.session.pageIn,
@@ -779,7 +732,7 @@ const getEditCoupon = async (req, res) => {
 };
 const editCoupon = async (req, res) => {
   try {
-    const { code, isPercent, amount, usageLimit, minCartAmount ,maxDiscountAmount} = req.body;
+    const { code, isPercent, amount, usageLimit, minCartAmount, maxDiscountAmount } = req.body;
     // const createdAt = new Date();
     // let expireAfter = createdAt.getTime() + req.body.expireAfter * 24 * 60 * 60 * 1000;
     // expireAfter = new Date(expireAfter);
@@ -813,7 +766,6 @@ const addCoupon = async (req, res) => {
 
 const deleteCoupon = async (req, res) => {
   try {
-    console.log(req.body);
     await Coupon.findByIdAndDelete(req.body.couponId);
     res.json({
       delete: 'success',
@@ -825,41 +777,45 @@ const deleteCoupon = async (req, res) => {
   }
 };
 
-const salesReportGenerator = async (req,res)=>{
-  try{
-const products_sales= await Order.aggregate([
-  {
-    $match:{orderstat:{$ne:'CANCELLED'}}
-  },
-  {
-    $unwind:{path:'$products'}
-  },
-  {
-    $group:{_id:'$products.product._id',sold:{$sum:'$products.quantity'},sales:{$sum:'$products.subtotal'}}
-  },
-  {
-    $lookup:{
-      from: Product.collection.name,
-       localField: '_id',
-       foreignField: '_id',
-       as:'stock'
-    }
-  },
-  {
-    $project:{_id:1,sold:1,sales:1,'stock.stock':1,'stock.title':1}
-  }
-]);
+const salesReportGenerator = async (req, res) => {
+  try {
+    const productSales = await Order.aggregate([
+      {
+        $match: { orderstat: { $ne: 'CANCELLED' } },
+      },
+      {
+        $unwind: { path: '$products' },
+      },
+      {
+        $group: {
+          _id: '$products.product._id',
+          sold: { $sum: '$products.quantity' },
+          sales: { $sum: '$products.subtotal' },
+        },
+      },
+      {
+        $lookup: {
+          from: Product.collection.name,
+          localField: '_id',
+          foreignField: '_id',
+          as: 'stock',
+        },
+      },
+      {
+        $project: { _id: 1, sold: 1, sales: 1, 'stock.stock': 1, 'stock.title': 1 },
+      },
+    ]);
 
-res.json({
-  stat:'success',
-  report:products_sales
-})
-  }catch(err){
     res.json({
-      stat:'failed'
-    })
+      stat: 'success',
+      report: productSales,
+    });
+  } catch (err) {
+    res.json({
+      stat: 'failed',
+    });
   }
-}
+};
 
 const adminLogout = async (req, res) => {
   req.session.adminLogIn = false;

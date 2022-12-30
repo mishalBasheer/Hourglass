@@ -4,7 +4,6 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import flash from 'connect-flash';
-import Razorpay from 'razorpay';
 
 import userRouter from './route/userRoutes.js';
 import adminRouter from './route/adminRoutes.js';

@@ -23,8 +23,6 @@ import {
   getProfile,
   getWish,
   setCart,
-  // removeFromWishlist,
-  // setWish,
   decQuantity,
   incQuantity,
   getAddAddress,
@@ -86,7 +84,6 @@ router.route('/order-confirmation').get(userLoginCheck, checkBlockedUser, getPay
 router.route('/create/orderId').post(razorOrderGenerate);
 router.route('/order-success').get(userLoginCheck, checkBlockedUser, getOrderSuccess);
 
-// router.route('/order-confirmation').get(userLoginCheck, checkBlockedUser, getOrderConfirmation);
 router.route('/orders').get(userLoginCheck, checkBlockedUser, getOrders).post(getOrderData);
 router.route('/cancel-order/:id').post(userLoginCheck, checkBlockedUser, cancelOrder);
 router.route('/order-tracking').get(userLoginCheck, checkBlockedUser, getTracking);

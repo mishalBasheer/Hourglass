@@ -39,7 +39,7 @@ import {
   editCoupon,
 } from '../controllers/admin/adminController.js';
 import { uploadMultiple, uploadOne, uploadBannerImg, uploadBrandImg } from '../middleware/multerMiddleware.js';
-import { adminLoginCheck } from '../middleware/adminLoginCheckMiddleware.js';
+import adminLoginCheck from '../middleware/adminLoginCheckMiddleware.js';
 
 const router = express.Router();
 
@@ -80,6 +80,6 @@ router.route('/coupon').get(adminLoginCheck, getCoupon);
 router.route('/coupon/add-coupon').get(adminLoginCheck, getAddCoupon).post(adminLoginCheck, addCoupon);
 router.route('/coupon/edit-coupon/:id').get(adminLoginCheck, getEditCoupon).post(adminLoginCheck, editCoupon);
 router.route('/coupon/delete-coupon').post(adminLoginCheck, deleteCoupon);
-router.route('/sales-report').post(adminLoginCheck,salesReportGenerator);
+router.route('/sales-report').post(adminLoginCheck, salesReportGenerator);
 
 export default router;
