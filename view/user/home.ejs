@@ -449,7 +449,8 @@
   </div>
 </section>
 <!--::subscribe_area part end::-->
-<%- include('partials/footer.ejs') %> <% if (msg.length>0) { %>
+<%- include('partials/footer.ejs') %> 
+<% if (msg.length>0) { %>
 <script defer>
   customAlert('<%= msg %>', 'success');
 </script>

@@ -47,6 +47,7 @@ import {
   ajaxCheckExisting,
   searchProduct,
   changePass,
+  priceFilter,
 } from '../controllers/user/userController.js';
 import { userLoginCheck, checkBlockedUser } from '../middleware/userLoginCheckMiddleware.js';
 import { axiosUserLoginCheck, axiosCheckBlockedUser } from '../middleware/axiosUserLoginCheck.js';
@@ -96,5 +97,6 @@ router
   .post(userLoginCheck, checkBlockedUser, addressValidator, addAddress);
 router.route('/check-coupon').post(userLoginCheck, checkBlockedUser, checkCoupon);
 router.route('/search/:key').get(searchProduct);
+router.route('/price-range-products').post(priceFilter);
 
 export default router;

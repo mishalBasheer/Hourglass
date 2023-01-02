@@ -1147,6 +1147,19 @@ const searchProduct = async (req, res) => {
   }
 };
 
+const priceFilter = async (req, res) => {
+  const { from, to } = req.body;
+  const products = await Product.aggregate([
+    {
+      $project: { title: 1, price: 1, thumbnail: 1, available: 1 },
+    },
+    {
+      $match: { price: { $gt: +from, $lt: +to } },
+    },
+  ]);
+  return res.json({ products, name: 'mishal' });
+};
+
 // removing session of the user
 const logoutUser = (req, res) => {
   req.session.user = null;
@@ -1202,4 +1215,5 @@ export {
   updateWishlist,
   ajaxCheckExisting,
   changePass,
+  priceFilter,
 };

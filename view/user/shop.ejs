@@ -5,7 +5,7 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-3">
-        <div class="left_sidebar_area">
+        <div class="price_textleft_sidebar_area">
           <aside class="left_widgets p_filter_widgets">
             <div class="l_w_title">
               <h3>Browse Categories</h3>
@@ -37,7 +37,6 @@
             </div>
           </aside>
 
-
           <aside class="left_widgets p_filter_widgets price_rangs_aside">
             <div class="l_w_title">
               <h3>Price Filter</h3>
@@ -46,11 +45,8 @@
               <div class="range_item">
                 <!-- <div id="slider-range"></div> -->
                 <input type="text" class="js-range-slider" value="" />
-                <div class="d-flex">
-                  <div class="price_text">
-                    <p>Price :</p>
-                  </div>
-                  <div class="price_value d-flex justify-content-center">
+                <div>
+                  <div class="price_value justify-content-center">
                     <input type="text" class="js-input-from" id="amount" readonly />
                     <span>to</span>
                     <input type="text" class="js-input-to" id="amount" readonly />
@@ -70,7 +66,7 @@
               </div>
               <div class="single_product_menu d-flex">
                 <div class="input-group">
-                  <input type="text" id="seach_input" name="search" class="form-control" placeholder="search"/>
+                  <input type="text" id="seach_input" name="search" class="form-control" placeholder="search" />
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="inputGroupPrepend"><i class="ti-search"></i></span>
                   </div>
@@ -80,7 +76,7 @@
           </div>
         </div>
 
-        <div class="row align-items-center latest_product_inner">
+        <div class="row align-items-center latest_product_inner" id="products_found">
           <% product.forEach((element,index) => { %>
           <div class="col-lg-4 col-sm-6">
             <div class="single_product_item">
@@ -243,18 +239,66 @@
 </section>
 <!-- product_list part end-->
 <script>
-$('#seach_input').keydown(function(e){
-  var key = e.keyCode;
-  if(key == 13)  // the enter key code
-  {
-    const searchKey = $('#seach_input').val();
-    location.href=`/search/${searchKey}`;
-  }
-})
+  $(document).ready(() => {
+    $('span.irs-slider').mouseup(() => {
+      const from = $('input.js-input-from').val();
+      const to = $('input.js-input-to').val();
+      $.ajax({
+        url: '/price-range-products',
+        method: 'POST',
+        data: {
+          from,
+          to,
+        },
+      })
+      .then((response) => {
+        let eachProduct = ``;
+        $('#products_found').empty();
+        console.log(response);
+
+        response.products.forEach((el, index) => {
+          eachProduct += `<div class="col-lg-4 col-sm-6">
+            <div class="single_product_item">
+              <a href="/product-details/${el._id}">
+                <img src="/product_img/${el.thumbnail}" alt="" />
+              </a>
+              <div class="single_product_text">
+                <h4>${el.title}</h4>
+                <h3>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-currency-rupee"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      d="M4 3.06h2.726c1.22 0 2.12.575 2.325 1.724H4v1.051h5.051C8.855 7.001 8 7.558 6.788 7.558H4v1.317L8.437 14h2.11L6.095 8.884h.855c2.316-.018 3.465-1.476 3.688-3.049H12V4.784h-1.345c-.08-.778-.357-1.335-.793-1.732H12V2H4v1.06Z"
+                    /></svg
+                  >${el.price}
+                </h3>
+                <a onclick="cartAdd('${el._id}')" class="add_cart">+ add to cart</a>
+              </div>
+            </div>
+          </div>`;
+        });
+        $('#products_found').html(eachProduct);
+      });
+    });
+
+    $('#seach_input').keydown(function (e) {
+      var key = e.keyCode;
+      if (key == 13) {
+        // the enter key code
+        const searchKey = $('#seach_input').val();
+        location.href = `/search/${searchKey}`;
+      }
+    });
+  });
 </script>
 
-<%- include('partials/footer.ejs') %> 
-<% if (msg.length>0) { %>
+<%- include('partials/footer.ejs') %> <% if (msg.length>0) { %>
 <script defer>
   customAlert('<%= msg %>', 'success');
 </script>
