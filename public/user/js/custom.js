@@ -46,7 +46,7 @@
       autoplayHoverPause: true,
       autoplayTimeout: 5000,
       nav: true,
-      navText: ["next", "previous"],
+      navText: ["previous","next"],
       responsive: {
         0: {
           margin: 15,
@@ -83,7 +83,7 @@
       autoplayHoverPause: true,
       autoplayTimeout: 5000,
       nav: true,
-      navText: ["next", "previous"],
+      navText: ["previous","next"],
       smartSpeed: 1000,
       responsive: {
         0: {
@@ -116,7 +116,7 @@
   //     autoplayHoverPause: true,
   //     autoplayTimeout: 5000,
   //     nav: true,
-  //     navText: ["next","previous"],
+  //     navText: ["previous","next"],
   //     smartSpeed: 1000,
   //   });
   // }
@@ -147,7 +147,7 @@
     autoplayHoverPause: true,
     autoplayTimeout: 5000,
     nav: true,
-    navText: ["next", "previous"],
+    navText: ["previous","next"],
     smartSpeed: 1000,
     responsive: {
       0: {
