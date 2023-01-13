@@ -379,36 +379,13 @@
   <div class="container">
     <div class="row align-items-center">
       <div class="col-lg-12">
-        <div class="single_client_logo">
-          <img src="/user/img/client_logo/client_logo_1.png" alt="" />
-        </div>
-        <div class="single_client_logo">
-          <img src="/user/img/client_logo/client_logo_2.png" alt="" />
-        </div>
-        <div class="single_client_logo">
-          <img src="/user/img/client_logo/client_logo_3.png" alt="" />
-        </div>
-        <div class="single_client_logo">
-          <img src="/user/img/client_logo/client_logo_4.png" alt="" />
-        </div>
-        <div class="single_client_logo">
-          <img src="/user/img/client_logo/client_logo_5.png" alt="" />
-        </div>
-        <div class="single_client_logo">
-          <img src="/user/img/client_logo/client_logo_3.png" alt="" />
-        </div>
-        <div class="single_client_logo">
-          <img src="/user/img/client_logo/client_logo_1.png" alt="" />
-        </div>
-        <div class="single_client_logo">
-          <img src="/user/img/client_logo/client_logo_2.png" alt="" />
-        </div>
-        <div class="single_client_logo">
-          <img src="/user/img/client_logo/client_logo_3.png" alt="" />
-        </div>
-        <div class="single_client_logo">
-          <img src="/user/img/client_logo/client_logo_4.png" alt="" />
-        </div>
+        <% brands.forEach((e,i) => { %>
+          <% if (i<5) { %>
+            <div class="single_client_logo">
+              <a href="/shop/brand/<%= e._id %>"><img src="/brand_img/<%= e.image %> " alt="..." width="120p" height="70px"/></a>
+            </div>
+            <% } %>
+          <% }) %>
       </div>
     </div>
   </div>

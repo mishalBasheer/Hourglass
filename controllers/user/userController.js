@@ -46,6 +46,7 @@ const getUserHome = async (req, res) => {
     req.session.couponApplied = null;
     const banner = await Banner.find();
     const navCat = await Category.find();
+    const brands = await Brand.find();
     const product = await Product.find().limit(8);
 
     if (user) {
@@ -54,10 +55,10 @@ const getUserHome = async (req, res) => {
         _id: 0,
       });
       msg = req.flash('cartSuccess');
-      return res.render('user/home', { msg, user, banner, product, navCat, wishlistProducts });
+      return res.render('user/home', { msg, user, banner, product, navCat, wishlistProducts, brands });
     }
     msg = req.flash('cartSuccess');
-    return res.render('user/home', { msg, user, banner, product, navCat });
+    return res.render('user/home', { msg, user, banner, product, navCat, brands });
   } catch (err) {
     res.render('user/error-page', { error: err, errorMsg: 'error from getting home page' });
   }
