@@ -294,6 +294,7 @@
           <div class="input-group">
             <input
               type="text"
+              name="email"
               class="form-control"
               placeholder="enter email address"
               aria-label="Recipient's username"
@@ -349,22 +350,24 @@
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-lg-7">
+        <form id="submit-form" role="form"
+      >
         <div class="subscribe_area_text text-center">
           <h5>Join Our Newsletter</h5>
           <h2>Subscribe to get Updated with new offers</h2>
           <div class="input-group">
             <input
               type="text"
+              name="email"
               class="form-control"
               placeholder="enter email address"
-              aria-label="Recipient's username"
-              aria-describedby="basic-addon2"
             />
             <div class="input-group-append">
-              <a href="#" class="input-group-text btn_2" id="basic-addon2">subscribe now</a>
+              <button class="input-group-text btn_2" id="basic-addon2" type="submit">subscribe now</button>
             </div>
           </div>
         </div>
+        </form>
       </div>
     </div>
   </div>
@@ -411,8 +414,14 @@
   </div>
 </section>
 <!--::subscribe_area part end::-->
-<%- include('partials/footer.ejs') %> <% if (msg.length>0) { %>
+
+<script src="/user/js/subscription.js" defer></script>
+<% if (msg.length>0) { %>
 <script defer>
   customAlert('<%= msg %>', 'success');
 </script>
 <% } %>
+
+
+<%- include('partials/footer.ejs') %> 
+

@@ -5,11 +5,11 @@ $('#submit-form').submit((e) => {
     data: $('#submit-form').serialize(),
     method: 'post',
     success: function (response) {
-      alert('Form submitted successfully');
       window.location.reload();
+      customAlert('Form submitted successfully', 'success');
     },
     error: function (err) {
-      alert('Something Error');
+      customAlert('Something Error', 'error');
     },
   });
 });

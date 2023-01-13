@@ -2,15 +2,14 @@
 
 <footer class="footer_part">
     <div class="container">
-        <div class="row justify-content-around">
+        <div class="row justify-content-between">
             <div class="col-sm-6 col-lg-2">
                 <div class="single_footer_part">
-                    <h4>Top Products</h4>
+                    <h4>Product Categories</h4>
                     <ul class="list-unstyled">
-                        <li><a href="">Managed Website</a></li>
-                        <li><a href="">Manage Reputation</a></li>
-                        <li><a href="">Power Tools</a></li>
-                        <li><a href="">Marketing Service</a></li>
+                        <% navCat.forEach(element => { %>
+                        <li><a href="/shop/category/<%= element._id %> "><%= element.title %> </a></li>
+                          <% }) %>
                     </ul>
                 </div>
             </div>
