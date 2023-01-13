@@ -68,7 +68,7 @@
         <h2 class="contact-title">Get in Touch</h2>
       </div>
       <div class="col-lg-8">
-        <form  action="/contact" id="submit-form" role="form"
+        <form  id="submit-form" role="form"
           class="form-contact contact_form"
           action="contact_process.php"
         >
@@ -161,24 +161,6 @@
 <!-- ================ contact section end ================= -->
 
       <!-- Mail to -->
-      <script>
-        $("#submit-form").submit((e)=>{
-            e.preventDefault()
-            $.ajax({
-                url:"https://script.google.com/macros/s/AKfycbzTAX0Zu3Fn1kxOitRzCNVOoH0a_lUyy8R1xDZP3XpnkrX0qU_J7iX2WzCVlnYGnRziRQ/exec",
-                data:$("#submit-form").serialize(),
-                method:"post",
-                success:function (response){
-                    alert("Form submitted successfully")
-                    window.location.reload()
-                    //window.location.href="https://google.com"
-                },
-                error:function (err){
-                    alert("Something Error")
-    
-                }
-            })
-        })
-    </script>
+      <script src="/user/js/subscirption.js" defer></script>
 
 <%- include('partials/footer.ejs') %>
